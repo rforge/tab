@@ -68,9 +68,11 @@ races = c("White","Black","Mexican American","Other")
 logtable1 = tablog(x=d$race,y=d$death_1yr,xlabels=c("Race",races))
 
 # Test whether age, sex, race, and treatment group are associated with 1-year mortality
-logtable2 = tablog(x=d[,c("age","sex","race","group")],y=d$death_1yr,xlabels=c("Age","Male","Race",races,"Treatment"))
+logtable2 = tablog(x=d[,c("age","sex","race","group")],y=d$death_1yr,
+                   xlabels=c("Age","Male","Race",races,"Treatment"))
 
-# Click on logtable1 and logtable2 in the Workspace tab of RStudio to see the tables that could be copied and pasted into a report or manuscript.
+# Click on logtable1 and logtable2 in the Workspace tab of RStudio to see the tables 
+# that could be copied and pasted into a report or manuscript.
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

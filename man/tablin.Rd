@@ -67,12 +67,15 @@ races = c("White","Black","Mexican American","Other")
 lintable1 = tablin(x=d$race,y=d$bmi,xlabels=c("Race",races))
 
 # Test whether age, sex, race, and treatment group are associated with BMI
-lintable2 = tablin(x=d[,c("age","sex","race","group")],y=d$bmi,xlabels=c("Age","Male","Race",races,"Treatment"))
+lintable2 = tablin(x=d[,c("age","sex","race","group")],y=d$bmi,
+                   xlabels=c("Age","Male","Race",races,"Treatment"))
 
 # Same as previous, but request fully standardized regression coefficients
-lintable3 = tablin(x=d[,c("age","sex","race","group")],y=d$bmi,xlabels=c("Age","Male","Race",races,"Treatment"),coef="xy")
+lintable3 = tablin(x=d[,c("age","sex","race","group")],y=d$bmi,
+                   xlabels=c("Age","Male","Race",races,"Treatment"),coef="xy")
 
-# Click on lintable1, lintable2, and lintable3 in the Workspace tab of RStudio to see the tables that could be copied and pasted into a report or manuscript.
+# Click on lintable1, lintable2, and lintable3 in the Workspace tab of RStudio 
+# to see the tables that could be copied and pasted into a report or manuscript.
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

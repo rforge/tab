@@ -72,9 +72,11 @@ races = c("White","Black","Mexican American","Other")
 coxtable1 = tabcox(x=d$race,time=d$time,delta=d$delta,xlabels=c("Race",races))
 
 # Test whether age, sex, race, and treatment group are associated with survival
-coxtable2 = tabcox(x=d[,c("age","sex","race","group")],time=d$time,delta=d$delta,xlabels=c("Age","Male","Race",races,"Treatment"))
+coxtable2 = tabcox(x=d[,c("age","sex","race","group")],time=d$time,delta=d$delta,
+                   xlabels=c("Age","Male","Race",races,"Treatment"))
 
-# Click on coxtable1 and coxtable2 in the Workspace tab of RStudio to see the tables that could be copied and pasted into a report or manuscript.
+# Click on coxtable1 and coxtable2 in the Workspace tab of RStudio to see the tables 
+# that could be copied and pasted into a report or manuscript.
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

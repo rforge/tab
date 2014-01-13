@@ -68,11 +68,12 @@ meanstable1 = tabmeans(x=d$group,y=d$bmi,xlevels=groups,yname="BMI")
 # Compare mean BMI by race and omit sample size
 meanstable2 = tabmeans(x=d$race,y=d$bmi,xlevels=races,yname="BMI",n=FALSE)
 
-# Use rbind to create a single table comparing mean BMI and mean age in control vs. treatment group
+# Use rbind to create single table comparing mean BMI and mean age in control vs. treatment group
 meanstable3 = rbind(tabmeans(x=d$group,y=d$bmi,xlevels=groups,yname="BMI"),
                     tabmeans(x=d$group,y=d$age,xlevels=groups,yname="Age"))
 
-# Click on meanstable1, meanstable2, and meanstable3 in the Workspace tab of RStudio to see the tables that could be copied and pasted into a report or manuscript.
+# Click on meanstable1, meanstable2, and meanstable3 in the Workspace tab of RStudio to 
+# see the tables that could be copied and pasted into a report or manuscript.
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

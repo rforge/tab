@@ -82,7 +82,8 @@ freqtable3 = tabfreq(x=d$race,y=d$sex,xlevels=races,yname="Sex",ylevels=sexes,n=
 freqtable4 = rbind(tabfreq(x=d$group,y=d$sex,xlevels=groups,ylevels=sexes,yname="Sex"),
                    tabfreq(x=d$group,y=d$race,xlevels=groups,ylevels=races,yname="Race"))
 
-# Click on freqtable1, freqtable2, freqtable3, and freqtable4 in the Workspace tab of RStudio to see the tables that could be copied and pasted into a report or manuscript.
+# Click on freqtable1, freqtable2, freqtable3, and freqtable4 in the Workspace tab of 
+# RStudio to see the tables that could be copied and pasted into a report or manuscript.
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
