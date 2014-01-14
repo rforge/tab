@@ -64,13 +64,18 @@ table1 = rbind(tabmeans(x=d$group,y=d$age,xlevels=groups,yname="Age"),
                tabfreq(x=d$group,y=d$race,xlevels=groups,ylevels=races,yname="Race"))
 
 # Test whether age, sex, race, and treatment group are associated with BMI
-lintable = tablin(x=d[,c("age","sex","race","group")],y=d$bmi,xlabels=c("Age","Male","Race",races,"Treatment"))
+lintable = tablin(x=d[,c("age","sex","race","group")],y=d$bmi,
+                  xlabels=c("Age","Male","Race",races,"Treatment"))
 
 # Test whether age, sex, race, and treatment group are associated with 1-year mortality
-logtable = tablog(x=d[,c("age","sex","race","group")],y=d$death_1yr,xlabels=c("Age","Male","Race",races,"Treatment"))
+logtable = tablog(x=d[,c("age","sex","race","group")],y=d$death_1yr,
+                  xlabels=c("Age","Male","Race",races,"Treatment"))
 
 # Test whether age, sex, race, and treatment group are associated with survival
-coxtable = tabcox(x=d[,c("age","sex","race","group")],time=d$time,delta=d$delta,xlabels=c("Age","Male","Race",races,"Treatment"))
+coxtable = tabcox(x=d[,c("age","sex","race","group")],time=d$time,delta=d$delta,
+                  xlabels=c("Age","Male","Race",races,"Treatment"))
 
-# Click on freqtable, meanstable, table1, lintable, logtable, and coxtable in the Workspace tab of RStudio to see the tables that could be copied and pasted into a report or manuscript.
+# Click on freqtable, meanstable, table1, lintable, logtable, and coxtable in 
+# the Workspace tab of RStudio to see the tables that could be copied and pasted 
+# into a report or manuscript.
 }
