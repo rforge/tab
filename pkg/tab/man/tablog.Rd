@@ -7,7 +7,7 @@ Generate summary tables of logistic regression models for statistical reports.
 This function performs logistic regression using the glm function and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tablog(x, y, xlabels = NULL, int = TRUE, decimals = 2, n = TRUE, events = TRUE, coef = "n")
+tablog(x, y, xlabels=NULL, int=TRUE, decimals=2, n=TRUE, events=TRUE, coef="n")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -7,7 +7,7 @@ Generate summary tables of linear regression models for statistical reports.
 This function performs linear regression using the lm function and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tablin(x, y, xlabels = NULL, int = TRUE, decimals = 2, n = TRUE, coef = "n")
+tablin(x, y, xlabels=NULL, int=TRUE, decimals=2, n=TRUE, coef="n")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

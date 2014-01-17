@@ -7,7 +7,8 @@ Generate frequency tables for statistical reports.
 This function creates an I-by-J frequency table and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabfreq(x, y, test = "chi", xlevels = NULL, ylevels = NULL, yname = "Y variable", decimals = 1, n = TRUE, compress = FALSE)
+tabfreq(x, y, test="chi", xlevels=NULL, ylevels=NULL, yname="Y variable", 
+        decimals=1, n=TRUE, compress=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -7,7 +7,7 @@ Generate summary tables of mean comparisons for statistical reports.
 This function compares the mean of a continuous variable across levels of a factor variable and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabmeans(x, y, xlevels = NULL, yname = "Y variable", decimals = 1, n = TRUE, se = FALSE)
+tabmeans(x, y, xlevels=NULL, yname="Y variable", decimals=1, n=TRUE, se=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
