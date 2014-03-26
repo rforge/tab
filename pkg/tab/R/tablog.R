@@ -143,8 +143,8 @@ function(x,y,xlabels=NULL,int=TRUE,decimals=2,n=TRUE,events=TRUE,coef="n") {
   tbl[1:nrow(tbl)] = xlabels
   
   # Drop particular columns if requested
-  if (n==FALSE) {tbl = tbl[,colnames(tbl)!="N"]}
-  if (events==FALSE) {tbl = tbl[,colnames(tbl)!="Events"]}
+  if (n==FALSE) {tbl = tbl[,colnames(tbl)!="N",drop=FALSE]}
+  if (events==FALSE) {tbl = tbl[,colnames(tbl)!="Events",drop=FALSE]}
   
   
   # Return table
