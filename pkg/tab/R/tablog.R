@@ -66,16 +66,16 @@ function(x,y,xlabels=NULL,int=TRUE,decimals=2,n=TRUE,events=TRUE,coef="n") {
   }
   
   # Run logistic regression depending on number of x variables
-  if (colx==1) {fit = summary(glm(y~x[,1]),family=binomial)}
-  if (colx==2) {fit = summary(glm(y~x[,1] + x[,2]),family=binomial)}
-  if (colx==3) {fit = summary(glm(y~x[,1] + x[,2] + x[,3]),family=binomial)}
-  if (colx==4) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4]),family=binomial)}
-  if (colx==5) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5]),family=binomial)}
-  if (colx==6) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6]),family=binomial)}
-  if (colx==7) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6] + x[,7]),family=binomial)}
-  if (colx==8) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6] + x[,7] + x[,8]),family=binomial)}
-  if (colx==9) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6] + x[,7] + x[,8] + x[,9]),family=binomial)}
-  if (colx==10) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6] + x[,7] + x[,8] + x[,9] + x[,10]),family=binomial)}
+  if (colx==1) {fit = summary(glm(y~x[,1], family=binomial))}
+  if (colx==2) {fit = summary(glm(y~x[,1] + x[,2], family=binomial))}
+  if (colx==3) {fit = summary(glm(y~x[,1] + x[,2] + x[,3], family=binomial))}
+  if (colx==4) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4], family=binomial))}
+  if (colx==5) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5], family=binomial))}
+  if (colx==6) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6], family=binomial))}
+  if (colx==7) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6] + x[,7], family=binomial))}
+  if (colx==8) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6] + x[,7] + x[,8], family=binomial))}
+  if (colx==9) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6] + x[,7] + x[,8] + x[,9], family=binomial))}
+  if (colx==10) {fit = summary(glm(y~x[,1] + x[,2] + x[,3] + x[,4] + x[,5] + x[,6] + x[,7] + x[,8] + x[,9] + x[,10], family=binomial))}
   
   # If intercept requested, adjust rows and xlabels
   if (int==TRUE) {
