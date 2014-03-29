@@ -53,33 +53,35 @@ Acknowledgment: This material is based upon work supported by the National Scien
 Dane R. Van Domelen
 }
 \note{
+A function is currently being developed to create a summary table based on an object from coxph rather than the data vectors themselves (similarly to how tabglm works).
+
 If you have suggestions for additional options or features, or if you would like some help using any function in the package tab, please e-mail me at vandomed@gmail.com. Thanks!
 }
 \seealso{
 \code{\link{tabfreq}}
 \code{\link{tabmeans}}
-\code{\link{tablin}}
-\code{\link{tablog}}
+\code{\link{tabglm}}
 }
 \examples{
-# Load in example dataset d
+# Load in sample dataset d and drop rows with missing values
 data(d)
+d <- d[complete.cases(d),]
 
 # Create labels for race
-races = c("White","Black","Mexican American","Other")
+races <- c("White", "Black", "Mexican American", "Other")
 
 # Test whether race is associated with survival
-coxtable1 = tabcox(x=d$race,time=d$time,delta=d$delta,xlabels=c("Race",races))
+coxtable1 <- tabcox(x = d$race, time = d$time, delta = d$delta, 
+                    xlabels = c("Race", races))
 
 # Test whether age, sex, race, and treatment group are associated with survival
-coxtable2 = tabcox(x=d[,c("age","sex","race","group")],time=d$time,delta=d$delta,
-                   xlabels=c("Age","Male","Race",races,"Treatment"))
+coxtable2 <- tabcox(x = d[,c("age", "sex", "race", "group")], time = d$time, 
+                    delta = d$delta, 
+                    xlabels = c("Age", "Male", "Race", races, "Treatment"))
 
 # Click on coxtable1 and coxtable2 in the Workspace tab of RStudio to see the tables 
 # that could be copied and pasted into a report or manuscript.
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ table }
 \keyword{ regression }
 \keyword{ Cox proportional hazards}

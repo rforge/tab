@@ -9,7 +9,7 @@ This dataset is used to illustrate the various functions in the R package tab.
 }
 \usage{data(d)}
 \format{
-  A data frame with 245 observations on the following 9 variables.
+  A data frame with 300 observations on the following 9 variables.
   \describe{
     \item{\code{id}}{a numeric vector}
     \item{\code{group}}{a numeric vector}

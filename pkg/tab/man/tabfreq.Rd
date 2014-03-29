@@ -7,19 +7,19 @@ Generate frequency tables for statistical reports.
 This function creates an I-by-J frequency table and summarizes the results in a clean table for a statistical report.
 }
 \usage{
+tabfreq(x, y, xlevels = NULL, ylevels = NULL, yname = "Y variable", test = "chi", 
+        decimals = 1, p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, 
+        p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, compress = FALSE) {
+
 tabfreq(x, y, test="chi", xlevels=NULL, ylevels=NULL, yname="Y variable", 
         decimals=1, n=TRUE, compress=FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
 Vector of values indicating group membership for columns of IxJ table. 
 }
   \item{y}{
 Vector of values indicating group membership for rows of IxJ table. 
-}
-  \item{test}{
-Controls test of independence between x and y. "chi" for Pearson's chi-squared test, "fisher" for Fisher's exact test.
 }
   \item{xlevels}{
 Optional character vector to label the levels of x. If unspecified, the function uses generic labels.
@@ -30,8 +30,26 @@ Optional character vector to label the levels of y. If unspecified, the function
   \item{yname}{
 Optional label for the y (row) variable.
 }
+  \item{test}{
+Controls test of independence between x and y. "chi" for Pearson's chi-squared test, "fisher" for Fisher's exact test.
+}
   \item{decimals}{
 Number of decimal places for percentages.
+}
+  \item{p.decimals}{
+Number of decimal places for p-values. If a vector is provided rather than a single value, number of decimal places will depend on what range the p-value lies in. See p.cuts input.
+}
+  \item{p.cuts}{
+Cut-point(s) to control number of decimal places used for p-values. For example, by default p.cuts is 0.1 and p.decimals is c(2,3). This means that p-values in the range [0.1, 1] will be printed to two decimal places, while p-values in the range [0, 0.1) will be printed to three decimal places.
+}
+  \item{p.lowerbound}{
+Controls cut-point at which p-values are no longer printed as their value, but rather <lowerbound. For example, by default p.lowerbound is 0.001. Under this setting, p-values less than 0.001 are printed as <0.001.
+}
+  \item{p.leading0}{
+If TRUE, p-values are printed with 0 before decimal place; if FALSE, the leading 0 is omitted.
+}
+  \item{p.avoid1}{
+If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly depending on values for p.decimals and p.cuts). 
 }
   \item{n}{
 If TRUE, the table returned will include sample sizes in the column headings. 
@@ -57,37 +75,40 @@ If you have suggestions for additional options or features, or if you would like
 }
 \seealso{
 \code{\link{tabmeans}}
-\code{\link{tablin}}
-\code{\link{tablog}}
 \code{\link{tabcox}}
+\code{\link{tabglm}}
 }
 \examples{
-# Load in example dataset d
+# Load in sample dataset d and drop rows with missing values
 data(d)
+d <- d[complete.cases(d),]
 
 # Create labels for treatment group, sex, and race
-groups = c("Control","Treatment")
-sexes = c("Female","Male")
-races = c("White","Black","Mexican American","Other")
+groups <- c("Control", "Treatment")
+sexes <- c("Female", "Male")
+races <- c("White", "Black", "Mexican American", "Other")
 
 # Compare sex distribution by group, with group as column variable
-freqtable1 = tabfreq(x=d$group,y=d$sex,xlevels=groups,ylevels=sexes,yname="Sex")
+freqtable1 <- tabfreq(x = d$group, y = d$sex, xlevels = groups, ylevels = sexes, 
+                      yname = "Sex")
 
 # Same comparison, but compress table to single row
-freqtable2 = tabfreq(x=d$group,y=d$sex,xlevels=groups,yname="Male",compress=TRUE)
+freqtable2 <- tabfreq(x = d$group, y = d$sex, xlevels = groups, yname = "Male", 
+                      compress = TRUE)
 
 # Compare sex distribution by race, with race as column variable, and omit sample sizes
-freqtable3 = tabfreq(x=d$race,y=d$sex,xlevels=races,yname="Sex",ylevels=sexes,n=FALSE)
+freqtable3 <- tabfreq(x = d$race, y = d$sex, xlevels = races, yname = "Sex", 
+                      ylevels = sexes, n = FALSE)
 
 # Use rbind to create single table comparing sex and race in control vs. treatment group
-freqtable4 = rbind(tabfreq(x=d$group,y=d$sex,xlevels=groups,ylevels=sexes,yname="Sex"),
-                   tabfreq(x=d$group,y=d$race,xlevels=groups,ylevels=races,yname="Race"))
+freqtable4 <- rbind(tabfreq(x = d$group, y = d$sex, xlevels = groups, 
+                            ylevels = sexes, yname = "Sex"),
+                    tabfreq(x = d$group, y = d$race, xlevels = groups, 
+                            ylevels = races, yname = "Race"))
 
 # Click on freqtable1, freqtable2, freqtable3, and freqtable4 in the Workspace tab of 
 # RStudio to see the tables that could be copied and pasted into a report or manuscript.
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ table }
 \keyword{ frequency }
 \keyword{ crosstab }
