@@ -9,10 +9,7 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 \usage{
 tabfreq(x, y, xlevels = NULL, ylevels = NULL, yname = "Y variable", test = "chi", 
         decimals = 1, p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, 
-        p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, compress = FALSE) {
-
-tabfreq(x, y, test="chi", xlevels=NULL, ylevels=NULL, yname="Y variable", 
-        decimals=1, n=TRUE, compress=FALSE)
+        p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, compress = FALSE)
 }
 \arguments{
   \item{x}{

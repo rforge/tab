@@ -9,7 +9,7 @@ This function compares the mean of a continuous variable across levels of a fact
 \usage{
 tabmeans(x, y, xlevels = NULL, yname = "Y variable", decimals = 1, p.decimals = c(2,3), 
          p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-         n = TRUE, se = FALSE) {
+         n = TRUE, se = FALSE)
 }
 \arguments{
   \item{x}{
