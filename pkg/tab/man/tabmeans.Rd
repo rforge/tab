@@ -1,7 +1,7 @@
 \name{tabmeans}
 \alias{tabmeans}
 \title{
-Generate summary tables of mean comparisons for statistical reports. 
+Generate summary tables of mean comparisons for statistical reports 
 }
 \description{
 This function compares the mean of a continuous variable across levels of a factor variable and summarizes the results in a clean table for a statistical report.

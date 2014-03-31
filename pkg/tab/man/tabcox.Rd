@@ -1,13 +1,15 @@
 \name{tabcox}
 \alias{tabcox}
 \title{
-Generate summary tables of Cox proportional hazards regression models for statistical reports. 
+Generate summary tables of Cox proportional hazards regression models for statistical reports
 }
 \description{
 This function performs Cox proportional hazards regression using the R package survival [1] and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabcox(x, time, delta, xlabels=NULL, decimals=2, n=TRUE, events=TRUE, coef="n")
+tabcox(x, time, delta, xlabels = NULL, decimals = 2, p.decimals = c(2,3), p.cuts = 0.01,
+       p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, 
+       events = TRUE, coef = "n")
 }
 \arguments{
   \item{x}{
@@ -24,6 +26,21 @@ Optional character vector to label the x variables and their levels. If unspecif
 }
   \item{decimals}{
 Number of decimal places for the regression coefficients, standard errors, hazard ratios, and confidence intervals. 
+}
+  \item{p.decimals}{
+Number of decimal places for p-values. If a vector is provided rather than a single value, number of decimal places will depend on what range the p-value lies in. See p.cuts.
+}
+  \item{p.cuts}{
+Cut-point(s) to control number of decimal places used for p-values. For example, by default p.cuts is 0.1 and p.decimals is c(2,3). This means that p-values in the range [0.1, 1] will be printed to two decimal places, while p-values in the range [0, 0.1) will be printed to three decimal places.
+}
+  \item{p.lowerbound}{
+Controls cut-point at which p-values are no longer printed as their value, but rather <lowerbound. For example, by default p.lowerbound is 0.001. Under this setting, p-values less than 0.001 are printed as <0.001.
+}
+  \item{p.leading0}{
+If TRUE, p-values are printed with 0 before decimal place; if FALSE, the leading 0 is omitted.
+}
+  \item{p.avoid1}{
+If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly depending on values for p.decimals and p.cuts).
 }
   \item{n}{
 If TRUE, the table returned will include a column for sample size. 

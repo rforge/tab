@@ -3,17 +3,17 @@
 \alias{tab}
 \docType{package}
 \title{
-Functions for creating summary tables for statistical reports.
+Functions for creating summary tables for statistical reports
 }
 \description{
-This package contains functions for generating neat tables for statistical reports. There are functions for I-by-J frequency tables, comparison of means across levels of a categorical variable, generalized linear models, and Cox proportional hazards regression. The package is intended to make it easier for researchers to translate results from statistical analyses in R to their reports or manuscripts.
+This package contains functions for generating tables for statistical reports. There are functions for I-by-J frequency tables, comparison of means across levels of a categorical variable, generalized linear models, and Cox proportional hazards regression. The package is intended to make it easier for researchers to translate results from statistical analyses in R to their reports or manuscripts.
 }
 \details{
 \tabular{ll}{
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 2.1.1\cr
-Date: \tab 2014-03-29\cr
+Date: \tab 2014-03-31\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:
