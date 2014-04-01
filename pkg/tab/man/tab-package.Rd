@@ -6,14 +6,14 @@
 Functions for creating summary tables for statistical reports
 }
 \description{
-This package contains functions for generating tables for statistical reports. There are functions for I-by-J frequency tables, comparison of means across levels of a categorical variable, generalized linear models, and Cox proportional hazards regression. The package is intended to make it easier for researchers to translate results from statistical analyses in R to their reports or manuscripts.
+This package contains functions for generating tables for statistical reports written in Microsoft Word or LaTeX. There are functions for I-by-J frequency tables, comparison of means across levels of a categorical variable, generalized linear models, and Cox proportional hazards regression. The package is intended to make it easier for researchers to translate results from statistical analyses in R to their reports or manuscripts.
 }
 \details{
 \tabular{ll}{
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 2.1.1\cr
-Date: \tab 2014-03-31\cr
+Date: \tab 2014-04-01\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:
@@ -82,5 +82,6 @@ coxtable <- tabcox(x = d[,c("age", "sex", "race", "group")], time = d$time,
 
 # Click on freqtable, meanstable, table1, lintable, logtable, and coxtable in 
 # the Workspace tab of RStudio to see the tables that could be copied and pasted 
-# into a report or manuscript.
+# into a Word document. Alternatively, setting the latex input to TRUE produces
+# tables that can be inserted into LaTeX using the xtables package.
 }

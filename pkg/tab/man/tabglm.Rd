@@ -7,13 +7,17 @@ Generate summary tables of generalized linear models for statistical reports
 This function takes an object returned from the glm function and generates a clean summary table for a statistical report.
 }
 \usage{
-tabglm(glmfit, xlabels = NULL, ci.beta = TRUE, decimals = 2, p.decimals = c(2, 3), 
-       p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-       basic.form = FALSE, intercept = TRUE, n = FALSE, events = FALSE, or = TRUE)
+tabglm(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
+       p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+       p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
+       events = FALSE, or = TRUE)
 }
 \arguments{
   \item{glmfit}{
 An object returned from glm function call.
+}
+  \item{latex}{
+If TRUE, object returned will be formatted for printing in LaTeX using print.xtable; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlabels}{
 Optional character vector to label the x variables and their levels. If unspecified, the function uses the variable names and values themselves.
@@ -101,7 +105,9 @@ logtable <- tabglm(glmfit = glmfit2,
                    xlabels = c("Intercept", "Age", "Male", "Race", races, "Treatment"))
 
 # Click on lintable and logtable in the Workspace tab of RStudio to see the tables that 
-# could be copied and pasted into a report or manuscript.
+# could be copied and pasted into a report or manuscript. Alternatively, setting the
+# latex input to TRUE produces tables that can be inserted into LaTeX using the xtables 
+# package.
 }
 \keyword{ table }
 \keyword{ generalized linear model }

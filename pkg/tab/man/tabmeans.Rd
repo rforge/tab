@@ -7,9 +7,9 @@ Generate summary tables of mean comparisons for statistical reports
 This function compares the mean of a continuous variable across levels of a factor variable and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabmeans(x, y, xlevels = NULL, yname = "Y variable", decimals = 1, p.decimals = c(2,3), 
-         p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-         n = TRUE, se = FALSE)
+tabmeans(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
+         p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+         p.avoid1 = FALSE, n = TRUE, se = FALSE)
 }
 \arguments{
   \item{x}{
@@ -17,6 +17,9 @@ Vector of values for the factor variable.
 }
   \item{y}{
 Vector of values for the continuous variable.
+}
+  \item{latex}{
+If TRUE, object returned will be formatted for printing in LaTeX using print.xtable; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
 Optional character vector to label the levels of x. If unspecified, the function uses generic labels.
@@ -91,7 +94,9 @@ meanstable3 <- rbind(tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = 
                      tabmeans(x = d$group, y = d$age, xlevels = groups, yname = "Age"))
 
 # Click on meanstable1, meanstable2, and meanstable3 in the Workspace tab of RStudio 
-# to see the tables that could be copied and pasted into a report or manuscript.
+# to see the tables that could be copied and pasted into a report or manuscript. 
+# Alternatively, setting the latex input to TRUE produces tables that can be inserted 
+# into LaTeX using the xtables package.
 }
 \keyword{ table }
 \keyword{ means }

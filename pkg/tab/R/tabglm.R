@@ -1,6 +1,7 @@
-tabglm <- function(glmfit, xlabels = NULL, ci.beta = TRUE, decimals = 2, p.decimals = c(2,3),
-                   p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-                   basic.form = FALSE, intercept = TRUE, n = FALSE, events = FALSE, or = TRUE) {
+tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
+                   p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+                   p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
+                   events = FALSE, or = TRUE) {
   
   # If any predictors are ordered factors, return error
   if (any(class(glmfit$model[,-1])[1] == "ordered")) {
@@ -9,6 +10,9 @@ tabglm <- function(glmfit, xlabels = NULL, ci.beta = TRUE, decimals = 2, p.decim
   }
   
   # If any inputs are not correct class, return error
+  if (!is.logical(latex)) {
+    stop("For latex input, please enter TRUE or FALSE")
+  }
   if (!is.logical(ci.beta)) {
     stop("For ci.beta input, please enter TRUE or FALSE")
   }
@@ -195,6 +199,18 @@ tabglm <- function(glmfit, xlabels = NULL, ci.beta = TRUE, decimals = 2, p.decim
     xlabels[spaces] <- paste("  ", xlabels[spaces], sep = "")
     xlabels[refs] <- paste(xlabels[refs], "(ref)")
     tbl[1:nrow(tbl),1] <- xlabels
+  }
+  
+  # If latex is TRUE, do some re-formatting
+  if (latex == TRUE) {
+    plocs = which(substr(tbl[,"P"],1,1) == "<")
+    if (length(plocs) > 0) {
+      tbl[plocs,"P"] = paste("$<$", substring(tbl[plocs,"P"],2), sep = "")
+    }
+    spacelocs = which(substr(tbl[,"Variable"],1,2) == "  ")
+    if (length(spacelocs) > 0) {
+      tbl[spacelocs,"Variable"] = paste("\\hskip .3cm ", substring(tbl[spacelocs,"Variable"], 3), sep = "")
+    }
   }
   
   # Return tbl

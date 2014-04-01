@@ -1,9 +1,12 @@
-tabfreq <- function(x, y, xlevels = NULL, ylevels = NULL, yname = "Y variable",
+tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname = "Y variable", 
                     test = "chi", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01,
-                    p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-                    n = TRUE, compress = FALSE) {
+                    p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, 
+                    compress = FALSE) {
   
   # If any inputs are not correct class, return error
+  if (!is.logical(latex)) {
+    stop("For latex input, please enter TRUE or FALSE")
+  }
   if (! test %in% c("chi", "fisher")) {
     stop("For test input, please enter 'chi' or 'fisher'")
   }
@@ -93,6 +96,18 @@ tabfreq <- function(x, y, xlevels = NULL, ylevels = NULL, yname = "Y variable",
   
   # Add column names
   colnames(tbl) <- c("Variable", overall, xlevels, "P")
+  
+  # If latex is TRUE, do some re-formatting
+  if (latex == TRUE) {
+    plocs = which(substr(tbl[,"P"],1,1) == "<")
+    if (length(plocs) > 0) {
+      tbl[plocs,"P"] = paste("$<$", substring(tbl[plocs,"P"],2), sep = "")
+    }
+    spacelocs = which(substr(tbl[,"Variable"],1,2) == "  ")
+    if (length(spacelocs) > 0) {
+      tbl[spacelocs,"Variable"] = paste("\\hskip .3cm ", substring(tbl[spacelocs,"Variable"], 3), sep = "")
+    }
+  }
   
   # Return table
   return(tbl)

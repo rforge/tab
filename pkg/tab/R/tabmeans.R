@@ -1,8 +1,11 @@
-tabmeans <- function(x, y, xlevels = NULL, yname = "Y variable", decimals = 1,
-                     p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, 
-                     p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, se = FALSE) {
+tabmeans <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1,
+                     p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+                     p.avoid1 = FALSE, n = TRUE, se = FALSE) {
   
   # If any inputs are not correct class, return error
+  if (!is.logical(latex)) {
+    stop("For latex input, please enter TRUE or FALSE")
+  }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
   }
@@ -94,6 +97,14 @@ tabmeans <- function(x, y, xlevels = NULL, yname = "Y variable", decimals = 1,
   
   # Add column names
   colnames(tbl) <- c("Variable", overall, xlevels, "P")
+  
+  # If latex is TRUE, do some re-formatting
+  if (latex == TRUE) {
+    plocs = which(substr(tbl[,"P"],1,1) == "<")
+    if (length(plocs) > 0) {
+      tbl[plocs,"P"] = paste("$<$", substring(tbl[plocs,"P"],2), sep = "")
+    }
+  }
   
   # Return table
   return(tbl)

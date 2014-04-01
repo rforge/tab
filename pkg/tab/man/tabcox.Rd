@@ -7,8 +7,8 @@ Generate summary tables of Cox proportional hazards regression models for statis
 This function performs Cox proportional hazards regression using the R package survival [1] and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabcox(x, time, delta, xlabels = NULL, decimals = 2, p.decimals = c(2,3), p.cuts = 0.01,
-       p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, 
+tabcox(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, p.decimals = c(2,3), 
+       p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE,
        events = TRUE, coef = "n")
 }
 \arguments{
@@ -20,6 +20,9 @@ Numeric values for time to event or censoring.
 }
   \item{delta}{
 Indicator variable where 1 = event observed, 0 = censored.
+}
+  \item{latex}{
+If TRUE, object returned will be formatted for printing in LaTeX using print.xtable; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlabels}{
 Optional character vector to label the x variables and their levels. If unspecified, the function uses generic labels.
@@ -97,7 +100,9 @@ coxtable2 <- tabcox(x = d[,c("age", "sex", "race", "group")], time = d$time,
                     xlabels = c("Age", "Male", "Race", races, "Treatment"))
 
 # Click on coxtable1 and coxtable2 in the Workspace tab of RStudio to see the tables 
-# that could be copied and pasted into a report or manuscript.
+# that could be copied and pasted into a report or manuscript. Alternatively, setting 
+# the latex input to TRUE produces tables that can be inserted into LaTeX using the 
+# xtables package.
 }
 \keyword{ table }
 \keyword{ regression }

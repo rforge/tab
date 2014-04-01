@@ -7,9 +7,10 @@ Generate frequency tables for statistical reports
 This function creates an I-by-J frequency table and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabfreq(x, y, xlevels = NULL, ylevels = NULL, yname = "Y variable", test = "chi", 
-        decimals = 1, p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, 
-        p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, compress = FALSE)
+tabfreq(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname = "Y variable", 
+        test = "chi", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01, 
+        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, 
+        compress = FALSE)
 }
 \arguments{
   \item{x}{
@@ -17,6 +18,9 @@ Vector of values indicating group membership for columns of IxJ table.
 }
   \item{y}{
 Vector of values indicating group membership for rows of IxJ table. 
+}
+  \item{latex}{
+If TRUE, object returned will be formatted for printing in LaTeX using print.xtable; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
 Optional character vector to label the levels of x. If unspecified, the function uses generic labels.
@@ -105,6 +109,8 @@ freqtable4 <- rbind(tabfreq(x = d$group, y = d$sex, xlevels = groups,
 
 # Click on freqtable1, freqtable2, freqtable3, and freqtable4 in the Workspace tab of 
 # RStudio to see the tables that could be copied and pasted into a report or manuscript.
+# Alternatively, setting the latex input to TRUE produces tables that can be inserted 
+# into LaTeX using the xtables package.
 }
 \keyword{ table }
 \keyword{ frequency }
