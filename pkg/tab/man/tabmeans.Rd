@@ -19,7 +19,7 @@ Vector of values for the factor variable.
 Vector of values for the continuous variable.
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using print.xtable; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
 Optional character vector to label the levels of x. If unspecified, the function uses generic labels.
@@ -58,9 +58,11 @@ If x has two levels, a t-test is used to test for a difference in means. An F te
 Both x and y can have missing values. The function drops observations with missing x or y. 
 }
 \value{
-A character matrix with the requested frequency table. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript.
+A character matrix with the requested frequency table. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [1].
 }
 \references{
+1. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
+
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
 \author{
@@ -96,7 +98,7 @@ meanstable3 <- rbind(tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = 
 # Click on meanstable1, meanstable2, and meanstable3 in the Workspace tab of RStudio 
 # to see the tables that could be copied and pasted into a report or manuscript. 
 # Alternatively, setting the latex input to TRUE produces tables that can be inserted 
-# into LaTeX using the xtables package.
+# into LaTeX using the xtable package.
 }
 \keyword{ table }
 \keyword{ means }

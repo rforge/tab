@@ -20,7 +20,7 @@ Vector of values indicating group membership for columns of IxJ table.
 Vector of values indicating group membership for rows of IxJ table. 
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using print.xtable; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
 Optional character vector to label the levels of x. If unspecified, the function uses generic labels.
@@ -56,16 +56,18 @@ If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly 
 If TRUE, the table returned will include sample sizes in the column headings. 
 }
   \item{compress}{
-If y has only two levels, setting compress to TRUE will produce a single row for n (percent) for the higher level. For example, if y is gender with 0 for female, 1 for male, setting compress=TRUE will return a table with n (percent) for males only.
+If y has only two levels, setting compress to TRUE will produce a single row for n (percent) for the higher level. For example, if y is gender with 0 for female, 1 for male, setting compress = TRUE will return a table with n (percent) for males only.
 }
 }
 \details{
 NA
 }
 \value{
-A character matrix with the requested frequency table. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. 
+A character matrix with the requested frequency table. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [1].
 }
 \references{
+1. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
+
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
 \author{
@@ -110,7 +112,7 @@ freqtable4 <- rbind(tabfreq(x = d$group, y = d$sex, xlevels = groups,
 # Click on freqtable1, freqtable2, freqtable3, and freqtable4 in the Workspace tab of 
 # RStudio to see the tables that could be copied and pasted into a report or manuscript.
 # Alternatively, setting the latex input to TRUE produces tables that can be inserted 
-# into LaTeX using the xtables package.
+# into LaTeX using the xtable package.
 }
 \keyword{ table }
 \keyword{ frequency }

@@ -17,7 +17,7 @@ tabglm(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2,
 An object returned from glm function call.
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using print.xtable; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlabels}{
 Optional character vector to label the x variables and their levels. If unspecified, the function uses the variable names and values themselves.
@@ -65,9 +65,11 @@ The function should work well with categorical predictors (factors), provided th
 Interaction terms are compatible with tabglm, but the table will be formatted a little differently if interaction terms are present. Basically including an interaction is equivalent to setting basic.form to TRUE. All variable names and levels will be exactly as they appear when you run summary(glmfit), where glmfit is the object returned from a call to glm.
 }
 \value{
-A character matrix that summarizes the fitted generalized linear model. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. 
+A character matrix that summarizes the fitted generalized linear model. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [1].
 }
 \references{
+1. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
+
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
 \author{
@@ -106,7 +108,7 @@ logtable <- tabglm(glmfit = glmfit2,
 
 # Click on lintable and logtable in the Workspace tab of RStudio to see the tables that 
 # could be copied and pasted into a report or manuscript. Alternatively, setting the
-# latex input to TRUE produces tables that can be inserted into LaTeX using the xtables 
+# latex input to TRUE produces tables that can be inserted into LaTeX using the xtable 
 # package.
 }
 \keyword{ table }

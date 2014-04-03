@@ -34,6 +34,8 @@ Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 2. Terry M. Therneau and Patricia M. Grambsch (2000). Modeling Survival Data: Extending the Cox Model.
 Springer, New York. ISBN 0-387-98784-3.
 
+3. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
+
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
 \keyword{ package }
@@ -83,5 +85,5 @@ coxtable <- tabcox(x = d[,c("age", "sex", "race", "group")], time = d$time,
 # Click on freqtable, meanstable, table1, lintable, logtable, and coxtable in 
 # the Workspace tab of RStudio to see the tables that could be copied and pasted 
 # into a Word document. Alternatively, setting the latex input to TRUE produces
-# tables that can be inserted into LaTeX using the xtables package.
+# tables that can be inserted into LaTeX using the xtable package.
 }
