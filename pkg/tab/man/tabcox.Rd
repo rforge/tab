@@ -7,7 +7,7 @@ Generate summary tables of Cox proportional hazards regression models for statis
 This function performs Cox proportional hazards regression using the R package survival [1, 2] and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabcox(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, p.decimals = c(2,3), 
+tabcox(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, p.decimals = c(2, 3), 
        p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE,
        events = TRUE, coef = "n")
 }

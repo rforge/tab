@@ -1,4 +1,4 @@
-tabcox <- function(x, latex = FALSE, time, delta, xlabels = NULL, decimals = 2, p.decimals = c(2,3), 
+tabcox <- function(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, p.decimals = c(2, 3), 
                    p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, 
                    events = TRUE, coef = "n") {
   
