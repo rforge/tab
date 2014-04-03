@@ -1,5 +1,5 @@
 tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
-                   p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+                   p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
                    p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
                    events = FALSE, or = TRUE) {
   
@@ -82,6 +82,8 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
     tabindex <- tabindex + 1
     coefindex <- coefindex + 1
     
+  } else {
+    coefindex <- coefindex + 1
   }
   
   # If there are one or more interaction terms OR basic.form is TRUE, just do basic formatting straight
@@ -166,24 +168,24 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   }
   
   # Truncate table at correct number of rows
-  tbl <- tbl[1:(tabindex-1),]
+  tbl <- tbl[1:(tabindex-1),, drop = FALSE]
   
   # Add column names
   colnames(tbl) <- c("Variable", "N", "Events", "Beta (SE)", "95% CI for Beta", "OR", "95% CI for OR", "P")
 
   # If not a binary response or events is FALSE, remove events column
   if (glmfit$family$family != "binomial" | events == FALSE) {
-    tbl <- tbl[,-which(colnames(tbl) == "Events")]
+    tbl <- tbl[,-which(colnames(tbl) == "Events"), drop = FALSE]
   }
   
   # If n is FALSE, remove column
   if (n == FALSE) {
-    tbl <- tbl[,-which(colnames(tbl) == "N")]
+    tbl <- tbl[,-which(colnames(tbl) == "N"), drop = FALSE]
   }
 
   # If ci.beta is FALSE, remove column
   if (ci.beta == FALSE) {
-    tbl <- tbl[,-which(colnames(tbl) == "95% CI for Beta")]
+    tbl <- tbl[,-which(colnames(tbl) == "95% CI for Beta"), drop = FALSE]
   }
   
   # Adjust OR columns if necessary
@@ -191,7 +193,7 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
     colnames(tbl)[colnames(tbl) == "OR"] <- "exp(Beta)"
     colnames(tbl)[colnames(tbl) == "95% CI for OR"] <- "95% CI for exp(Beta)"
   } else if (!(glmfit$family$link == "logit" & glmfit$family$family %in% c("binomial", "quasi", "quasibibinomial"))) {
-    tbl <- tbl[,-which(colnames(tbl) %in% c("OR", "95% CI for OR"))]
+    tbl <- tbl[,-which(colnames(tbl) %in% c("OR", "95% CI for OR")), drop = FALSE]
   }
   
   # Add variable labels if possible
