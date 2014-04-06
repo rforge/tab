@@ -61,6 +61,10 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   xnames <- rownames(coef)
   model <- glmfit$model
   
+  # Initialized vectors for formatting factor variables in table
+  spaces <- c()
+  refs <- c()
+  
   # Initialize table
   tbl <- matrix("", nrow = 100, ncol = 8)
   tbl[1,2] <- nrow(model)
@@ -106,8 +110,6 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   } else {
   
     # Otherwise format factors neatly
-    spaces <- c()
-    refs <- c()
     for (ii in 2:ncol(model)) {
       if (class(model[,ii])[1] != "factor") {
         beta <- coef[coefindex,1]

@@ -64,8 +64,12 @@ tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   model <- attr(geefit$terms, "dataClasses")
   
   # Column for SE's and Z's based on robust input
-  secol <- ifelse(robust == TRUE, 2, 4)
-  zcol <- ifelse(robust == TRUE, 3, 5)
+  secol <- ifelse(robust == FALSE, 2, 4)
+  zcol <- ifelse(robust == FALSE, 3, 5)
+  
+  # Initialized vectors for formatting factor variables in table
+  spaces <- c()
+  refs <- c()
   
   # Initialize table
   tbl <- matrix("", nrow = 100, ncol = 8)
@@ -114,8 +118,6 @@ tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   } else {
   
     # Otherwise format factors neatly
-    spaces <- c()
-    refs <- c()
     for (ii in 2:(length(model)-1)) {
       if (model[ii] != "factor") {
         beta <- coef[coefindex,1]
