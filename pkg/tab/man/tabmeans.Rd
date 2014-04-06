@@ -8,7 +8,7 @@ This function compares the mean of a continuous variable across levels of a fact
 }
 \usage{
 tabmeans(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
-         p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+         p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
          p.avoid1 = FALSE, n = TRUE, se = FALSE)
 }
 \arguments{
@@ -34,7 +34,7 @@ Number of decimal places for means and standard deviations or standard errors.
 Number of decimal places for p-values. If a vector is provided rather than a single value, number of decimal places will depend on what range the p-value lies in. See p.cuts.
 }
   \item{p.cuts}{
-Cut-point(s) to control number of decimal places used for p-values. For example, by default p.cuts is 0.1 and p.decimals is c(2,3). This means that p-values in the range [0.1, 1] will be printed to two decimal places, while p-values in the range [0, 0.1) will be printed to three decimal places.
+Cut-point(s) to control number of decimal places used for p-values. For example, by default p.cuts is 0.1 and p.decimals is c(2, 3). This means that p-values in the range [0.1, 1] will be printed to two decimal places, while p-values in the range [0, 0.1) will be printed to three decimal places.
 }
   \item{p.lowerbound}{
 Controls cut-point at which p-values are no longer printed as their value, but rather <lowerbound. For example, by default p.lowerbound is 0.001. Under this setting, p-values less than 0.001 are printed as <0.001.
@@ -75,6 +75,7 @@ If you have suggestions for additional options or features, or if you would like
 \code{\link{tabfreq}}
 \code{\link{tabcox}}
 \code{\link{tabglm}}
+\code{\link{tabgee}}
 }
 \examples{
 # Load in sample dataset d and drop rows with missing values

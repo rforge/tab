@@ -1,18 +1,12 @@
-tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
+tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
                    p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-                   p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
-                   events = FALSE, or = TRUE) {
+                   p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n.id = FALSE, 
+                   n.total = FALSE, or = TRUE, robust = TRUE, data = NULL) {
   
-  # If glmfit is not correct class, return error
-  if (!all(class(glmfit) == c("glm", "lm"))) {
-    stop("For glmfit input, please enter an object returned from the glm function")
+  # If any inputs are not correct class, return error
+  if (!all(class(geefit) == c("gee", "glm"))) {
+    stop("For geefit input, please enter an object returned from the gee function")
   }
-  # If any predictors are ordered factors, return error
-  if (any(class(glmfit$model[,-1])[1] == "ordered") & basic.form == FALSE) {
-    stop("tabglm does not work with ordered factors because dummie coding can be unpredictable. 
-         Please re-run the glm after converting ordered factors to regular factors")
-  }
-  # If any other inputs are not correct class, return error
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
   }
@@ -43,38 +37,51 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   if (!is.logical(intercept)) {
     stop("For intercept input, please enter TRUE or FALSE")
   }
-  if (!is.logical(n)) {
-    stop("For n input, please enter TRUE or FALSE")
+  if (!is.logical(n.id)) {
+    stop("For n.id input, please enter TRUE or FALSE")
   }
-  if (!is.logical(events)) {
-    stop("For events input, please enter TRUE or FALSE")
+  if (!is.logical(n.total)) {
+    stop("For n.total input, please enter TRUE or FALSE")
   }
   if (!is.logical(or)) {
     stop("For or input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(robust)) {
+    stop("For robust input, please enter TRUE or FALSE")
+  }
+  if (!is.null(data)) {
+    if (!(is.data.frame(data) | is.matrix(data))) {
+      stop("For data input, please enter data frame or matrix.")
+    }
   }
   
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
   
-  # Store glm.fit results
-  coef <- summary(glmfit)$coefficients
+  # Store gee.fit results
+  coef <- summary(geefit)$coefficients
   xnames <- rownames(coef)
-  model <- glmfit$model
+  model <- attr(geefit$terms, "dataClasses")
+  
+  # Column for SE's and Z's based on robust input
+  secol <- ifelse(robust == TRUE, 2, 4)
+  zcol <- ifelse(robust == TRUE, 3, 5)
   
   # Initialize table
   tbl <- matrix("", nrow = 100, ncol = 8)
-  tbl[1,2] <- nrow(model)
-  tbl[1,3] <- sprintf("%0.0f", sum(model[,1]))
+  tbl[1,2] <- length(unique(geefit$id))
+  tbl[1,3] <- sprintf("%0.0f", geefit$nobs)
   
-  # Create index variables for table and glm coefficients
+  # Create index variables for table and gee coefficients
   tabindex <- 1
   coefindex <- 1
   
   # Enter intercept information if available
   if (xnames[1] == "(Intercept)" & intercept == TRUE) {
     beta <- coef[1,1]
-    se <- coef[1,2]
-    p <- coef[1,4]
+    se <- coef[1,secol]
+    z <- coef[1, zcol]
+    p <- pnorm(-abs(z))*2
     tbl[1,1] <- "Intercept"
     tbl[1,4] <- paste(sprintf(spf, coef[1,1]), " (", sprintf(spf, se), ")", sep = "")
     tbl[1,5] <- paste("(", sprintf(spf, beta-1.96*se), ", ",sprintf(spf, beta+1.96*se), ")", sep = "")
@@ -90,31 +97,33 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   
   # If there are one or more interaction terms OR basic.form is TRUE, just do basic formatting straight
   # from the table of coefficients
-  if ((":" %in% unlist(strsplit(rownames(coef), ""))) | basic.form == TRUE) {
+  if ((":" %in% unlist(strsplit(rownames(coef), ""))) | basic.form == TRUE | (sum(model == "factor") > 0 & is.null(data))) {
     beta <- coef[2:nrow(coef),1]
-    se <- coef[2:nrow(coef),2]
+    se <- coef[2:nrow(coef),secol]
     or <- exp(beta)
-    p <- coef[2:nrow(coef),4]
+    z <- coef[tabindex:nrow(coef), zcol]
+    p <- pnorm(-abs(z))*2
     tbl[2:nrow(coef),1] <- rownames(coef)[-1]
     tbl[2:nrow(coef),4] <- paste(sprintf(spf, beta), " (", sprintf(spf, se), ")", sep = "")
     tbl[2:nrow(coef),5] <- paste("(", sprintf(spf, beta-1.96*se), ", ", sprintf(spf, beta+1.96*se), ")", sep = "")
     tbl[2:nrow(coef),6] <- sprintf(spf, exp(beta))
     tbl[2:nrow(coef),7] <- paste("(", sprintf(spf, exp(beta-1.96*se)), ", ", sprintf(spf, exp(beta+1.96*se)), ")", sep = "")
-    tbl[2:nrow(coef),8] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound,
-                                   leading0 = p.leading0, avoid1 = p.avoid1)
+    tbl[tabindex:nrow(coef),8] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound,
+                                          leading0 = p.leading0, avoid1 = p.avoid1)
     tabindex <- nrow(coef)+1
   } else {
   
     # Otherwise format factors neatly
     spaces <- c()
     refs <- c()
-    for (ii in 2:ncol(model)) {
-      if (class(model[,ii])[1] != "factor") {
+    for (ii in 2:(length(model)-1)) {
+      if (model[ii] != "factor") {
         beta <- coef[coefindex,1]
-        se <- coef[coefindex,2]
+        se <- coef[coefindex,secol]
         or <- exp(beta)
-        p <- coef[coefindex,4]
-        tbl[tabindex,1] <- colnames(model)[ii]
+        z <- coef[coefindex, zcol]
+        p <- pnorm(-abs(z))*2
+        tbl[tabindex,1] <- names(model)[ii]
         tbl[tabindex,4] <- paste(sprintf(spf, beta), " (", sprintf(spf, se), ")", sep = "")
         tbl[tabindex,5] <- paste("(", sprintf(spf, beta-1.96*se), ", ", sprintf(spf, beta+1.96*se), ")", sep = "")
         tbl[tabindex,6] <- sprintf(spf, exp(beta))
@@ -125,12 +134,13 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
         coefindex <- coefindex + 1
         
       } else {
-        levels <- sort(unique(model[,ii]))
+        levels <- sort(unique(data[,names(model)[ii]]))
         if (length(levels) == 2) {
           beta <- coef[coefindex,1]
-          se <- coef[coefindex,2]
+          se <- coef[coefindex,secol]
           or <- exp(beta)
-          p <- coef[coefindex,4]
+          z <- coef[coefindex, zcol]
+          p <- pnorm(-abs(z))*2
           tbl[tabindex,1] <- xnames[coefindex]
           tbl[tabindex,4] <- paste(sprintf(spf, beta), " (", sprintf(spf, se), ")", sep = "")
           tbl[tabindex,5] <- paste("(", sprintf(spf, beta-1.96*se), ", ", sprintf(spf, beta+1.96*se), ")", sep = "")
@@ -141,19 +151,21 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
           tabindex <- tabindex + 1
           coefindex <- coefindex + 1
         } else {
-          tbl[tabindex, 1] <- colnames(model)[ii]
+          tbl[tabindex, 1] <- names(model)[ii]
           tabindex <- tabindex + 1
           tbl[tabindex,1] <- paste("  ", levels[1], " (ref)", sep = "")
           tbl[tabindex,4:8] <- "-"
           spaces <- c(spaces, tabindex)
           refs <- c(refs, tabindex)
           tabindex <- tabindex + 1
+          
           for (jj in 2:length(levels)) {
-            beta <- coef[coefindex,1]
-            se <- coef[coefindex,2]
-            or <- exp(beta)
-            p <- coef[coefindex,4]
             tbl[tabindex,1] <- paste("  ", levels[jj], sep = "")
+            beta <- coef[coefindex,1]
+            se <- coef[coefindex,secol]
+            or <- exp(beta)
+            z <- coef[coefindex, zcol]
+            p <- pnorm(-abs(z))*2
             tbl[tabindex,4] <- paste(sprintf(spf, beta), " (", sprintf(spf, se), ")", sep = "")
             tbl[tabindex,5] <- paste("(", sprintf(spf, beta-1.96*se), ", ", sprintf(spf, beta+1.96*se), ")", sep = "")
             tbl[tabindex,6] <- sprintf(spf, exp(beta))
@@ -173,28 +185,26 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   tbl <- tbl[1:(tabindex-1),, drop = FALSE]
   
   # Add column names
-  colnames(tbl) <- c("Variable", "N", "Events", "Beta (SE)", "95% CI for Beta", "OR", "95% CI for OR", "P")
-
-  # If not a binary response or events is FALSE, remove events column
-  if (glmfit$family$family != "binomial" | events == FALSE) {
-    tbl <- tbl[,-which(colnames(tbl) == "Events"), drop = FALSE]
+  colnames(tbl) <- c("Variable", "Clusters", "Observations", "Beta (SE)", "95% CI for Beta", "OR", "95% CI for OR", "P")
+  
+  # Remove n columns if requested
+  if (n.id == FALSE) {
+    tbl <- tbl[,-which(colnames(tbl) == "Clusters"), drop = FALSE]
+  }
+  if (n.total == FALSE) {
+    tbl <- tbl[,-which(colnames(tbl) == "Observations"), drop = FALSE]
   }
   
-  # If n is FALSE, remove column
-  if (n == FALSE) {
-    tbl <- tbl[,-which(colnames(tbl) == "N"), drop = FALSE]
-  }
-
   # If ci.beta is FALSE, remove column
   if (ci.beta == FALSE) {
     tbl <- tbl[,-which(colnames(tbl) == "95% CI for Beta"), drop = FALSE]
   }
   
   # Adjust OR columns if necessary
-  if (glmfit$family$link == "log") {
+  if (geefit$family$link == "log") {
     colnames(tbl)[colnames(tbl) == "OR"] <- "exp(Beta)"
     colnames(tbl)[colnames(tbl) == "95% CI for OR"] <- "95% CI for exp(Beta)"
-  } else if (!(glmfit$family$link == "logit" & glmfit$family$family %in% c("binomial", "quasi", "quasibibinomial"))) {
+  } else if (!(geefit$family$link == "logit" & geefit$family$family %in% c("binomial", "quasi", "quasibibinomial"))) {
     tbl <- tbl[,-which(colnames(tbl) %in% c("OR", "95% CI for OR")), drop = FALSE]
   }
   
