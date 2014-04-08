@@ -10,7 +10,7 @@ This function takes an object returned from the gee function in the package gee 
 tabgee(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
        p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
        p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n.id = FALSE, 
-       n.id = FALSE, or = TRUE, robust = TRUE, data = NULL)
+       n.total = FALSE, or = TRUE, robust = TRUE, data = NULL)
 }
 \arguments{
   \item{geefit}{
@@ -55,9 +55,6 @@ If TRUE, the table returned will include a column for number of unique IDs (e.g.
   \item{n.total}{
 If TRUE, the table returned will include a column for total number of observations used.
   }
-  \item{events}{
-If TRUE, the table returned will include a column for number of events observed. Only meaningful when the outcome variable is binary.
-}
   \item{or}{
 If TRUE, the table returned will include columns for odds ratios and Wald 95\% confidence intervals for odds ratios. Only meaningful for logistic regression.
 }
