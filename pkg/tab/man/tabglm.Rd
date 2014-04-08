@@ -102,7 +102,7 @@ lintable <- tabglm(glmfit = glmfit1,
 
 # Test whether age, sex, race, and treatment group are associated with 1-year mortality
 glmfit2 <- glm(death_1yr ~ age + sex + race + group, data = d, family = binomial)
-logtable <- tabglm(glmfit = glmfit2, 
+logtable <- tabglm(glmfit = glmfit2, ci.beta = FALSE,
                    xlabels = c("Intercept", "Age", "Male", "Race", races, "Treatment"))
 
 # Click on lintable and logtable in the Workspace tab of RStudio to see the tables that 

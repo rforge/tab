@@ -9,7 +9,7 @@ This function compares the mean of a continuous variable across levels of a fact
 \usage{
 tabmeans(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
          p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-         p.avoid1 = FALSE, n = TRUE, se = FALSE)
+         p.avoid1 = FALSE, n = FALSE, se = FALSE)
 }
 \arguments{
   \item{x}{
@@ -89,8 +89,8 @@ races <- c("White", "Black", "Mexican American", "Other")
 # Compare mean BMI in control group vs. treatment group
 meanstable1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
 
-# Compare mean BMI by race and omit sample size
-meanstable2 <- tabmeans(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = FALSE)
+# Compare mean BMI by race and include sample size
+meanstable2 <- tabmeans(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = TRUE)
 
 # Create single table comparing mean BMI and mean age in control vs. treatment group
 meanstable3 <- rbind(tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),

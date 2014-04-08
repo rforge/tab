@@ -9,7 +9,7 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 \usage{
 tabfreq(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname = "Y variable", 
         test = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
-        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, 
+        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
         compress = FALSE)
 }
 \arguments{
@@ -96,13 +96,13 @@ races <- c("White", "Black", "Mexican American", "Other")
 freqtable1 <- tabfreq(x = d$group, y = d$sex, xlevels = groups, ylevels = sexes, 
                       yname = "Sex")
 
-# Same comparison, but compress table to single row
+# Same comparison, but compress table to single row and include sample size
 freqtable2 <- tabfreq(x = d$group, y = d$sex, xlevels = groups, yname = "Male", 
-                      compress = TRUE)
+                      compress = TRUE, n = TRUE)
 
-# Compare sex distribution by race, with race as column variable, and omit sample sizes
+# Compare sex distribution by race, with race as column variable
 freqtable3 <- tabfreq(x = d$race, y = d$sex, xlevels = races, yname = "Sex", 
-                      ylevels = sexes, n = FALSE)
+                      ylevels = sexes)
 
 # Use rbind to create single table comparing sex and race in control vs. treatment group
 freqtable4 <- rbind(tabfreq(x = d$group, y = d$sex, xlevels = groups, 

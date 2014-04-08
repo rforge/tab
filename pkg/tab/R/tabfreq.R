@@ -1,6 +1,6 @@
 tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname = "Y variable", 
                     test = "chi", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01,
-                    p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, 
+                    p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
                     compress = FALSE) {
   
   # If any inputs are not correct class, return error
@@ -107,6 +107,14 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
     if (length(spacelocs) > 0) {
       tbl[spacelocs,"Variable"] = paste("\\hskip .3cm ", substring(tbl[spacelocs,"Variable"], 3), sep = "")
     }
+    chars = strsplit(tbl[,"Variable"], "")
+    for (ii in 1:length(chars)) {
+      percentlocs = which(chars[[ii]] == "%")
+      if (length(percentlocs) > 0) {
+        chars[[ii]][percentlocs] = "\\%"
+      }
+    }
+    tbl[,"Variable"] = sapply(chars, function(x) paste(x, sep = "", collapse = ""))
   }
   
   # Return table
