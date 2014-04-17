@@ -1,6 +1,6 @@
-tabmeans.svy <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", test = "Wald",
-                         decimals = 1, p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, 
-                         p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE) {
+tabmeans.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable", 
+                         test = "Wald", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01, 
+                         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE) {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {

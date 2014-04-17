@@ -1,5 +1,5 @@
-\name{tabglm_svy}
-\alias{tabglm_svy}
+\name{tabglm.svy}
+\alias{tabglm.svy}
 \title{
 Generate summary tables of generalized linear models for statistical reports (survey data)
 }

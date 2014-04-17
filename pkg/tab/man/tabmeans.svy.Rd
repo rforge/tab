@@ -7,9 +7,9 @@ Generate summary tables of mean comparisons for statistical reports (survey data
 This function compares the mean of a continuous variable across levels of a factor variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1,2].
 }
 \usage{
-tabmeans.svy(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable", test = "Wald",
-             decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
-             p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE)
+tabmeans.svy(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable", 
+             test = "Wald", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
+             p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE)
 }
 \arguments{
   \item{svy}{
