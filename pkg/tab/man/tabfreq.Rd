@@ -23,10 +23,10 @@ Vector of values indicating group membership for rows of IxJ table.
 If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
-Optional character vector to label the levels of x. If unspecified, the function uses generic labels.
+Optional character vector to label the levels of x. If unspecified, the function uses the values that x takes on.
 }
   \item{ylevels}{
-Optional character vector to label the levels of y. If unspecified, the function uses generic labels.
+Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on.
 }
   \item{yname}{
 Optional label for the y (row) variable.
@@ -77,9 +77,14 @@ Dane R. Van Domelen
 If you have suggestions for additional options or features, or if you would like some help using any function in the package tab, please e-mail me at vandomed@gmail.com. Thanks!
 }
 \seealso{
+\code{\link{svydesign}}
+\code{\link{svyglm}}
+\code{\link{tabfreq.svy}}
 \code{\link{tabmeans}}
-\code{\link{tabcox}}
+\code{\link{tabmeans.svy}}
 \code{\link{tabglm}}
+\code{\link{tabglm.svy}}
+\code{\link{tabcox}}
 \code{\link{tabgee}}
 }
 \examples{

@@ -170,13 +170,13 @@ tabcox <- function(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, 
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
-    plocs = which(substr(tbl[,"P"],1,1) == "<")
+    plocs <- which(substr(tbl[,"P"], 1, 1) == "<")
     if (length(plocs) > 0) {
-      tbl[plocs,"P"] = paste("$<$", substring(tbl[plocs,"P"],2), sep = "")
+      tbl[plocs,"P"] <- paste("$<$", substring(tbl[plocs,"P"], 2), sep = "")
     }
-    spacelocs = which(substr(tbl[,"Variable"],1,2) == "  ")
+    spacelocs <- which(substr(tbl[,"Variable"], 1, 2) == "  ")
     if (length(spacelocs) > 0) {
-      tbl[spacelocs,"Variable"] = paste("\\hskip .3cm ", substring(tbl[spacelocs,"Variable"], 3), sep = "")
+      tbl[spacelocs,"Variable"] <- paste("\\hskip .3cm ", substring(tbl[spacelocs,"Variable"], 3), sep = "")
     }
   }
   

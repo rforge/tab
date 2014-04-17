@@ -1,14 +1,14 @@
-tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
-                   p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-                   p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
-                   events = FALSE, or = TRUE) {
+tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
+                       p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
+                       p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, 
+                       intercept = TRUE, n = FALSE, events = FALSE, or = TRUE) {
   
-  # If glmfit is not correct class, return error
-  if (!all(class(glmfit) == c("glm", "lm"))) {
-    stop("For glmfit input, please enter an object returned from the glm function")
+  # If svyglmfit is not correct class, return error
+  if (!all(class(svyglmfit) == c("svyglm", "glm", "lm"))) {
+    stop("For svyglmfit input, please enter an object returned from the glm function")
   }
   # If any predictors are ordered factors, return error
-  if (any(class(glmfit$model[,-1])[1] == "ordered") & basic.form == FALSE) {
+  if (any(class(svyglmfit$model[,-1])[1] == "ordered") & basic.form == FALSE) {
     stop("tabglm does not work with ordered factors because dummie coding can be unpredictable. 
          Please re-run the glm after converting ordered factors to regular factors")
   }
@@ -57,9 +57,9 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   spf <- paste("%0.", decimals, "f", sep = "")
   
   # Store glm.fit results
-  coef <- summary(glmfit)$coefficients
+  coef <- summary(svyglmfit)$coefficients
   xnames <- rownames(coef)
-  model <- glmfit$model
+  model <- svyglmfit$model
   
   # Initialized vectors for formatting factor variables in table
   spaces <- c()
@@ -108,9 +108,9 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
                                    leading0 = p.leading0, avoid1 = p.avoid1)
     tabindex <- nrow(coef)+1
   } else {
-  
+    
     # Otherwise format factors neatly
-    for (ii in 2:ncol(model)) {
+    for (ii in 2:(ncol(model)-1)) {
       if (class(model[,ii])[1] != "factor") {
         beta <- coef[coefindex,1]
         se <- coef[coefindex,2]
@@ -176,9 +176,9 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   
   # Add column names
   colnames(tbl) <- c("Variable", "N", "Events", "Beta (SE)", "95% CI for Beta", "OR", "95% CI for OR", "P")
-
+  
   # If not a binary response or events is FALSE, remove events column
-  if (glmfit$family$family != "binomial" | events == FALSE) {
+  if (svyglmfit$family$family != "binomial" | events == FALSE) {
     tbl <- tbl[,-which(colnames(tbl) == "Events"), drop = FALSE]
   }
   
@@ -186,17 +186,17 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   if (n == FALSE) {
     tbl <- tbl[,-which(colnames(tbl) == "N"), drop = FALSE]
   }
-
+  
   # If ci.beta is FALSE, remove column
   if (ci.beta == FALSE) {
     tbl <- tbl[,-which(colnames(tbl) == "95% CI for Beta"), drop = FALSE]
   }
   
   # Adjust OR columns if necessary
-  if (glmfit$family$link == "log") {
+  if (svyglmfit$family$link == "log") {
     colnames(tbl)[colnames(tbl) == "OR"] <- "exp(Beta)"
     colnames(tbl)[colnames(tbl) == "95% CI for OR"] <- "95% CI for exp(Beta)"
-  } else if (!(glmfit$family$link == "logit" & glmfit$family$family %in% c("binomial", "quasi", "quasibibinomial"))) {
+  } else if (!(svyglmfit$family$link == "logit" & svyglmfit$family$family %in% c("binomial", "quasi", "quasibibinomial"))) {
     tbl <- tbl[,-which(colnames(tbl) %in% c("OR", "95% CI for OR")), drop = FALSE]
   }
   

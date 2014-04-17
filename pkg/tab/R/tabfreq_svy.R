@@ -1,14 +1,11 @@
-tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname = "Y variable", 
-                    test = "chi", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01,
-                    p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-                    compress = FALSE) {
+tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, ylevels = NULL, 
+                        yname = "Y variable", decimals = 1, p.decimals = c(2,3), 
+                        p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+                        p.avoid1 = FALSE, n = FALSE, compress = FALSE) {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
-  }
-  if (! test %in% c("chi", "fisher")) {
-    stop("For test input, please enter 'chi' or 'fisher'")
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
@@ -38,10 +35,15 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
   
-  # Get cell counts and proportions
+  # Extract vectors x and y
+  x <- svy$variables[,x]
+  y <- svy$variables[,y]
+  
+  # Update survey object to include y and x explicitly
+  svy2 <- update(svy, y = y, x = x)
+  
+  # Basic table to get levels of x and y
   counts <- table(y, x)
-  props <- 100*prop.table(counts)
-  colprops <- 100*prop.table(counts, 2)
   
   # If ylevels unspecified, set to actual values
   if (is.null(ylevels)) {
@@ -54,25 +56,21 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   # Add variable name and levels of Y to first row
   tbl[,1] <- c(paste(yname, ", n (%)", sep = ""), paste("  ", ylevels, sep = ""))
   
-  # n (%) in each level of y
-  tbl[2:nrow(tbl),2] <- paste(sprintf("%.0f", rowSums(counts)), " (", sprintf(spf, rowSums(props)), ")", sep = "")
-  
   # n (%) for each cell
-  for (i in 1:nrow(counts)) {
-    for (j in 1:ncol(counts)) {
-      tbl[i+1,j+2] <- paste(sprintf("%.0f", counts[i,j]), " (", sprintf(spf, colprops[i,j]), ")", sep = "")
-    }
+  for (ii in 1:nrow(counts)) {
+    yval <- rownames(counts)[ii]
+    totmean <- svymean(y == yval, design = svy2)
+    tbl[ii+1,2] <- paste(sprintf("%.0f", counts[ii,1]), " (", sprintf(spf, totmean*100), ")", sep = "")
+    yval <- rownames(counts)[ii]
+    levmeans <- svyby(~y == yval, by = ~x, FUN = svymean, design = svy2)
+    tbl[ii+1,3:(ncol(tbl)-1)] <- paste(sprintf("%.0f", counts[ii,]), " (", sprintf(spf, levmeans$"y == yvalTRUE"*100), ")", sep = "")
   }
   
   # Statistical test
   if (nrow(counts) == 1) {
-    pval = "-"
+    pval <- "-"
   } else {
-    if (test == "chi") {
-      pval <- chisq.test(x = x, y = y)$p.value
-    } else if (test == "fisher") {
-      pval <- fisher.test(x = x, y = y)$p.value
-    }
+    pval <- svychisq(~y + x, design = svy2)$p.value
   }
   tbl[1,ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
   

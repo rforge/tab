@@ -100,9 +100,9 @@ tabmeans <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
-    plocs = which(substr(tbl[,"P"],1,1) == "<")
+    plocs <- which(substr(tbl[,"P"], 1, 1) == "<")
     if (length(plocs) > 0) {
-      tbl[plocs,"P"] = paste("$<$", substring(tbl[plocs,"P"],2), sep = "")
+      tbl[plocs,"P"] <- paste("$<$", substring(tbl[plocs,"P"], 2), sep = "")
     }
   }
   

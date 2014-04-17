@@ -13,15 +13,20 @@ Description: This package contains functions for generating tables for statistic
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 2.1.1\cr
-Date: \tab 2014-04-10\cr
+Date: \tab 2014-04-17\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:
 
 \code{\link{tabfreq}},
+\code{\link{tabfreq.svy}},
 \code{\link{tabmeans}},
+\code{\link{tabmeans.svy}},
+\code{\link{tabglm}},
+\code{\link{tabglm.svy}},
 \code{\link{tabcox}},
-\code{\link{tabglm}}
+\code{\link{tabgee}
+\code{\link{formatp}}
 }
 \author{
 Dane R. Van Domelen
