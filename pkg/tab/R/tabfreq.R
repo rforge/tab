@@ -49,18 +49,21 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   }
   
   # Initialize table
-  tbl <- matrix("", nrow = nrow(counts)+1, ncol = ncol(counts)+3) 
+  tbl <- matrix("", nrow = nrow(counts)+1, ncol = ncol(counts)+4) 
   
   # Add variable name and levels of Y to first row
   tbl[,1] <- c(paste(yname, ", n (%)", sep = ""), paste("  ", ylevels, sep = ""))
   
+  # Add N column
+  tbl[1,2] <- sprintf("%.0f", sum(counts))
+  
   # n (%) in each level of y
-  tbl[2:nrow(tbl),2] <- paste(sprintf("%.0f", rowSums(counts)), " (", sprintf(spf, rowSums(props)), ")", sep = "")
+  tbl[2:nrow(tbl),3] <- paste(sprintf("%.0f", rowSums(counts)), " (", sprintf(spf, rowSums(props)), ")", sep = "")
   
   # n (%) for each cell
   for (i in 1:nrow(counts)) {
     for (j in 1:ncol(counts)) {
-      tbl[i+1,j+2] <- paste(sprintf("%.0f", counts[i,j]), " (", sprintf(spf, colprops[i,j]), ")", sep = "")
+      tbl[i+1,j+3] <- paste(sprintf("%.0f", counts[i,j]), " (", sprintf(spf, colprops[i,j]), ")", sep = "")
     }
   }
   
@@ -78,7 +81,7 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   
   # If y binary and compress is TRUE, compress table to a single row
   if (nrow(counts) <= 2 & compress == TRUE) {
-    tbl <- matrix(c(tbl[1,1], tbl[nrow(tbl), 2:(ncol(tbl)-1)], tbl[1,ncol(tbl)]), nrow = 1)
+    tbl <- matrix(c(tbl[1,1:2], tbl[nrow(tbl),3:(ncol(tbl)-1)], tbl[1,ncol(tbl)]), nrow = 1)
   }
   
   # If xlevels unspecified, set to actual values
@@ -86,16 +89,13 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
     xlevels <- colnames(counts)
   }
   
-  # If requested, include n's in xlevels labels
-  if (n == TRUE) {
-    xlevels <- paste(xlevels," (n = ", colSums(counts), ")", sep = "")
-    overall <- paste("Overall (n = ", sum(counts), ")", sep = "")
-  } else {
-    overall <- "Overall"
-  }
-  
   # Add column names
-  colnames(tbl) <- c("Variable", overall, xlevels, "P")
+  colnames(tbl) <- c("Variable", "N", "Overall", xlevels, "P")
+  
+  # Drop N column if requested
+  if (n == FALSE) {
+    tbl <- tbl[,-which(colnames(tbl) == "N"), drop = FALSE]
+  }
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {

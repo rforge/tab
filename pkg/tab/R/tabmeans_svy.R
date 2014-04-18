@@ -34,12 +34,24 @@ tabmeans.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y va
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
   
+  # Save x and y as character strings
+  xstring <- x
+  ystring <- y
+  
   # Extract vectors x and y
-  x <- svy$variables[,x]
-  y <- svy$variables[,y]
+  x <- svy$variables[,xstring]
+  y <- svy$variables[,ystring]
   
   # Update survey object to include y and x explicitly
   svy2 <- update(svy, y = y, x = x)
+  
+  # Drop missing values if present
+  locs <- which(!is.na(x) & !is.na(y))
+  if (length(locs) < nrow(svy2)) {
+    svy2 <- subset(svy2, !is.na(x) & !is.na(y))
+    x <- svy2$variables[,xstring]
+    y <- svy2$variables[,ystring]
+  }
   
   # Get unique values of x
   xvals <- sort(unique(x))
@@ -50,7 +62,7 @@ tabmeans.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y va
   }
   
   # Initialize table
-  tbl <- matrix("", nrow = 1, ncol = 3+length(xlevels))
+  tbl <- matrix("", nrow = 1, ncol = length(xlevels)+4)
   
   # Get means and SE's overall and by levels of x, and get sample size in each x
   totmean <- svymean(y, design = svy2)
@@ -59,25 +71,23 @@ tabmeans.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y va
   
   # Add mean (SE) values to table
   tbl[1,1] <- paste(yname, ", M (SE)", sep = "")
-  tbl[1,2] <- paste(sprintf(spf, totmean), " (", sprintf(spf, sqrt(attr(totmean, "var"))), ")", sep = "")
-  tbl[1,3:(ncol(tbl)-1)] <- paste(sprintf(spf, means$"y"), " (", sprintf(spf, means$"se"), ")", sep = "")
+  tbl[1,2] <- sprintf("%.0f", sum(ns))
+  tbl[1,3] <- paste(sprintf(spf, totmean), " (", sprintf(spf, sqrt(attr(totmean, "var"))), ")", sep = "")
+  tbl[1,4:(ncol(tbl)-1)] <- paste(sprintf(spf, means$"y"), " (", sprintf(spf, means$"se"), ")", sep = "")
   
   # ANOVA
   fit1 <- svyglm(y ~ 1, design = svy2)
   fit2 <- svyglm(y ~ as.factor(x), design = svy2)
   pval <- anova(fit1, fit2, method = test)$p
   tbl[1,ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
-
-  # If requested, include n's in xlevels labels
-  if (n == TRUE) {
-    xlevels <- paste(xlevels, " (n = ", tapply(X = y, INDEX = x, FUN = length), ")", sep = "")
-    overall <- paste("Overall (n = ", sum(complete.cases(x) & complete.cases(y)), ")", sep = "")
-  } else {
-    overall <- "Overall"
-  }
   
   # Add column names
-  colnames(tbl) <- c("Variable", overall, xlevels, "P")
+  colnames(tbl) <- c("Variable", "N", "Overall", xlevels, "P")
+  
+  # Drop N column if requested
+  if (n == FALSE) {
+    tbl <- tbl[,-which(colnames(tbl) == "N"), drop = FALSE]
+  }
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
