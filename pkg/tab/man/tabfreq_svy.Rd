@@ -7,7 +7,7 @@ Generate frequency tables for statistical reports (survey data)
 This function creates an I-by-J frequency table and summarizes the results in a clean table for a statistical report. Similar to tabfreq, but for survey data. Relies heavily on the 'survey' package [1,2].
 }
 \usage{
-tabfreq_svy(x, y, svy, latex = FALSE, xlevels = NULL, ylevels = NULL, 
+tabfreq.svy(x, y, svy, latex = FALSE, xlevels = NULL, ylevels = NULL, 
             yname = "Y variable", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
             p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
             compress = FALSE)

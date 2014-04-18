@@ -7,10 +7,10 @@ Generate summary tables of generalized linear models for statistical reports (su
 This function takes an object returned from the svyglm function and generates a clean summary table for a statistical report. Similar to tabglm, but for survey data. Relies heavily on the 'survey' package [1,2].
 }
 \usage{
-tabglm(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
-       p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-       p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
-       events = FALSE, or = TRUE)
+tabglm.svy(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
+           p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+           p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
+           events = FALSE, or = TRUE)
 }
 \arguments{
   \item{svyglmfit}{
