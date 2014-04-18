@@ -12,8 +12,8 @@ This package contains functions for generating tables for statistical reports wr
 \tabular{ll}{
 Package: \tab tab\cr
 Type: \tab Package\cr
-Version: \tab 2.1.1\cr
-Date: \tab 2014-04-17\cr
+Version: \tab 2.1.2\cr
+Date: \tab 2014-04-18\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:
