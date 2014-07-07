@@ -23,7 +23,7 @@ If TRUE, object returned will be formatted for printing in LaTeX using xtable [1
 Optional character vector to label the x variables and their levels. If unspecified, the function uses the variable names and values themselves.
 }
   \item{ci.beta}{
-If TRUE, the table returned will include a column for Wald 95\% confidence interval for the regression coefficients.
+If TRUE, the table returned will include a column for 95\% confidence interval for the regression coefficients.
 }
  \item{ci.method}{
 If "wald", confidence intervals are constructed by inverting the t or z statistics, depending on the GLM family (i.e. Gaussian, Poisson, binomial, etc.);
@@ -60,7 +60,7 @@ If TRUE, the table returned will include a column for sample size.
 If TRUE, the table returned will include a column for number of events observed. Only meaningful when the outcome variable is binary.
 }
   \item{or}{
-If TRUE, the table returned will include columns for odds ratios and Wald 95\% confidence intervals for odds ratios. Only meaningful for logistic regression.
+If TRUE, the table returned will include columns for odds ratios and 95\% confidence intervals for odds ratios. Only meaningful for logistic regression.
 }
 }
 \details{
