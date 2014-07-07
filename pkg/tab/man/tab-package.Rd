@@ -6,14 +6,14 @@
 Functions for creating summary tables for statistical reports
 }
 \description{
-This package contains functions for generating tables for statistical reports written in Microsoft Word or LaTeX. There are functions for I-by-J frequency tables, comparison of means across levels of a categorical variable, generalized linear models, generalized estimating equations, and Cox proportional hazards regression. The package is intended to make it easier for researchers to translate results from statistical analyses in R to their reports or manuscripts.
+This package contains functions for generating tables for statistical reports written in Microsoft Word or LaTeX. There are functions for I-by-J frequency tables, comparison of means across levels of a categorical variable, generalized linear models, generalized estimating equations, and Cox proportional hazards regression. Functions are available to handle data simple random samples or survey data. The package is intended to make it easier for researchers to translate results from statistical analyses in R to their reports or manuscripts.
 }
 \details{
 \tabular{ll}{
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 2.1.2\cr
-Date: \tab 2014-04-23\cr
+Date: \tab 2014-07-07\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:

@@ -1,11 +1,16 @@
 tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, ylevels = NULL, 
-                        yname = "Y variable", decimals = 1, p.decimals = c(2,3), 
+                        yname = "Y variable", test = "F", decimals = 1, p.decimals = c(2,3), 
                         p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
                         p.avoid1 = FALSE, n = FALSE, compress = FALSE) {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
+  }
+  if (! test %in% c("F", "Chisq", "Wald", "adjWald", "lincom", "saddlepoint")) {
+    stop("For test input, please enter a possible value for the 'statistic' input of the 
+         svychisq function in the survey package: 'F', 'Chisq', 'Wald', 'adjWald', 'lincom', 
+         or 'saddlepoint'. See svychisq documentation for details.")
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
@@ -85,7 +90,7 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, ylevels = NULL
   if (nrow(counts) == 1) {
     pval <- "-"
   } else {
-    pval <- svychisq(~y + x, design = svy2)$p.value
+    pval <- svychisq(~y + x, design = svy2, statistic = test)$p.value
   }
   tbl[1,ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
   

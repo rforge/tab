@@ -3,12 +3,20 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
                     p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
                     compress = FALSE) {
   
+  # Get cell counts and proportions
+  counts <- table(y, x)
+  props <- 100*prop.table(counts)
+  colprops <- 100*prop.table(counts, 2)
+  
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
   }
-  if (! test %in% c("chi", "fisher")) {
-    stop("For test input, please enter 'chi' or 'fisher'")
+  if (! test %in% c("chi", "fisher", "z", "z.continuity")) {
+    stop("For test input, please enter 'chi', 'fisher', 'z', or 'z.continuity'")
+  }
+  if (test %in% c("z", "z.continuity") & ! all(dim(counts) == 2)) {
+    stop("For test input, 'z' and 'z.continuity' can only be used if both x and y are binary")
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
@@ -37,11 +45,6 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
-  
-  # Get cell counts and proportions
-  counts <- table(y, x)
-  props <- 100*prop.table(counts)
-  colprops <- 100*prop.table(counts, 2)
   
   # If ylevels unspecified, set to actual values
   if (is.null(ylevels)) {
@@ -75,6 +78,10 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
       pval <- chisq.test(x = x, y = y)$p.value
     } else if (test == "fisher") {
       pval <- fisher.test(x = x, y = y)$p.value
+    } else if (test == "z") {
+      pval <- prop.test(x = counts, correct = FALSE)$p.value
+    } else if (test == "z.continuity") {
+      pval <- prop.test(x = counts)$p.value
     }
   }
   tbl[1,ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)

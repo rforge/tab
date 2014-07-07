@@ -8,9 +8,9 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 }
 \usage{
 tabfreq.svy(x, y, svy, latex = FALSE, xlevels = NULL, ylevels = NULL, 
-            yname = "Y variable", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
-            p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-            compress = FALSE)
+            yname = "Y variable", test = "F", decimals = 1, p.decimals = c(2, 3), 
+            p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+            p.avoid1 = FALSE, n = FALSE, compress = FALSE)
 }
 \arguments{
   \item{svy}{
@@ -33,6 +33,9 @@ Optional character vector to label the levels of y. If unspecified, the function
 }
   \item{yname}{
 Optional label for the y (row) variable.
+}
+  \item{test}{
+Controls test for association between x and y. Must be a possible value for the 'statistic' input of the svychisq function in the survey package [1,2]: 'F', 'Chisq', 'Wald', 'adjWald', 'lincom', or 'saddlepoint'.
 }
   \item{decimals}{
 Number of decimal places for percentages.
@@ -83,6 +86,7 @@ Currently this function is fairly basic. Future versions should allow for more f
 \seealso{
 \code{\link{svydesign}}
 \code{\link{svyglm}}
+\code{\link{svychisq}}
 \code{\link{tabfreq}}
 \code{\link{tabmeans}}
 \code{\link{tabmeans.svy}}

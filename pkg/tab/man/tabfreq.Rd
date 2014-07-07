@@ -32,7 +32,7 @@ Optional character vector to label the levels of y. If unspecified, the function
 Optional label for the y (row) variable.
 }
   \item{test}{
-Controls test of independence between x and y. "chi" for Pearson's chi-squared test, "fisher" for Fisher's exact test.
+Controls test for association between x and y. "chi" for Pearson's chi-squared test, "fisher" for Fisher's exact test, "z" for z test without continuity correction, and "z.continuity" for z test with continuity correction. "z" and "z.continuity" can only be used if x and y are binary.
 }
   \item{decimals}{
 Number of decimal places for percentages.

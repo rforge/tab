@@ -7,10 +7,10 @@ Generate summary tables of generalized linear models for statistical reports
 This function takes an object returned from the glm function and generates a clean summary table for a statistical report.
 }
 \usage{
-tabglm(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
-       p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-       p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
-       events = FALSE, or = TRUE)
+tabglm(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, ci.method = "wald", 
+       decimals = 2, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
+       p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, 
+       n = FALSE, events = FALSE, or = TRUE)
 }
 \arguments{
   \item{glmfit}{
@@ -24,6 +24,10 @@ Optional character vector to label the x variables and their levels. If unspecif
 }
   \item{ci.beta}{
 If TRUE, the table returned will include a column for Wald 95\% confidence interval for the regression coefficients.
+}
+ \item{ci.method}{
+If "wald", confidence intervals are constructed by inverting the t or z statistics, depending on the GLM family (i.e. Gaussian, Poisson, binomial, etc.);
+if "profile", confidence intervals are constructed using profile likelihood (confint function).
 }
   \item{decimals}{
 Number of decimal places for numeric values in the table (except p-values).
