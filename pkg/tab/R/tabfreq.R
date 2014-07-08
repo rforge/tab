@@ -1,5 +1,5 @@
 tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname = "Y variable", 
-                    test = "chi", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01,
+                    test = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
                     p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
                     compress = FALSE) {
   
@@ -55,18 +55,18 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   tbl <- matrix("", nrow = nrow(counts)+1, ncol = ncol(counts)+4) 
   
   # Add variable name and levels of Y to first row
-  tbl[,1] <- c(paste(yname, ", n (%)", sep = ""), paste("  ", ylevels, sep = ""))
+  tbl[, 1] <- c(paste(yname, ", n (%)", sep = ""), paste("  ", ylevels, sep = ""))
   
   # Add N column
-  tbl[1,2] <- sprintf("%.0f", sum(counts))
+  tbl[1, 2] <- sprintf("%.0f", sum(counts))
   
   # n (%) in each level of y
-  tbl[2:nrow(tbl),3] <- paste(sprintf("%.0f", rowSums(counts)), " (", sprintf(spf, rowSums(props)), ")", sep = "")
+  tbl[2:nrow(tbl), 3] <- paste(sprintf("%.0f", rowSums(counts)), " (", sprintf(spf, rowSums(props)), ")", sep = "")
   
   # n (%) for each cell
   for (i in 1:nrow(counts)) {
     for (j in 1:ncol(counts)) {
-      tbl[i+1,j+3] <- paste(sprintf("%.0f", counts[i,j]), " (", sprintf(spf, colprops[i,j]), ")", sep = "")
+      tbl[i+1, j+3] <- paste(sprintf("%.0f", counts[i, j]), " (", sprintf(spf, colprops[i, j]), ")", sep = "")
     }
   }
   
@@ -84,11 +84,11 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
       pval <- prop.test(x = counts)$p.value
     }
   }
-  tbl[1,ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
+  tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
   
   # If y binary and compress is TRUE, compress table to a single row
   if (nrow(counts) <= 2 & compress == TRUE) {
-    tbl <- matrix(c(tbl[1,1:2], tbl[nrow(tbl),3:(ncol(tbl)-1)], tbl[1,ncol(tbl)]), nrow = 1)
+    tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
   }
   
   # If xlevels unspecified, set to actual values
@@ -101,27 +101,27 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   
   # Drop N column if requested
   if (n == FALSE) {
-    tbl <- tbl[,-which(colnames(tbl) == "N"), drop = FALSE]
+    tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
   }
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
-    plocs <- which(substr(tbl[,"P"], 1, 1) == "<")
+    plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
     if (length(plocs) > 0) {
-      tbl[plocs,"P"] <- paste("$<$", substring(tbl[plocs,"P"], 2), sep = "")
+      tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2), sep = "")
     }
-    spacelocs <- which(substr(tbl[,"Variable"], 1, 2) == "  ")
+    spacelocs <- which(substr(tbl[, "Variable"], 1, 2) == "  ")
     if (length(spacelocs) > 0) {
-      tbl[spacelocs,"Variable"] <- paste("\\hskip .3cm ", substring(tbl[spacelocs,"Variable"], 3), sep = "")
+      tbl[spacelocs, "Variable"] <- paste("\\hskip .3cm ", substring(tbl[spacelocs, "Variable"], 3), sep = "")
     }
-    chars <- strsplit(tbl[,"Variable"], "")
+    chars <- strsplit(tbl[, "Variable"], "")
     for (ii in 1:length(chars)) {
       percentlocs <- which(chars[[ii]] == "%")
       if (length(percentlocs) > 0) {
         chars[[ii]][percentlocs] <- "\\%"
       }
     }
-    tbl[,"Variable"] <- sapply(chars, function(x) paste(x, sep = "", collapse = ""))
+    tbl[, "Variable"] <- sapply(chars, function(x) paste(x, sep = "", collapse = ""))
   }
   
   # Return table

@@ -102,7 +102,7 @@ data(d)
 d2 <- reshape(data = d, 
               varying = c("bp.1", "bp.2", "bp.3", "highbp.1", "highbp.2", "highbp.3"), 
               timevar = "bp.visit", direction = "long")
-d2 <- d2[order(d2$id),]
+d2 <- d2[order(d2$id), ]
 
 # Load required package gee
 library("gee")

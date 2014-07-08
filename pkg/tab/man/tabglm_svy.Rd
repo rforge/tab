@@ -7,10 +7,10 @@ Generate summary tables of generalized linear models for statistical reports (su
 This function takes an object returned from the svyglm function and generates a clean summary table for a statistical report. Similar to tabglm, but for survey data. Relies heavily on the 'survey' package [1,2].
 }
 \usage{
-tabglm.svy(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
-           p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-           p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n = FALSE, 
-           events = FALSE, or = TRUE)
+tabglm.svy(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, inference = "wald.t",
+           decimals = 2, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
+           p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, 
+           n = FALSE, events = FALSE)
 }
 \arguments{
   \item{svyglmfit}{
@@ -24,6 +24,9 @@ Optional character vector to label the x variables and their levels. If unspecif
 }
   \item{ci.beta}{
 If TRUE, the table returned will include a column for Wald 95\% confidence interval for the regression coefficients.
+}
+ \item{inference}{
+If "wald.t", confidence intervals and p-values are based on t distributions with degrees of freedom given by svyglmfit$df.residual; if "wald.z", confidence intervals and p-values are based on z distributions. 
 }
   \item{decimals}{
 Number of decimal places for numeric values in the table (except p-values).
@@ -54,9 +57,6 @@ If TRUE, the table returned will include a column for sample size.
 }
   \item{events}{
 If TRUE, the table returned will include a column for number of events observed. Only meaningful when the outcome variable is binary.
-}
-  \item{or}{
-If TRUE, the table returned will include columns for odds ratios and Wald 95\% confidence intervals for odds ratios. Only meaningful for logistic regression.
 }
 }
 \details{

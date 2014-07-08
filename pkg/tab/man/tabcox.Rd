@@ -92,7 +92,7 @@ If you have suggestions for additional options or features, or if you would like
 \examples{
 # Load in sample dataset d and drop rows with missing values
 data(d)
-d <- d[complete.cases(d),]
+d <- d[complete.cases(d), ]
 
 # Create labels for race levels
 races <- c("White", "Black", "Mexican American", "Other")

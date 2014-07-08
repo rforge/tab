@@ -50,7 +50,7 @@ NA
 \examples{
 # Load in sample dataset d and drop rows with missing values
 data(d)
-d <- d[complete.cases(d),]
+d <- d[complete.cases(d), ]
 
 # Create labels for treatment group, sex, and race
 groups <- c("Control", "Treatment")
@@ -73,7 +73,7 @@ table1 <- rbind(tabmeans(x = d$group, y = d$age, xlevels = groups, yname = "Age"
                         yname = "Race"))
 
 # Test whether age, sex, race, and treatment group are associated with BMI
-glmfit1 = glm(bmi ~ age + sex + race + group, data = d)
+glmfit1 <- glm(bmi ~ age + sex + race + group, data = d)
 lintable <- tabglm(glmfit = glmfit1, 
                    xlabels = c("Intercept", "Age", "Male", "Race", races, "Treatment"))
 

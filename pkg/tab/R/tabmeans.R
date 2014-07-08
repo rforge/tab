@@ -1,5 +1,5 @@
 tabmeans <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1,
-                     p.decimals = c(2,3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+                     p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
                      p.avoid1 = FALSE, n = FALSE, se = FALSE) {
   
   # If any inputs are not correct class, return error
@@ -55,18 +55,18 @@ tabmeans <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
   ns <- tapply(X = y, INDEX = x, FUN = length)
   if (se == FALSE) {
     vars <- tapply(X = y, INDEX = x, FUN = sd)
-    tbl[1,1] <- paste(yname, ", M (SD)", sep = "")
-    tbl[1,2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1,3] <- paste(sprintf(spf, mean(y[!is.na(x)])), " (", sprintf(spf, sd(y[!is.na(x)])), ")", sep = "")
+    tbl[1, 1] <- paste(yname, ", M (SD)", sep = "")
+    tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
+    tbl[1, 3] <- paste(sprintf(spf, mean(y[!is.na(x)])), " (", sprintf(spf, sd(y[!is.na(x)])), ")", sep = "")
   } else {
     vars <- tapply(X = y, INDEX = x, FUN = function(x) sd(x)/sqrt(length(x)))
-    tbl[1,1] <- paste(yname, ", M (SE)", sep = "")
-    tbl[1,2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1,3] <- paste(sprintf(spf, mean(y[!is.na(x)])), " (", sprintf(spf, sd(y[!is.na(x)])/sqrt(length(y[!is.na(x)]))), ")", sep = "")
+    tbl[1, 1] <- paste(yname, ", M (SE)", sep = "")
+    tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
+    tbl[1, 3] <- paste(sprintf(spf, mean(y[!is.na(x)])), " (", sprintf(spf, sd(y[!is.na(x)])/sqrt(length(y[!is.na(x)]))), ")", sep = "")
   }
   
   # Add mean (SD/SE) values to table
-  tbl[1,4:(ncol(tbl)-1)] <- paste(sprintf(spf, means), " (", sprintf(spf, vars), ")", sep = "")
+  tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, means), " (", sprintf(spf, vars), ")", sep = "")
   
   # Add p-value based on ANOVA or t-test depending on number of levels of x
   if (length(xlevels) == 2) {
@@ -87,21 +87,21 @@ tabmeans <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
   }
   
   # Add p-value from t-test
-  tbl[1,ncol(tbl)] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
+  tbl[1, ncol(tbl)] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
   
   # Add column names
   colnames(tbl) <- c("Variable", "N", "Overall", xlevels, "P")
   
   # Drop N column if requested
   if (n == FALSE) {
-    tbl <- tbl[,-which(colnames(tbl) == "N"), drop = FALSE]
+    tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
   }
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
-    plocs <- which(substr(tbl[,"P"], 1, 1) == "<")
+    plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
     if (length(plocs) > 0) {
-      tbl[plocs,"P"] <- paste("$<$", substring(tbl[plocs,"P"], 2), sep = "")
+      tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2), sep = "")
     }
   }
   
