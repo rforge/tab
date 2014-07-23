@@ -13,7 +13,7 @@ This package contains functions for generating tables for statistical reports wr
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 2.1.2\cr
-Date: \tab 2014-07-07\cr
+Date: \tab 2014-07-23\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:
