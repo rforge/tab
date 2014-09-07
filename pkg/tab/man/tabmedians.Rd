@@ -9,7 +9,8 @@ This function compares the median of a continuous variable across levels of a fa
 \usage{
 tabmedians(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
            p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-           p.avoid1 = FALSE, n = FALSE, parenth = "iqr")
+           p.avoid1 = FALSE, n = FALSE, parenth = "iqr", text.label = NA, 
+           parenth.sep = "-")
 }
 \arguments{
   \item{x}{
@@ -50,6 +51,12 @@ If TRUE, the table returned will include sample sizes in the column headings.
 }
   \item{parenth}{
 Controls what values (if any) are placed in parentheses after the medians in each cell. Possible choices are as follows: 'minmax' for minimum and maximum; 'range' for difference between minimum and maximum; 'q1q3' for first and third quartiles; 'iqr' for difference between first and third quartiles; or 'none' for no parentheses at all.
+}
+  \item{text.label}{
+Optional text to put after the variable name. For example, if parenth is 'q1q3' and yname is 'BMI' the default label would be 'BMI, Median (Q1-Q3)'. You might prefer to set text.label to something like 'Med (Quartile 1-Quartile 3)' instead.
+}
+  \item{parenth.sep}{
+Optional character specifying the separator for the two numbers in parentheses when parenth is set to 'minmax' or 'q1q3'. The default is a dash, so values in the table are formatted as Median (Lower-Upper). If you set parenth.sep to ', ' the values in the table would instead be formatted as Median (Lower, Upper).
 }
 }
 \details{

@@ -1,6 +1,7 @@
 tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1,
                        p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-                       p.avoid1 = FALSE, n = FALSE, parenth = "iqr") {
+                       p.avoid1 = FALSE, n = FALSE, parenth = "iqr", text.label = NA,
+                       parenth.sep = "-") {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -30,6 +31,9 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   if (! parenth %in% c("minmax", "range", "q1q3", "iqr", "none")) {
     stop("For parenth input, please enter one of the following: 'minmax', 'range', 'q1q3', 'iqr', 'none'")
   }
+  if (!is.na(text.label) && !is.character(text.label)) {
+    stop("For text.label input, please enter something like 'Median (IQR)' or just leave it unspecified")
+  }
   
   # Drop missing values
   locs.complete <- which(!is.na(x) & !is.na(y))
@@ -57,15 +61,21 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     parent1 <- tapply(X = y, INDEX = x, FUN = min)
     parent2 <- tapply(X = y, INDEX = x, FUN = max)
     parent <- paste(sprintf(spf, parent1), "-", sprintf(spf, parent2), sep = "")
-    tbl[1, 1] <- paste(yname, ", Median (Min-Max)", sep = "")
+    if (is.na(text.label)) {
+      text.label <- "Median (Min-Max)"
+    }
+    tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
     tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, min(y)), "-", sprintf(spf, max(y)), ")", sep = "")
+    tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, min(y)), parenth.sep, sprintf(spf, max(y)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
   } else if (parenth == "range") {
     parent1 <- tapply(X = y, INDEX = x, FUN = min)
     parent2 <- tapply(X = y, INDEX = x, FUN = max)
     parent <- paste(sprintf(spf, parent2 - parent1))
-    tbl[1, 1] <- paste(yname, ", Median (Range)", sep = "")
+    if (is.na(text.label)) {
+      text.label <- "Median (Range)"
+    }
+    tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
     tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
     tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, max(y) - min(y)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
@@ -73,21 +83,29 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     parent1 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.25))
     parent2 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.75))
     parent <- paste(sprintf(spf, parent1), "-", sprintf(spf, parent2), sep = "")
-    tbl[1, 1] <- paste(yname, ", Median (Q1-Q3)", sep = "")
+    if (is.na(text.label)) {
+      text.label <- "Median (Q1-Q3)"
+    }
+    tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
     tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, quantile(y, probs = 0.25)), "-", sprintf(spf, quantile(y, 0.75)), ")", sep = "")
+    tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, quantile(y, probs = 0.25)), parenth.sep, sprintf(spf, quantile(y, 0.75)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
   } else if (parenth == "iqr") {
     parent1 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.25))
     parent2 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.75))
     parent <- paste(sprintf(spf, parent2 - parent1))
-    tbl[1, 1] <- paste(yname, ", Median (IQR)", sep = "")
+    if (is.na(text.label)) {
+      text.label <- "Median (IQR)"
+    }
+    tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
     tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
     tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, quantile(y, probs = 0.75) - quantile(y, probs = 0.25)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
   } else if (parenth == "none") {
-    parent <- ""
-    tbl[1, 1] <- paste(yname, ", Median", sep = "")
+    if (is.na(text.label)) {
+      text.label <- "Median"
+    }
+    tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
     tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
     tbl[1, 3] <- sprintf(spf, median(y))
     tbl[1, 4:(ncol(tbl)-1)] <- sprintf(spf, medians)
