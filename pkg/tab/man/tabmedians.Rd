@@ -1,15 +1,15 @@
-\name{tabmeans}
-\alias{tabmeans}
+\name{tabmedians}
+\alias{tabmedians}
 \title{
-Generate summary tables of mean comparisons for statistical reports 
+Generate summary tables of median comparisons for statistical reports 
 }
 \description{
-This function compares the mean of a continuous variable across levels of a factor variable and summarizes the results in a clean table for a statistical report.
+This function compares the median of a continuous variable across levels of a factor variable and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabmeans(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
-         p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-         p.avoid1 = FALSE, n = FALSE, se = FALSE)
+tabmedians(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
+           p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+           p.avoid1 = FALSE, n = FALSE, parenth = "iqr")
 }
 \arguments{
   \item{x}{
@@ -48,17 +48,17 @@ If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly 
   \item{n}{
 If TRUE, the table returned will include sample sizes in the column headings. 
 }
-  \item{se}{
-If TRUE, the table will present mean (standard error) rather than mean (standard deviation).
+  \item{parenth}{
+Controls what values (if any) are placed in parentheses after the medians in each cell. Possible choices are as follows: 'minmax' for minimum and maximum; 'range' for difference between minimum and maximum; 'q1q3' for first and third quartiles; 'iqr' for difference between first and third quartiles; or 'none' for no parentheses at all.
 }
 }
 \details{
-If x has two levels, a t-test is used to test for a difference in means. An F test is first used to determine whether the equal variance or unequal variance t-test is appropriate. If x has more than two levels, a one-way analysis of variance is used to test for a difference in means across the groups.
+If x has two levels, a Mann-Whitney U (also known as Wilcoxon rank-sum) test is used to test whether the distribution of the continuous variable (y) differs in the two groups (x). If x has more than two levels, a Kruskal-Wallis test is used to test whether the distribution of y differs across at least two of the x groups.
 
 Both x and y can have missing values. The function drops observations with missing x or y. 
 }
 \value{
-A character matrix with the requested table comparing mean y across levels of x. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [1].
+A character matrix with the requested table comparing median y across levels of x. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [1].
 }
 \references{
 1. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
@@ -74,8 +74,8 @@ If you have suggestions for additional options or features, or if you would like
 \seealso{
 \code{\link{tabfreq}}
 \code{\link{tabfreq.svy}}
+\code{\link{tabmeans}}
 \code{\link{tabmeans.svy}}
-\code{\link{tabmedians}}
 \code{\link{tabglm}}
 \code{\link{tabglm.svy}}
 \code{\link{tabcox}}
@@ -90,22 +90,24 @@ d <- d[complete.cases(d), ]
 groups <- c("Control", "Treatment")
 races <- c("White", "Black", "Mexican American", "Other")
 
-# Compare mean BMI in control group vs. treatment group
-meanstable1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
+# Compare median BMI in control group vs. treatment group
+medtable1 <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
 
-# Compare mean BMI by race and include sample size
-meanstable2 <- tabmeans(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = TRUE)
+# Repeat, but suppress Min-Max from being shown in parentheses
+medtable2 <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", 
+             parenth = "none")
 
-# Create single table comparing mean BMI and mean age in control vs. treatment group
-meanstable3 <- rbind(tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),
-                     tabmeans(x = d$group, y = d$age, xlevels = groups, yname = "Age"))
+# Compare median BMI by race and include sample size
+medtable3 <- tabmedians(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = TRUE)
 
-# Click on meanstable1, meanstable2, and meanstable3 in the Workspace tab of RStudio 
+# Create single table comparing median BMI and median age in control vs. treatment group
+medtable4 <- rbind(tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),
+                   tabmedians(x = d$group, y = d$age, xlevels = groups, yname = "Age"))
+
+# Click on medtable1, medtable2, medtable3, and medtable4 in the Workspace tab of RStudio 
 # to see the tables that could be copied and pasted into a report or manuscript. 
 # Alternatively, setting the latex input to TRUE produces tables that can be inserted 
 # into LaTeX using the xtable package.
 }
 \keyword{ table }
-\keyword{ means }
-\keyword{ t-test }
-\keyword{ anova }
+\keyword{ median }

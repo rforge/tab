@@ -82,6 +82,7 @@ If you have suggestions for additional options or features, or if you would like
 \code{\link{tabfreq.svy}}
 \code{\link{tabmeans}}
 \code{\link{tabmeans.svy}}
+\code{\link{tabmedians}}
 \code{\link{tabglm}}
 \code{\link{tabglm.svy}}
 \code{\link{tabcox}}

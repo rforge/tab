@@ -90,6 +90,7 @@ Currently this function is fairly basic. Future versions should allow for more f
 \code{\link{tabfreq}}
 \code{\link{tabmeans}}
 \code{\link{tabmeans.svy}}
+\code{\link{tabmedians}}
 \code{\link{tabglm}}
 \code{\link{tabglm.svy}}
 \code{\link{tabcox}}
