@@ -60,7 +60,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   if (parenth == "minmax") {
     parent1 <- tapply(X = y, INDEX = x, FUN = min)
     parent2 <- tapply(X = y, INDEX = x, FUN = max)
-    parent <- paste(sprintf(spf, parent1), "-", sprintf(spf, parent2), sep = "")
+    parent <- paste(sprintf(spf, parent1), parenth.sep, sprintf(spf, parent2), sep = "")
     if (is.na(text.label)) {
       text.label <- "Median (Min-Max)"
     }
@@ -82,7 +82,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   } else if (parenth == "q1q3") {
     parent1 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.25))
     parent2 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.75))
-    parent <- paste(sprintf(spf, parent1), "-", sprintf(spf, parent2), sep = "")
+    parent <- paste(sprintf(spf, parent1), parenth.sep, sprintf(spf, parent2), sep = "")
     if (is.na(text.label)) {
       text.label <- "Median (Q1-Q3)"
     }
