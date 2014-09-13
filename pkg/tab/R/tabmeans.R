@@ -82,7 +82,7 @@ tabmeans <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
   } else {
     
     # ANOVA
-    p <- anova(lm(y ~ as.factor(x)))$"P"[1]
+    p <- anova(lm(y ~ as.factor(x)))$"Pr(>F)"[1]
     
   }
   
