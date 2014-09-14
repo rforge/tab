@@ -82,13 +82,14 @@ If you have suggestions for additional options or features, or if you would like
 \seealso{
 \code{\link{coxph}}
 \code{\link{tabfreq}}
-\code{\link{tabfreq.svy}}
 \code{\link{tabmeans}}
-\code{\link{tabmeans.svy}}
 \code{\link{tabmedians}}
+\code{\link{tabmulti}}
 \code{\link{tabglm}}
-\code{\link{tabglm.svy}}
 \code{\link{tabgee}}
+\code{\link{tabfreq.svy}}
+\code{\link{tabmeans.svy}}
+\code{\link{tabglm.svy}}
 }
 \examples{
 # Load in sample dataset d and drop rows with missing values

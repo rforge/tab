@@ -1,5 +1,5 @@
-tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname = "Y variable", 
-                    test = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
+tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
+                    test = "fisher", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
                     p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
                     compress = FALSE) {
   
@@ -12,8 +12,17 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
   }
-  if (! test %in% c("chi", "fisher", "z", "z.continuity")) {
-    stop("For test input, please enter 'chi', 'fisher', 'z', or 'z.continuity'")
+  if (!is.null(xlevels) && !all(is.character(xlevels))) {
+    stop("For xlevels input, please enter vector of character strings")
+  }
+  if (!is.character(yname)) {
+    stop("For yname input, please enter character string")
+  }
+  if (!is.null(ylevels) && !all(is.character(ylevels))) {
+    stop("For ylevels input, please enter vector of character strings")
+  }
+  if (! test %in% c("fisher", "chi", "z", "z.continuity")) {
+    stop("For test input, please enter 'fisher', 'chi', 'z', or 'z.continuity'")
   }
   if (test %in% c("z", "z.continuity") & ! all(dim(counts) == 2)) {
     stop("For test input, 'z' and 'z.continuity' can only be used if both x and y are binary")
@@ -76,12 +85,16 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, ylevels = NULL, yname =
   } else {
     if (test == "chi") {
       pval <- chisq.test(x = x, y = y)$p.value
+      print(paste("Pearson's chi-square test was used to test whether the distribution of ", yname, " differed across groups.", sep = ""))
     } else if (test == "fisher") {
       pval <- fisher.test(x = x, y = y)$p.value
+      print(paste("Fisher's exact test was used to test whether the distribution of ", yname, " differed across groups.", sep = ""))
     } else if (test == "z") {
       pval <- prop.test(x = counts, correct = FALSE)$p.value
+      print(paste("A z-test (without continuity correction) was used to test whether proportions of ", yname, " differed in the two groups.", sep = ""))
     } else if (test == "z.continuity") {
       pval <- prop.test(x = counts)$p.value
+      print(paste("A z-test (with continuity correction) was used to test whether proportions of ", yname, " differed in the two groups.", sep = ""))
     }
   }
   tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)

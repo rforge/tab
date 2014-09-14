@@ -52,7 +52,7 @@ If TRUE, p-values are printed with 0 before decimal place; if FALSE, the leading
 If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly depending on values for p.decimals and p.cuts). 
 }
   \item{n}{
-If TRUE, the table returned will include sample sizes in the column headings. 
+If TRUE, the table will have a column for sample size.
 }
 }
 \details{
@@ -79,14 +79,15 @@ Currently this function is fairly basic. Future versions should allow for more f
 \seealso{
 \code{\link{svydesign}}
 \code{\link{svyglm}}
-\code{\link{tabfreq}}
-\code{\link{tabfreq.svy}}
-\code{\link{tabmeans}}
-\code{\link{tabmedians}}
-\code{\link{tabglm}}
-\code{\link{tabglm.svy}}
-\code{\link{tabcox}}
-\code{\link{tabgee}}
+\code{\link{tabfreq}},
+\code{\link{tabmeans}},
+\code{\link{tabmedians}},
+\code{\link{tabmulti}},
+\code{\link{tabglm}},
+\code{\link{tabcox}},
+\code{\link{tabgee}},
+\code{\link{tabfreq.svy}},
+\code{\link{tabglm.svy}},
 }
 \examples{
 NA

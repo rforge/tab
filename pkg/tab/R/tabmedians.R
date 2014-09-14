@@ -1,11 +1,14 @@
 tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1,
                        p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-                       p.avoid1 = FALSE, n = FALSE, parenth = "iqr", text.label = NA,
+                       p.avoid1 = FALSE, n = FALSE, parenth = "iqr", text.label = NULL,
                        parenth.sep = "-") {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
+  }
+  if (!is.null(xlevels) && !all(is.character(xlevels))) {
+    stop("For xlevels input, please enter vector of character strings")
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
@@ -31,8 +34,11 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   if (! parenth %in% c("minmax", "range", "q1q3", "iqr", "none")) {
     stop("For parenth input, please enter one of the following: 'minmax', 'range', 'q1q3', 'iqr', 'none'")
   }
-  if (!is.na(text.label) && !is.character(text.label)) {
+  if (!is.null(text.label) && !is.character(text.label)) {
     stop("For text.label input, please enter something like 'Median (IQR)' or just leave it unspecified")
+  }
+  if (!is.character(parenth.sep)) {
+    stop("For parenth.sep input, please enter a character string")
   }
   
   # Drop missing values
@@ -61,7 +67,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     parent1 <- tapply(X = y, INDEX = x, FUN = min)
     parent2 <- tapply(X = y, INDEX = x, FUN = max)
     parent <- paste(sprintf(spf, parent1), parenth.sep, sprintf(spf, parent2), sep = "")
-    if (is.na(text.label)) {
+    if (is.null(text.label)) {
       text.label <- "Median (Min-Max)"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
@@ -83,7 +89,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     parent1 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.25))
     parent2 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.75))
     parent <- paste(sprintf(spf, parent1), parenth.sep, sprintf(spf, parent2), sep = "")
-    if (is.na(text.label)) {
+    if (is.null(text.label)) {
       text.label <- "Median (Q1-Q3)"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
@@ -94,7 +100,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     parent1 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.25))
     parent2 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.75))
     parent <- paste(sprintf(spf, parent2 - parent1))
-    if (is.na(text.label)) {
+    if (is.null(text.label)) {
       text.label <- "Median (IQR)"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
@@ -102,7 +108,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, quantile(y, probs = 0.75) - quantile(y, probs = 0.25)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
   } else if (parenth == "none") {
-    if (is.na(text.label)) {
+    if (is.null(text.label)) {
       text.label <- "Median"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
