@@ -12,7 +12,7 @@ This package contains functions for generating tables for statistical reports wr
 \tabular{ll}{
 Package: \tab tab\cr
 Type: \tab Package\cr
-Version: \tab 2.1.4\cr
+Version: \tab 2.1.3\cr
 Date: \tab 2014-09-14\cr
 License: \tab GPL-2\cr
 }
