@@ -1,6 +1,6 @@
 tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FALSE,
                      latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
-                     freq.tests = "fisher", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
+                     freq.tests = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
                      p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
                      se = FALSE, compress = FALSE, parenth = "iqr", text.label = NULL, 
                      parenth.sep = "-") {
@@ -24,11 +24,18 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
   }
-  if (!is.null(xlevels) && !all(is.character(xlevels))) {
+  if (!is.null(xlevels) && !is.character(xlevels)) {
     stop("For xlevels input, please enter vector of character strings")
   }
   if (!all(is.character(ynames))) {
     stop("For ynames input, please enter character string or vector of character strings of same length as yvarnames")
+  }
+  if (!is.null(ylevels) && !all(unlist(lapply(X = ylevels, FUN = function(x) all(is.character(x)))))) {
+    stop("For ylevels input, please enter vector or list of vectors of character strings")
+  }
+  if (!all(freq.tests %in% c("chi", "fisher", "z", "z.continuity"))) {
+    stop("For freq.tests input, please enter character string or vector of character strings indicating what statistical test
+         should be performed for each categorical row variable. Each element should be 'chi', 'fisher', 'z', or 'z.continuity'")
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
@@ -70,9 +77,9 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   # If listwise.deletion is TRUE, drop observations with missing values for column variable or any row variables
   if (listwise.deletion == TRUE){
     
-    d <- d[which(!is.na(d[, xvarname])), ]
+    dataset <- dataset[which(!is.na(dataset[, xvarname])), ]
     for (ii in 1:length(yvarnames)) {
-      d <- d[which(!is.na(d[, yvarnames[ii]])), ]
+      dataset <- dataset[which(!is.na(dataset[, yvarnames[ii]])), ]
     }
     
   }
@@ -91,7 +98,7 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   if (is.null(ymeasures)) {
     ymeasures <- c()
     for (ii in 1:length(yvarnames)) {
-      if (is.factor(d[, yvarnames[ii]]) | length(unique(d[, yvarnames[ii]])) <= 5) {
+      if (is.factor(dataset[, yvarnames[ii]]) | length(unique(dataset[!is.na(dataset[, yvarnames[ii]]), yvarnames[ii]])) <= 5) {
         ymeasures <- c(ymeasures, "freq")
       } else
         ymeasures <- c(ymeasures, "mean")
@@ -102,18 +109,18 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   freqindex <- 0
   for (ii in 1:length(yvarnames)) {
     if (ymeasures[ii] == "mean") {
-      current <- tabmeans(x = d[, xvarname], y = d[, yvarnames[ii]], latex = latex, xlevels = xlevels,
+      current <- tabmeans(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
                           yname = ynames[ii], decimals = decimals, p.decimals = p.decimals, p.cuts = p.cuts,
                           p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
                           n = n, se = se)
     } else if (ymeasures[ii] == "median") {
-      current <- tabmedians(x = d[, xvarname], y = d[, yvarnames[ii]], latex = latex, xlevels = xlevels,
+      current <- tabmedians(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
                             yname = ynames[ii], decimals = decimals, p.decimals = p.decimals, p.cuts = p.cuts,
                             p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
                             n = n, parenth = parenth, text.label = text.label, parenth.sep = parenth.sep)
     } else if (ymeasures[ii] == "freq") {
       freqindex <- freqindex + 1
-      current <- tabfreq(x = d[, xvarname], y = d[, yvarnames[ii]], latex = latex, xlevels = xlevels,
+      current <- tabfreq(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
                          yname = ynames[ii], ylevels = ylevels[[freqindex]], test = freq.tests[ii], 
                          decimals = decimals, p.decimals = p.decimals, p.cuts = p.cuts, p.lowerbound = p.lowerbound,
                          p.leading0 = p.leading0, p.avoid1 = p.avoid1, n = n, compress = compress)

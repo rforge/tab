@@ -7,13 +7,13 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
   }
-  if (!is.null(xlevels) && !all(is.character(xlevels))) {
+  if (!is.null(xlevels) && !is.character(xlevels)) {
     stop("For xlevels input, please enter vector of character strings")
   }
   if (!is.character(yname)) {
     stop("For yname input, please enter character string")
   }
-  if (!is.null(ylevels) && !all(is.character(ylevels))) {
+  if (!is.null(ylevels) && !is.character(ylevels)) {
     stop("For ylevels input, please enter vector of character strings")
   }
   if (! test %in% c("F", "Chisq", "Wald", "adjWald", "lincom", "saddlepoint")) {

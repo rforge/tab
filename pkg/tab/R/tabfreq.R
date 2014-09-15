@@ -1,5 +1,5 @@
 tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
-                    test = "fisher", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
+                    test = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
                     p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
                     compress = FALSE) {
   
@@ -12,17 +12,17 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
   }
-  if (!is.null(xlevels) && !all(is.character(xlevels))) {
+  if (!is.null(xlevels) && !is.character(xlevels)) {
     stop("For xlevels input, please enter vector of character strings")
   }
   if (!is.character(yname)) {
     stop("For yname input, please enter character string")
   }
-  if (!is.null(ylevels) && !all(is.character(ylevels))) {
+  if (!is.null(ylevels) && !is.character(ylevels)) {
     stop("For ylevels input, please enter vector of character strings")
   }
-  if (! test %in% c("fisher", "chi", "z", "z.continuity")) {
-    stop("For test input, please enter 'fisher', 'chi', 'z', or 'z.continuity'")
+  if (! test %in% c("chi", "fisher", "z", "z.continuity")) {
+    stop("For test input, please enter 'chi', 'fisher', 'z', or 'z.continuity'")
   }
   if (test %in% c("z", "z.continuity") & ! all(dim(counts) == 2)) {
     stop("For test input, 'z' and 'z.continuity' can only be used if both x and y are binary")

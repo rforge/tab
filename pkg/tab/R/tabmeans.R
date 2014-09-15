@@ -6,7 +6,7 @@ tabmeans <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
   }
-  if (!is.null(xlevels) && !all(is.character(xlevels))) {
+  if (!is.null(xlevels) && !is.character(xlevels)) {
     stop("For xlevels input, please enter vector of character strings.")
   }
   if (!is.character(yname)) {
