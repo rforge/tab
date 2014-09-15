@@ -9,7 +9,7 @@ This function basically provides an alternative to making multiple calls to tabm
 \usage{
 tabmulti(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FALSE, 
          latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
-         freq.tests = "fisher", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
+         freq.tests = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
          p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
          se = FALSE, compress = FALSE, parenth = "iqr", text.label = NULL, 
          parenth.sep = "-")
@@ -43,7 +43,7 @@ Optional labels for the row variables.
 Character vector or list of character vectors to label the levels of the categorical row variables.
 }
   \item{freq.tests}{
-Controls test for association between x and y. Use "fisher" for Fisher's exact test, which is valid even in small samples; "chi" for Pearson's chi-squared test, which is valid only in large samples; "z" for z test without continuity correction; and "z.continuity" for z test with continuity correction. "z" and "z.continuity" can only be used if x and y are binary.
+Character string or vector of character strings indicating which statistical tests should be used to compare distributions of each categorical row variable across levels of the column variable. Elements can be "chi" for Pearson's chi-squared test, which is valid only in large samples; "fisher" for Fisher's exact test, which is valid in small or large samples; "z" for z test without continuity correction; or "z.continuity" for z test with continuity correction. "z" and "z.continuity" can only be used for binary column and row variables.
 }
   \item{decimals}{
 Number of decimal places for various cell entries, such as means and percentages. Does not affect p-values.

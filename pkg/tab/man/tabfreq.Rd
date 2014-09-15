@@ -8,7 +8,7 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 }
 \usage{
 tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
-        test = "fisher", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
+        test = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
         compress = FALSE)
 }
@@ -32,7 +32,7 @@ Optional label for the y (row) variable.
 Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on.
 }
   \item{test}{
-Controls test for association between x and y. Use "fisher" for Fisher's exact test, which is valid in small or large samples; "chi" for Pearson's chi-squared test, which is valid only in large samples; "z" for z test without continuity correction; and "z.continuity" for z test with continuity correction. "z" and "z.continuity" can only be used if x and y are binary.
+Controls test for association between x and y. Use "chi" for Pearson's chi-squared test, which is valid only in large samples; "fisher" for Fisher's exact test, which is valid in small or large samples; "z" for z test without continuity correction; or "z.continuity" for z test with continuity correction. "z" and "z.continuity" can only be used if x and y are binary.
 }
   \item{decimals}{
 Number of decimal places for percentages.
