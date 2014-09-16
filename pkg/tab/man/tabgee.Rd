@@ -1,7 +1,7 @@
 \name{tabgee}
 \alias{tabgee}
 \title{
-Generate summary tables of generalized estimating equations for statistical reports
+Generate Summary Tables of Fitted Generalized Estimating Equations for Statistical Reports
 }
 \description{
 This function takes an object returned from the gee function in the package gee [1] and generates a clean summary table for a statistical report.

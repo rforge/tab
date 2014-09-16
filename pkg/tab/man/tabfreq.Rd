@@ -1,7 +1,7 @@
 \name{tabfreq}
 \alias{tabfreq}
 \title{
-Generate frequency tables for statistical reports
+Generate Frequency Tables for Statistical Reports
 }
 \description{
 This function creates an I-by-J frequency table and summarizes the results in a clean table for a statistical report.

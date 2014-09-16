@@ -1,7 +1,7 @@
 \name{tabmedians}
 \alias{tabmedians}
 \title{
-Generate summary tables of median comparisons for statistical reports 
+Generate Summary Tables of Median Comparisons for Statistical Reports 
 }
 \description{
 This function compares the median of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report.

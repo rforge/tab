@@ -1,7 +1,7 @@
 \name{tabmulti}
 \alias{tabmulti}
 \title{
-Generate multi-row tables comparing means/medians/frequencies of multiple variables across levels of one categorical variable
+Generate Multi-row Tables Comparing Means/Medians/Frequencies of Multiple Variables Across Levels of One Categorical Variable
 }
 \description{
 This function basically provides an alternative to making multiple calls to tabmeans, tabmedians, and tabfreq, then using rbind to combine the results into a single table.

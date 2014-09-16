@@ -1,7 +1,7 @@
 \name{tabmeans.svy}
 \alias{tabmeans.svy}
 \title{
-Generate summary tables of mean comparisons for statistical reports (survey data)
+Generate Summary Tables of Mean Comparisons for Statistical Reports (Survey Data)
 }
 \description{
 This function compares the mean of a continuous variable across levels of a factor variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1,2].

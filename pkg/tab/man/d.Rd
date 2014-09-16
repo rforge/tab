@@ -2,7 +2,7 @@
 \alias{d}
 \docType{data}
 \title{
-Example dataset for R package tab
+Example Dataset for tab Package
 }
 \description{
 This dataset is used to illustrate the various functions in the R package tab.

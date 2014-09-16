@@ -1,7 +1,7 @@
 \name{tabfreq.svy}
 \alias{tabfreq.svy}
 \title{
-Generate frequency tables for statistical reports (survey data)
+Generate Frequency Tables for Statistical Reports (Survey Data)
 }
 \description{
 This function creates an I-by-J frequency table and summarizes the results in a clean table for a statistical report. Similar to tabfreq, but for survey data. Relies heavily on the 'survey' package [1,2].

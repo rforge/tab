@@ -1,7 +1,7 @@
 \name{tabglm}
 \alias{tabglm}
 \title{
-Generate summary tables of generalized linear models for statistical reports
+Generate Summary Tables of Fitted Generalized Linear Models for Statistical Reports
 }
 \description{
 This function takes an object returned from the glm function and generates a clean summary table for a statistical report.

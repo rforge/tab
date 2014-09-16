@@ -1,7 +1,7 @@
 \name{tabglm.svy}
 \alias{tabglm.svy}
 \title{
-Generate summary tables of generalized linear models for statistical reports (survey data)
+Generate Summary Tables of Fitted Generalized Linear Models for Statistical Reports (Survey Data)
 }
 \description{
 This function takes an object returned from the svyglm function and generates a clean summary table for a statistical report. Similar to tabglm, but for survey data. Relies heavily on the 'survey' package [1,2].

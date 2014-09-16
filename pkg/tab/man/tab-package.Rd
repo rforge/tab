@@ -3,17 +3,17 @@
 \alias{tab}
 \docType{package}
 \title{
-Functions for creating summary tables for statistical reports
+Functions for Creating Summary Tables for Statistical Reports
 }
 \description{
-This package contains functions for generating tables for statistical reports written in Microsoft Word or LaTeX. There are functions for I-by-J frequency tables, comparison of means or medians across levels of a categorical variable, generalized linear models, generalized estimating equations, and Cox proportional hazards regression. Functions are available to handle data simple random samples or survey data. The package is intended to make it easier for researchers to translate results from statistical analyses in R to their reports or manuscripts.
+Contains functions for generating tables for statistical reports written in Microsoft Word or LaTeX. There are functions for I-by-J frequency tables, comparison of means or medians across levels of a categorical variable, and summarizing fitted generalized linear models, generalized estimating equations, and Cox proportional hazards regression. Functions are available to handle data simple random samples or survey data. The package is intended to make it easier for researchers to translate results from statistical analyses in R to their reports or manuscripts.
 }
 \details{
 \tabular{ll}{
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 2.1.3\cr
-Date: \tab 2014-09-15\cr
+Date: \tab 2014-09-16\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:

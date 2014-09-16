@@ -1,7 +1,7 @@
 \name{tabcox}
 \alias{tabcox}
 \title{
-Generate summary tables of Cox proportional hazards regression models for statistical reports
+Generate Summary Tables of Fitted Cox Proportional Hazards Regression Models for Statistical Reports
 }
 \description{
 This function performs Cox proportional hazards regression using the R package survival [1, 2] and summarizes the results in a clean table for a statistical report.
