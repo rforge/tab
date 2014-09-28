@@ -119,10 +119,10 @@ medtable5 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("bmi", "age
 # medtable4 and medtable5 are equivalent
 all(medtable4 == medtable5)
 
-# Click on medtable1, medtable2, medtable3, medtable4, or medtable5 in the Workspace tab 
-# of RStudio to see the tables that could be copied and pasted into a report or 
-# manuscript. Alternatively, setting the latex input to TRUE produces tables that can be 
-# inserted into LaTeX using the xtable package.
+# Click on medtable1, ... , medtable5 in the Workspace tab of RStudio to see the tables 
+# that could be copied and pasted into a report or manuscript. Alternatively, setting the 
+# latex input to TRUE produces tables that can be inserted into LaTeX using the xtable 
+# package.
 }
 \keyword{ table }
 \keyword{ median }

@@ -123,10 +123,9 @@ freqtable5 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("sex", "ra
 # freqtable4 and freqtable5 are equivalent
 all(freqtable4 == freqtable5)
 
-# Click on freqtable1, freqtable2, freqtable3, freqtable4, or freqtable5 in the Workspace 
-# tab of RStudio to see the tables that could be copied and pasted into a report or 
-# manuscript. Alternatively, setting the latex input to TRUE produces tables that can be 
-# inserted into LaTeX using the xtable package.
+# Click on freqtable1, ... , freqtable5 in the Workspace tab of RStudio to see the tables 
+# that could be copied and pasted into a report. Alternatively, setting the latex input to 
+TRUE produces tables that can be inserted into LaTeX using the xtable package.
 }
 \keyword{ table }
 \keyword{ frequency }

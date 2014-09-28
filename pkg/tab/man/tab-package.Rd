@@ -13,7 +13,7 @@ Contains functions for generating tables for statistical reports written in Micr
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 2.1.3\cr
-Date: \tab 2014-09-16\cr
+Date: \tab 2014-09-28\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:
@@ -60,11 +60,14 @@ sexes <- c("Female", "Male")
 races <- c("White", "Black", "Mexican American", "Other")
 
 # Compare race distribution by group, with group as column variable
-freqtable <- tabfreq(x = d$group, y = d$race, xlevels = groups, 
+freqtable <- tabfreq(x = d$group, y = d$race, xlevels = groups,
                      ylevels = races, yname = "Race")
 
 # Compare mean BMI in control group vs. treatment group
 meanstable <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
+
+# Generate plot comparing mean BMI in control group vs. treatment group
+meansfig <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", fig = TRUE)
 
 # Compare median BMI in control group vs. treatment group
 medianstable <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
@@ -89,7 +92,7 @@ coxtable <- tabcox(x = d[,c("age", "sex", "race", "group")], time = d$time,
                    delta = d$delta, 
                    xlabels = c("Age", "Male", "Race", races, "Treatment"))
 
-# Click on freqtable, meanstable, table1, lintable, logtable, and coxtable in 
+# Click on freqtable, meanstable, table1, lintable, logtable, or coxtable in 
 # the Workspace tab of RStudio to see the tables that could be copied and pasted 
 # into a Word document. Alternatively, setting the latex input to TRUE produces
 # tables that can be inserted into LaTeX using the xtable package.

@@ -111,7 +111,7 @@ glmfit2 <- glm(death_1yr ~ age + sex + race + group, data = d, family = binomial
 logtable <- tabglm(glmfit = glmfit2, ci.beta = FALSE,
                    xlabels = c("Intercept", "Age", "Male", "Race", races, "Treatment"))
 
-# Click on lintable and logtable in the Workspace tab of RStudio to see the tables that 
+# Click on lintable or logtable in the Workspace tab of RStudio to see the tables that 
 # could be copied and pasted into a report or manuscript. Alternatively, setting the
 # latex input to TRUE produces tables that can be inserted into LaTeX using the xtable 
 # package.

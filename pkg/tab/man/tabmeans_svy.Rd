@@ -4,7 +4,7 @@
 Generate Summary Tables of Mean Comparisons for Statistical Reports (Survey Data)
 }
 \description{
-This function compares the mean of a continuous variable across levels of a factor variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1,2].
+This function compares the mean of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1,2].
 }
 \usage{
 tabmeans.svy(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable", 
@@ -16,10 +16,10 @@ tabmeans.svy(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable",
 Survey design object created by a call to svydesign [1,2]. 
 }
   \item{x}{
-Character string specifying factor variable name. Must match one of names(svy$variables).
+Character string specifying categorical x variable name. Must match one of names(svy$variables).
 }
   \item{y}{
-Character string specifying continuous variable name. Must match one of names(svy$variables).
+Character string specifying continuous y variable name. Must match one of names(svy$variables).
 }
   \item{latex}{
 If TRUE, object returned will be formatted for printing in LaTeX using xtable [3]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.

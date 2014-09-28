@@ -108,7 +108,7 @@ coxtable2 <- tabcox(x = d[,c("age", "sex", "race", "group")], time = d$time,
                     delta = d$delta, 
                     xlabels = c("Age", "Male", "Race", races, "Treatment"))
 
-# Click on coxtable1 and coxtable2 in the Workspace tab of RStudio to see the tables 
+# Click on coxtable1 or coxtable2 in the Workspace tab of RStudio to see the tables 
 # that could be copied and pasted into a report or manuscript. Alternatively, setting 
 # the latex input to TRUE produces tables that can be inserted into LaTeX using the 
 # xtable package.

@@ -4,28 +4,35 @@
 Generate Summary Tables of Mean Comparisons for Statistical Reports 
 }
 \description{
-This function compares the mean of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report.
+This function compares the mean of a continuous variable across levels of a categorical variable and summarizes the results in a clean table (or figure) for a statistical report.
 }
 \usage{
-tabmeans(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
-         p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-         p.avoid1 = FALSE, n = FALSE, se = FALSE)
+tabmeans(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = "Y variable", 
+         quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.decimals = c(2, 3), 
+         p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
+         n = FALSE, se = FALSE, fig = FALSE)
 }
 \arguments{
   \item{x}{
-Vector of values for the categorical variable.
+Vector of values for the categorical x variable.
 }
   \item{y}{
-Vector of values for the continuous variable.
+Vector of values for the continuous y variable.
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned is be formatted for printing in LaTeX using xtable [1]; if FALSE, it is formatted for copy-and-pasting from RStudio into a word processor.
+}
+  \item{xname}{
+Label for the categorical variable. Only used if fig is TRUE.  
 }
   \item{xlevels}{
-Optional character vector to label the levels of x. If unspecified, the function uses the values that x takes on.
+Character vector of labels for levels of the x variable. If unspecified, the function uses the values that x takes on.
 }
   \item{yname}{
-Optional label for the continuous variable.
+Label for the continuous y variable.
+}
+  \item{quantiles}{
+If specified, function compares means of the y variable across quantiles of the x variable. For example, if x contains continuous BMI values and y contains continuous HDL cholesterol levels, setting quantiles to 3 would result in mean HDL being compared across tertiles of BMI.
 }
   \item{decimals}{
 Number of decimal places for means and standard deviations or standard errors.
@@ -50,6 +57,9 @@ If TRUE, the table will have a column for sample size.
 }
   \item{se}{
 If TRUE, the table will present mean (standard error) rather than mean (standard deviation).
+}
+  \item{fig}{
+If TRUE, a figure is returned rather than a table. The figure shows mean (95 percent confidence interval) for each level of x.
 }
 }
 \details{
@@ -91,27 +101,34 @@ d <- d[complete.cases(d), ]
 groups <- c("Control", "Treatment")
 races <- c("White", "Black", "Mexican American", "Other")
 
-# Compare mean BMI in control group vs. treatment group
+# Compare mean BMI in control group vs. treatment group - table and figure
 meanstable1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
+meansfig1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", fig = T)
 
-# Compare mean BMI by race and include sample size
+# Compare mean BMI by race - table with sample size and figure
 meanstable2 <- tabmeans(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = TRUE)
+meansfig2 <- tabmeans(x = d$race, y = d$bmi, xname = "Race", xlevels = races, 
+                      yname = "BMI", fig = TRUE)
+
+# Compare mean baseline systolic BP across tertiles of BMI - table and figure
+meanstable3 <- tabmeans(x = d$bmi, y = d$bp.1, yname = "Systolic BP", quantiles = 3)
+meansfig3 <- tabmeans(x = d$bmi, y = d$bp.1, xname = "BMI Tertile", yname = "Systolic BP",
+                      quantiles = 3, fig = TRUE)
 
 # Create single table comparing mean BMI and mean age in control vs. treatment group
-meanstable3 <- rbind(tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),
+meanstable4 <- rbind(tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),
                      tabmeans(x = d$group, y = d$age, xlevels = groups, yname = "Age"))
                      
 # An easier way to make the above table is to call the tabmulti function
-meanstable4 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("bmi", "age"),
+meanstable5 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("bmi", "age"),
                         xlevels = groups, ynames = c("BMI", "Age"))
                         
-# meanstable3 and meanstable4 are equivalent
-all(meanstable3 == meanstable4)
+# meanstable4 and meanstable5 are equivalent
+all(meanstable4 == meanstable5)
 
-# Click on meanstable1, meanstable2, meanstable3, or meanstable4 in the Workspace tab of
-# RStudio to see the tables that could be copied and pasted into a report or manuscript. 
-# Alternatively, setting the latex input to TRUE produces tables that can be inserted 
-# into LaTeX using the xtable package.
+# Click on meanstable 1, ... , meanstable5 in the Workspace tab of RStudio to see the
+# tables that could be copied and pasted into a report. Alternatively, setting the latex 
+# input to TRUE produces tables that can be inserted into LaTeX using the xtable package.
 }
 \keyword{ table }
 \keyword{ means }

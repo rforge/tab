@@ -130,7 +130,7 @@ geetable2 <- tabgee(geefit = geefit2, data = d2, ci.beta = FALSE,
                     xlabels = c("Intercept", "Age", "Male", "Race", races, "BMI", 
                                "Treatment"))
 
-# Click on geetable1 and geetable2 in the Workspace tab of RStudio to see the tables that 
+# Click on geetable1 or geetable2 in the Workspace tab of RStudio to see the tables that 
 # could be copied and pasted into a report or manuscript. Alternatively, setting the
 # latex input to TRUE produces tables that can be inserted into LaTeX using the xtable 
 # package.
