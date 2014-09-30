@@ -1,6 +1,6 @@
 tabcox <- function(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, p.decimals = c(2, 3), 
                    p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE, 
-                   events = TRUE, coef = "n") {
+                   events = TRUE, coef = "n", greek.beta = FALSE) {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -32,6 +32,9 @@ tabcox <- function(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, 
   }
   if (! coef %in% c("n", "x")) {
     stop("For coef input, please enter 'n' or 'x'")
+  }
+  if (!is.logical(greek.beta)) {
+    stop("For greek.beta input, please enter TRUE or FALSE")
   }
   
   # Convert decimals to variable for sprintf
@@ -170,6 +173,9 @@ tabcox <- function(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, 
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
+    if (greek.beta == TRUE) {
+      colnames(tbl)[which(colnames(tbl) == "Beta (SE)")] <- "$\\hat{\\beta}$ (SE)"
+    }
     plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
     if (length(plocs) > 0) {
       tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2), sep = "")
@@ -178,6 +184,14 @@ tabcox <- function(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, 
     if (length(spacelocs) > 0) {
       tbl[spacelocs, "Variable"] <- paste("\\hskip .3cm ", substring(tbl[spacelocs, "Variable"], 3), sep = "")
     }
+    chars <- strsplit(colnames(tbl), "")
+    for (ii in 1:length(chars)) {
+      percentlocs <- which(chars[[ii]] == "%")
+      if (length(percentlocs) > 0) {
+        chars[[ii]][percentlocs] <- "\\%"
+      }
+    }
+    colnames(tbl) <- sapply(chars, function(x) paste(x, sep = "", collapse = ""))
   }
   
   # Return table

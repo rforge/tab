@@ -10,7 +10,7 @@ This function takes an object returned from the svyglm function and generates a 
 tabglm.svy(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, inference = "wald.t",
            decimals = 2, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
            p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, 
-           n = FALSE, events = FALSE)
+           n = FALSE, events = FALSE, greek.beta = FALSE)
 }
 \arguments{
   \item{svyglmfit}{
@@ -57,6 +57,9 @@ If TRUE, the table returned will include a column for sample size.
 }
   \item{events}{
 If TRUE, the table returned will include a column for number of events observed. Only meaningful when the outcome variable is binary.
+}
+  \item{greek.beta}{
+If TRUE, column headings refer to regression parameters as Greek letter beta rather than Beta. Only used when latex input is set to TRUE.
 }
 }
 \details{

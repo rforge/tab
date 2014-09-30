@@ -9,7 +9,7 @@ This function performs Cox proportional hazards regression using the R package s
 \usage{
 tabcox(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, p.decimals = c(2, 3), 
        p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE,
-       events = TRUE, coef = "n")
+       events = TRUE, coef = "n", greek.beta = FALSE)
 }
 \arguments{
   \item{x}{
@@ -53,6 +53,9 @@ If TRUE, the table returned will include a column for number of events observed 
 }
   \item{coef}{
 If set to "x", function will standardize all variables in x that are continuous, providing standardized regression coefficients. Then, the interpretation of each hazard ratio is the hazard ratio associated with a one standard deviation increase in the predictor.
+}
+  \item{greek.beta}{
+If TRUE, column headings refer to regression parameters as Greek letter beta rather than Beta. Only used when latex input is set to TRUE.
 }
 }
 \details{

@@ -1,7 +1,7 @@
 tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, inference = "wald.t",
                        decimals = 2, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
                        p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, 
-                       n = FALSE, events = FALSE) {
+                       n = FALSE, events = FALSE, greek.beta = FALSE) {
   
   # If svyglmfit is not correct class, return error
   if (!all(class(svyglmfit) == c("svyglm", "glm", "lm"))) {
@@ -51,6 +51,9 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
   }
   if (!is.logical(events)) {
     stop("For events input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(greek.beta)) {
+    stop("For greek.beta input, please enter TRUE or FALSE")
   }
   
   # Convert decimals to variable for sprintf
@@ -221,6 +224,12 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
+    if (greek.beta == TRUE) {
+      colnames(tbl)[which(colnames(tbl) == "Beta (SE)")] <- "$\\hat{\\beta}$ (SE)"
+      colnames(tbl)[which(colnames(tbl) == "95% CI for Beta")] <- "95% CI for $\\beta$"
+      colnames(tbl)[which(colnames(tbl) == "exp(Beta)"] <- "exp($\\beta)$"
+      colnames(tbl)[which(colnames(tbl) == "95% CI for exp(Beta)"] <- "95\\% CI for exp($\\beta$)"
+    }
     plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
     if (length(plocs) > 0) {
       tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2), sep = "")
@@ -229,6 +238,14 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
     if (length(spacelocs) > 0) {
       tbl[spacelocs, "Variable"] <- paste("\\hskip .3cm ", substring(tbl[spacelocs, "Variable"], 3), sep = "")
     }
+    chars <- strsplit(colnames(tbl), "")
+    for (ii in 1:length(chars)) {
+      percentlocs <- which(chars[[ii]] == "%")
+      if (length(percentlocs) > 0) {
+        chars[[ii]][percentlocs] <- "\\%"
+      }
+    }
+    colnames(tbl) <- sapply(chars, function(x) paste(x, sep = "", collapse = ""))
   }
   
   # Return tbl

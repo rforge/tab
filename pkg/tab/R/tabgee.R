@@ -1,7 +1,7 @@
 tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
                    p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
                    p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n.id = FALSE, 
-                   n.total = FALSE, or = TRUE, robust = TRUE, data = NULL) {
+                   n.total = FALSE, or = TRUE, robust = TRUE, data = NULL, greek.beta = FALSE) {
   
   # If any inputs are not correct class, return error
   if (!all(class(geefit) == c("gee", "glm"))) {
@@ -53,6 +53,9 @@ tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
     if (!(is.data.frame(data) | is.matrix(data))) {
       stop("For data input, please enter data frame or matrix.")
     }
+  }
+  if (!is.logical(greek.beta)) {
+    stop("For greek.beta input, please enter TRUE or FALSE")
   }
   
   # Convert decimals to variable for sprintf
@@ -219,6 +222,12 @@ tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
+    if (greek.beta == TRUE) {
+      colnames(tbl)[which(colnames(tbl) == "Beta (SE)")] <- "$\\hat{\\beta}$ (SE)"
+      colnames(tbl)[which(colnames(tbl) == "95% CI for Beta")] <- "95% CI for $\\beta$"
+      colnames(tbl)[which(colnames(tbl) == "exp(Beta)"] <- "exp($\\beta)$"
+      colnames(tbl)[which(colnames(tbl) == "95% CI for exp(Beta)"] <- "95\\% CI for exp($\\beta$)"
+    }
     plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
     if (length(plocs) > 0) {
       tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2), sep = "")
@@ -227,6 +236,14 @@ tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
     if (length(spacelocs) > 0) {
       tbl[spacelocs, "Variable"] <- paste("\\hskip .3cm ", substring(tbl[spacelocs, "Variable"], 3), sep = "")
     }
+    chars <- strsplit(colnames(tbl), "")
+    for (ii in 1:length(chars)) {
+      percentlocs <- which(chars[[ii]] == "%")
+      if (length(percentlocs) > 0) {
+        chars[[ii]][percentlocs] <- "\\%"
+      }
+    }
+    colnames(tbl) <- sapply(chars, function(x) paste(x, sep = "", collapse = ""))
   }
   
   # Return tbl

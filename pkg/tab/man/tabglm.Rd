@@ -10,7 +10,7 @@ This function takes an object returned from the glm function and generates a cle
 tabglm(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, inference = "wald", 
        decimals = 2, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
        p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, 
-       n = FALSE, events = FALSE)
+       n = FALSE, events = FALSE, greek.beta = FALSE)
 }
 \arguments{
   \item{glmfit}{
@@ -59,6 +59,9 @@ If TRUE, the table returned will include a column for sample size.
   \item{events}{
 If TRUE, the table returned will include a column for number of events observed. Only meaningful when the outcome variable is binary.
 }
+  \item{greek.beta}{
+If TRUE, column headings refer to regression parameters as Greek letter beta rather than Beta. Only used when latex input is set to TRUE.
+}
 }
 \details{
 The function should work well with categorical predictors (factors), provided they are not ordered. For ordered factors, just convert to unordered before creating the glm object to pass to tabglm. Note that you can define the levels of an unordered factor to control, which dictates which level is used as the reference group in regression models. For example, suppose a factor variable x takes values "low", "medium", and "high". If you write x = factor(x = x, levels = c("low", "medium", "high")), then you can run levels(x) to see that the levels are now arranged "low", "medium", "high". It is still a regular factor, but now if you use x as a predictor in a call to glm, "low" will be the reference group.
@@ -74,7 +77,7 @@ A character matrix that summarizes the fitted generalized linear model. If you c
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
 \author{
-Dane R. Van domelen
+Dane R. Van Domelen
 }
 \note{
 This function replaces the previous functions tablin and tablog, which were for linear and logistic regression, respectively. The only capability those functions had that tabglm does not currently have is the ability to calculate standardized regression coefficients. This feature may be added to tabglm in the future.

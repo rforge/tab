@@ -10,7 +10,7 @@ This function takes an object returned from the gee function in the package gee 
 tabgee(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decimals = 2, 
        p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
        p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, n.id = FALSE, 
-       n.total = FALSE, or = TRUE, robust = TRUE, data = NULL)
+       n.total = FALSE, or = TRUE, robust = TRUE, data = NULL, greek.beta = FALSE)
 }
 \arguments{
   \item{geefit}{
@@ -63,6 +63,9 @@ If TRUE, robust standard errors are used (i.e. from sandwich estimator); if FALS
 }
   \item{data}{
 Data frame or matrix containing variables passed to gee to create geefit. Only necessary when one or more of the predictors is a factor variable and basic.form is FALSE.
+}
+  \item{greek.beta}{
+If TRUE, column headings refer to regression parameters as Greek letter beta rather than Beta. Only used when latex input is set to TRUE.
 }
 }
 \details{
