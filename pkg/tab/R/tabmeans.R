@@ -51,7 +51,7 @@ tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = 
   
   # Create quantiles if necessary
   if (!is.null(quantiles)) {
-    x <- cut(x = x, breaks = quantile(x, probs = seq(0, 1, 1/quantiles)), include.lowest = TRUE, right = TRUE)
+    x <- cut(x = x, breaks = quantile(x, probs = seq(0, 1, 1/quantiles)), include.lowest = TRUE, right = TRUE, dig.lab = decimals)
   }
   
   # Get means and SD's or SE's
