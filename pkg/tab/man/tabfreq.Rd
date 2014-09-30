@@ -125,7 +125,7 @@ all(freqtable4 == freqtable5)
 
 # Click on freqtable1, ... , freqtable5 in the Workspace tab of RStudio to see the tables 
 # that could be copied and pasted into a report. Alternatively, setting the latex input to 
-TRUE produces tables that can be inserted into LaTeX using the xtable package.
+# TRUE produces tables that can be inserted into LaTeX using the xtable package.
 }
 \keyword{ table }
 \keyword{ frequency }

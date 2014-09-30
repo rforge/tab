@@ -1,7 +1,12 @@
 tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
                     test = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
                     p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-                    compress = FALSE) {
+                    compress = FALSE, compress.val = NULL) {
+  
+  # Drop missing values
+  locs.complete <- which(!is.na(x) & !is.na(y))
+  x <- x[locs.complete]
+  y <- y[locs.complete]
   
   # Get cell counts and proportions
   counts <- table(y, x)
@@ -51,6 +56,9 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
   if (!is.logical(compress)) {
     stop("For compress input, please enter TRUE or FALSE")
   }
+  if (!is.null(compress) && !is.null(compress.val) && ! compress.val %in% unique(y)) {
+    stop("For compress.val input, please ensure that you enter one of the values that y takes on")
+  }
   
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
@@ -85,28 +93,33 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
   } else {
     if (test == "chi") {
       pval <- chisq.test(x = x, y = y)$p.value
-      print(paste("Pearson's chi-square test was used to test whether the distribution of ", yname, " differed across groups.", sep = ""))
+      message(paste("Pearson's chi-square test was used to test whether the distribution of ", yname, " differed across groups.", sep = ""))
     } else if (test == "fisher") {
       pval <- fisher.test(x = x, y = y)$p.value
-      print(paste("Fisher's exact test was used to test whether the distribution of ", yname, " differed across groups.", sep = ""))
+      message(paste("Fisher's exact test was used to test whether the distribution of ", yname, " differed across groups.", sep = ""))
     } else if (test == "z") {
       pval <- prop.test(x = counts, correct = FALSE)$p.value
-      print(paste("A z-test (without continuity correction) was used to test whether proportions of ", yname, " differed in the two groups.", sep = ""))
+      message(paste("A z-test (without continuity correction) was used to test whether proportions of ", yname, " differed in the two groups.", sep = ""))
     } else if (test == "z.continuity") {
       pval <- prop.test(x = counts)$p.value
-      print(paste("A z-test (with continuity correction) was used to test whether proportions of ", yname, " differed in the two groups.", sep = ""))
+      message(paste("A z-test (with continuity correction) was used to test whether proportions of ", yname, " differed in the two groups.", sep = ""))
     }
   }
   tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
   
-  # If y binary and compress is TRUE, compress table to a single row
-  if (nrow(counts) <= 2 & compress == TRUE) {
-    tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
-  }
-  
   # If xlevels unspecified, set to actual values
   if (is.null(xlevels)) {
     xlevels <- colnames(counts)
+  }
+  
+  # If y binary and compress is TRUE, compress table to a single row
+  if (nrow(counts) <= 2 & compress == TRUE) {
+    if (is.null(compress.val)) {
+      tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+    } else {
+      whichrow <- which(unlist(lapply(strsplit(tbl[, 1], split = ""), function(x) paste(x[-c(1,2)], collapse = "") == as.character(compress.val))))
+      tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+    }
   }
   
   # Add column names

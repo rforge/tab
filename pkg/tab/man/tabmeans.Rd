@@ -34,6 +34,9 @@ Label for the continuous y variable.
   \item{quantiles}{
 If specified, function compares means of the y variable across quantiles of the x variable. For example, if x contains continuous BMI values and y contains continuous HDL cholesterol levels, setting quantiles to 3 would result in mean HDL being compared across tertiles of BMI.
 }
+  \item{quantile.vals}{
+If TRUE, labels for x show quantile number and corresponding range of the x variable. For example, Q1 [0.00, 0.25). If FALSE, labels for quantiles just show quantile number (e.g. Q1). Only used if xlevels is not specified.
+}
   \item{decimals}{
 Number of decimal places for means and standard deviations or standard errors.
 }
@@ -126,7 +129,7 @@ meanstable5 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("bmi", "a
 # meanstable4 and meanstable5 are equivalent
 all(meanstable4 == meanstable5)
 
-# Click on meanstable 1, ... , meanstable5 in the Workspace tab of RStudio to see the
+# Click on meanstable 1, ... , meanstable5 in the Workspace tab of RStudio to see the 
 # tables that could be copied and pasted into a report. Alternatively, setting the latex 
 # input to TRUE produces tables that can be inserted into LaTeX using the xtable package.
 }
