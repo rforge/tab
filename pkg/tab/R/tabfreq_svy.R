@@ -1,7 +1,7 @@
 tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable",
-                        ylevels = NULL, test = "F", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01, 
-                        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-                        compress = FALSE, compress.val = NULL) {
+                        ylevels = NULL, test = "F", decimals = 1, p.decimals = c(2,3), 
+                        p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+                        p.avoid1 = FALSE, n = FALSE, compress = FALSE, compress.val = NULL) {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {

@@ -8,9 +8,9 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 }
 \usage{
 tabfreq.svy(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable", 
-            ylevels = NULL, test = "F", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
-            p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-            compress = FALSE, compress.val = NULL)
+            ylevels = NULL, test = "F", decimals = 1, p.decimals = c(2, 3), 
+            p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+            p.avoid1 = FALSE, n = FALSE, compress = FALSE, compress.val = NULL)
 }
 \arguments{
   \item{svy}{
