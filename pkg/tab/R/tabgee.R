@@ -225,8 +225,8 @@ tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
     if (greek.beta == TRUE) {
       colnames(tbl)[which(colnames(tbl) == "Beta (SE)")] <- "$\\hat{\\beta}$ (SE)"
       colnames(tbl)[which(colnames(tbl) == "95% CI for Beta")] <- "95% CI for $\\beta$"
-      colnames(tbl)[which(colnames(tbl) == "exp(Beta)"] <- "exp($\\beta)$"
-      colnames(tbl)[which(colnames(tbl) == "95% CI for exp(Beta)"] <- "95\\% CI for exp($\\beta$)"
+      colnames(tbl)[which(colnames(tbl) == "exp(Beta)")] <- "exp($\\beta)$"
+      colnames(tbl)[which(colnames(tbl) == "95% CI for exp(Beta)")] <- "95\\% CI for exp($\\beta$)"
     }
     plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
     if (length(plocs) > 0) {
