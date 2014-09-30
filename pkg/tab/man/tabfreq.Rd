@@ -10,7 +10,7 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
         test = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-        compress = FALSE)
+        compress = FALSE, compress.val = NULL)
 }
 \arguments{
   \item{x}{
@@ -57,6 +57,9 @@ If TRUE, the table will have a column for sample size.
 }
   \item{compress}{
 If y has only two levels, setting compress to TRUE will produce a single row for n (percent) for the higher level. For example, if y is sex with 0 for female, 1 for male, setting compress = TRUE will return a table with n (percent) for males only. If FALSE, the table would show n (percent) for both males and females.
+}
+  \item{compress.val}{
+When x and y are both binary, and compress is TRUE, compress.val can be used to specify which level of the y variable should be shown. For example, if x is sex and y is obesity status with levels "Obese" and "Not Obese", setting compress to TRUE and compress.val to "Not Obese" would result in the table comparing the proportions of subjects that are not obese by sex.
 }
 }
 \details{

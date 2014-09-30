@@ -1,7 +1,7 @@
 tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable",
-                        ylevels = NULL, test = "F", decimals = 1, p.decimals = c(2,3), 
-                        p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-                        p.avoid1 = FALSE, n = FALSE, compress = FALSE) {
+                        ylevels = NULL, test = "F", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01, 
+                        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
+                        compress = FALSE, compress.val = NULL) {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -118,7 +118,12 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
   
   # If y binary and compress is TRUE, compress table to a single row
   if (nrow(counts) <= 2 & compress == TRUE) {
-    tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+    if (!is.null(compress.val)) {
+      tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+    } else {
+      whichrow <- which(unlist(lapply(strsplit(tbl[, 1], split = ""), function(x) paste(x[-c(1,2)], collapse = "") == as.character(compress.val))))
+      tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+    }
   }
   
   # Drop N column if requested

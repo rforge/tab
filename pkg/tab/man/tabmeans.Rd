@@ -106,7 +106,7 @@ races <- c("White", "Black", "Mexican American", "Other")
 
 # Compare mean BMI in control group vs. treatment group - table and figure
 meanstable1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
-meansfig1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", fig = T)
+meansfig1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", fig = TRUE)
 
 # Compare mean BMI by race - table with sample size and figure
 meanstable2 <- tabmeans(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = TRUE)
