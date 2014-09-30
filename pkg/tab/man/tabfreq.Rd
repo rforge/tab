@@ -29,7 +29,7 @@ Optional character vector to label the levels of x. If unspecified, the function
 Optional label for the y (row) variable.
 }
   \item{ylevels}{
-Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on.
+Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on. Note that levels of y will be listed in the order that they appear when you run table(y, x).
 }
   \item{test}{
 Controls test for association between x and y. Use "chi" for Pearson's chi-squared test, which is valid only in large samples; "fisher" for Fisher's exact test, which is valid in small or large samples; "z" for z test without continuity correction; or "z.continuity" for z test with continuity correction. "z" and "z.continuity" can only be used if x and y are binary.

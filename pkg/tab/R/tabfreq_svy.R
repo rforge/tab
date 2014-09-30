@@ -121,7 +121,7 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
     if (!is.null(compress.val)) {
       tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
     } else {
-      whichrow <- which(unlist(lapply(strsplit(tbl[, 1], split = ""), function(x) paste(x[-c(1,2)], collapse = "") == as.character(compress.val))))
+      whichrow <- which(rownames(counts) == as.character(compress.val)) + 1
       tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
     }
   }

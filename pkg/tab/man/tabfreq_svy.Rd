@@ -32,7 +32,7 @@ Optional character vector to label the levels of x. If unspecified, the function
 Optional label for the y (row) variable.
 }
   \item{ylevels}{
-Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on.
+Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on. Note that levels of y will be listed in the order that they appear when you run table(y, x).
 }
   \item{test}{
 Controls test for association between x and y. Must be a possible value for the 'statistic' input of the svychisq function in the survey package [1,2]: 'F', 'Chisq', 'Wald', 'adjWald', 'lincom', or 'saddlepoint'.
