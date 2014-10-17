@@ -105,6 +105,11 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
     }
   }
   
+  # If ylevels is a vector, convert to a list
+  if (!is.null(ylevels) && !is.list(ylevels)) {
+    ylevels <- list(ylevels)
+  }
+  
   # Call tabmeans, tabmedians, or tabfreq repeatedly
   freqindex <- 0
   for (ii in 1:length(yvarnames)) {
