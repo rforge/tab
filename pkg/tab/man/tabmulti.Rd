@@ -9,9 +9,9 @@ This function basically provides an alternative to making multiple calls to tabm
 \usage{
 tabmulti(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FALSE, 
          latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
-         freq.tests = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
-         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-         se = FALSE, compress = FALSE, parenth = "iqr", text.label = NULL, 
+         freq.tests = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), 
+         p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
+         n = FALSE, se = FALSE, compress = FALSE, parenth = "iqr", text.label = NULL, 
          parenth.sep = "-")
 }
 \arguments{
@@ -47,6 +47,9 @@ Character string or vector of character strings indicating which statistical tes
 }
   \item{decimals}{
 Number of decimal places for various cell entries, such as means and percentages. Does not affect p-values.
+}
+  \item{p.include}{
+If FALSE, statistical test is not performed and p-value is not returned. 
 }
   \item{p.decimals}{
 Number of decimal places for p-values. If a vector is provided rather than a single value, number of decimal places will depend on what range the p-value lies in. See p.cuts.

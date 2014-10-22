@@ -1,7 +1,7 @@
 tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1,
-                       p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-                       p.avoid1 = FALSE, n = FALSE, parenth = "iqr", text.label = NULL,
-                       parenth.sep = "-") {
+                       p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
+                       p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, parenth = "iqr", 
+                       text.label = NULL, parenth.sep = "-") {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -12,6 +12,9 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
+  }
+  if (!is.logical(p.include)) {
+    stop("For p.include input, please enter TRUE or FALSE")
   }
   if (!is.numeric(p.decimals)) {
     stop("For p.decimals input, please enter numeric value or vector")
@@ -118,20 +121,28 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   }
   
   # Add p-value from statistical test depending on number of levels of x
-  if (length(xlevels) == 2) {
+  if (p.include == TRUE) {
     
-    # Mann-Whitney U test a.k.a. Wilcoxon rank-sum test
-    p <- wilcox.test(y ~ x)$p.value
+    if (length(xlevels) == 2) {
+      
+      # Mann-Whitney U test a.k.a. Wilcoxon rank-sum test
+      p <- wilcox.test(y ~ x)$p.value
+      
+    } else {
+      
+      # Kruskal-Wallis rank-sum test
+      p <- kruskal.test(y ~ as.factor(x))$p.value
+      
+    }
     
   } else {
-    
-    # Kruskal-Wallis rank-sum test
-    p <- kruskal.test(y ~ as.factor(x))$p.value
-    
+    p <- NA
   }
   
   # Add p-value from t-test
-  tbl[1, ncol(tbl)] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
+  if (p.include == TRUE) {
+    tbl[1, ncol(tbl)] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
+  }
   
   # Add column names
   colnames(tbl) <- c("Variable", "N", "Overall", xlevels, "P")
@@ -139,6 +150,11 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   # Drop N column if requested
   if (n == FALSE) {
     tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
+  }
+  
+  # Drop p column if requested
+  if (p.include == FALSE) {
+    tbl <- tbl[, -which(colnames(tbl) == "P")]
   }
   
   # If latex is TRUE, do some re-formatting

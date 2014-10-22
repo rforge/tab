@@ -1,5 +1,5 @@
 tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
-                    test = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
+                    test = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01,
                     p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
                     compress = FALSE, compress.val = NULL) {
   
@@ -34,6 +34,9 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
+  }
+  if (!is.logical(p.include)) {
+    stop("For p.include input, please enter TRUE or FALSE")
   }
   if (!is.numeric(p.decimals)) {
     stop("For p.decimals input, please enter numeric value or vector")
@@ -88,7 +91,7 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
   }
   
   # Statistical test
-  if (nrow(counts) == 1) {
+  if (p.include == FALSE | nrow(counts) == 1) {
     pval = "-"
   } else {
     if (test == "chi") {
@@ -104,8 +107,9 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
       pval <- prop.test(x = counts)$p.value
       message(paste("A z-test (with continuity correction) was used to test whether proportions of ", yname, " differed in the two groups.", sep = ""))
     }
+    tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
+    
   }
-  tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
   
   # If xlevels unspecified, set to actual values
   if (is.null(xlevels)) {
@@ -128,6 +132,11 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
   # Drop N column if requested
   if (n == FALSE) {
     tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
+  }
+  
+  # Drop p column if requested
+  if (p.include == FALSE) {
+    tbl <- tbl[, -which(colnames(tbl) == "P")]
   }
   
   # If latex is TRUE, do some re-formatting

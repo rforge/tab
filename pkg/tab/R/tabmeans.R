@@ -1,7 +1,7 @@
 tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = "Y variable", 
-                     quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.decimals = c(2, 3), 
-                     p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-                     n = FALSE, se = FALSE, fig = FALSE) {
+                     quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.include = TRUE,
+                     p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+                     p.avoid1 = FALSE, n = FALSE, se = FALSE, fig = FALSE) {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -18,6 +18,9 @@ tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = 
   } 
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
+  }
+  if (!is.logical(p.include)) {
+    stop("For p.include input, please enter TRUE or FALSE")
   }
   if (!is.numeric(p.decimals)) {
     stop("For p.decimals input, please enter numeric value or vector")
@@ -78,24 +81,30 @@ tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = 
   }
   
   # Calculate p-value based on ANOVA or t-test depending on number of levels of x
-  if (length(xlevels) == 2) {
+  if (p.include == TRUE) {
     
-    # F test for equal variances then appropriate t-test
-    f <- var.test(x = y[x == xvals[1]], y = y[x == xvals[2]])
-    if (f$p.value < 0.05) {
-      p <- t.test(x = y[x == xvals[1]], y = y[x == xvals[2]], var.equal = FALSE)$p.value
-      message(paste("Unequal variance t-test was used to compare mean ", yname, " in the two groups.", sep = ""))
+    if (length(xlevels) == 2) {
+      
+      # F test for equal variances then appropriate t-test
+      f <- var.test(x = y[x == xvals[1]], y = y[x == xvals[2]])
+      if (f$p.value < 0.05) {
+        p <- t.test(x = y[x == xvals[1]], y = y[x == xvals[2]], var.equal = FALSE)$p.value
+        message(paste("Unequal variance t-test was used to compare mean ", yname, " in the two groups.", sep = ""))
+      } else {
+        p <- t.test(x = y[x == xvals[1]], y = y[x == xvals[2]], var.equal = TRUE)$p.value
+        message(paste("Equal variance t-test was used to compare mean ", yname, " in the two groups.", sep = ""))
+      }
+      
     } else {
-      p <- t.test(x = y[x == xvals[1]], y = y[x == xvals[2]], var.equal = TRUE)$p.value
-      message(paste("Equal variance t-test was used to compare mean ", yname, " in the two groups.", sep = ""))
+      
+      # ANOVA
+      p <- anova(lm(y ~ as.factor(x)))$"Pr(>F)"[1]
+      message(paste("ANOVA was used to compare means for ", yname, sep = ""))
+      
     }
     
   } else {
-    
-    # ANOVA
-    p <- anova(lm(y ~ as.factor(x)))$"Pr(>F)"[1]
-    message(paste("ANOVA was used to compare means for ", yname, sep = ""))
-    
+    p = NA
   }
   
   if (fig == FALSE) {
@@ -120,7 +129,9 @@ tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = 
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, means), " (", sprintf(spf, vars), ")", sep = "")
     
     # Add p-value from t-test
-    tbl[1, ncol(tbl)] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
+    if (p.include == TRUE) {
+      tbl[1, ncol(tbl)] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
+    }
     
     # Add column names
     colnames(tbl) <- c("Variable", "N", "Overall", xlevels, "P")
@@ -128,6 +139,11 @@ tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = 
     # Drop N column if requested
     if (n == FALSE) {
       tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
+    }
+    
+    # Drop p column if requested
+    if (p.include == FALSE) {
+      tbl <- tbl[, -which(colnames(tbl) == "P")]
     }
     
     # If latex is TRUE, do some re-formatting

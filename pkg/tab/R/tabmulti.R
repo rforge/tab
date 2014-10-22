@@ -1,8 +1,8 @@
 tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FALSE,
                      latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
-                     freq.tests = "chi", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01,
-                     p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-                     se = FALSE, compress = FALSE, parenth = "iqr", text.label = NULL, 
+                     freq.tests = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), 
+                     p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
+                     n = FALSE, se = FALSE, compress = FALSE, parenth = "iqr", text.label = NULL, 
                      parenth.sep = "-") {
   
   # If any inputs are not correct class, return error
@@ -39,6 +39,9 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
+  }
+  if (!is.logical(p.include)) {
+    stop("For p.include input, please enter TRUE or FALSE")
   }
   if (!is.numeric(p.decimals)) {
     stop("For p.decimals input, please enter numeric value or vector")
@@ -115,19 +118,19 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   for (ii in 1:length(yvarnames)) {
     if (ymeasures[ii] == "mean") {
       current <- tabmeans(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
-                          yname = ynames[ii], decimals = decimals, p.decimals = p.decimals, p.cuts = p.cuts,
-                          p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
+                          yname = ynames[ii], decimals = decimals, p.include = p.include, p.decimals = p.decimals, 
+                          p.cuts = p.cuts, p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
                           n = n, se = se)
     } else if (ymeasures[ii] == "median") {
       current <- tabmedians(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
-                            yname = ynames[ii], decimals = decimals, p.decimals = p.decimals, p.cuts = p.cuts,
-                            p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
+                            yname = ynames[ii], decimals = decimals, p.include = p.include, p.decimals = p.decimals, 
+                            p.cuts = p.cuts, p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
                             n = n, parenth = parenth, text.label = text.label, parenth.sep = parenth.sep)
     } else if (ymeasures[ii] == "freq") {
       freqindex <- freqindex + 1
       current <- tabfreq(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
-                         yname = ynames[ii], ylevels = ylevels[[freqindex]], test = freq.tests[ii], 
-                         decimals = decimals, p.decimals = p.decimals, p.cuts = p.cuts, p.lowerbound = p.lowerbound,
+                         yname = ynames[ii], ylevels = ylevels[[freqindex]], test = freq.tests[ii], decimals = decimals, 
+                         p.include = p.include, p.decimals = p.decimals, p.cuts = p.cuts, p.lowerbound = p.lowerbound, 
                          p.leading0 = p.leading0, p.avoid1 = p.avoid1, n = n, compress = compress)
     }
     if (ii == 1) {
@@ -136,6 +139,7 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
       results <- rbind(results, current)
     }
   }
+  rownames(results) <- NULL
   
   # Return results matrix
   return(results)

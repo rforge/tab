@@ -8,9 +8,9 @@ This function compares the mean of a continuous variable across levels of a cate
 }
 \usage{
 tabmeans(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = "Y variable", 
-         quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.decimals = c(2, 3), 
-         p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-         n = FALSE, se = FALSE, fig = FALSE)
+         quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.include = TRUE, 
+         p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+         p.avoid1 = FALSE, n = FALSE, se = FALSE, fig = FALSE)
 }
 \arguments{
   \item{x}{
@@ -39,6 +39,9 @@ If TRUE, labels for x show quantile number and corresponding range of the x vari
 }
   \item{decimals}{
 Number of decimal places for means and standard deviations or standard errors.
+}
+  \item{p.include}{
+If FALSE, t-test is not performed and p-value is not returned. 
 }
   \item{p.decimals}{
 Number of decimal places for p-values. If a vector is provided rather than a single value, number of decimal places will depend on what range the p-value lies in. See p.cuts.

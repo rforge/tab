@@ -8,9 +8,9 @@ This function compares the median of a continuous variable across levels of a ca
 }
 \usage{
 tabmedians(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
-           p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-           p.avoid1 = FALSE, n = FALSE, parenth = "iqr", text.label = NULL, 
-           parenth.sep = "-")
+           p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
+           p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, parenth = "iqr", 
+           text.label = NULL, parenth.sep = "-")
 }
 \arguments{
   \item{x}{
@@ -30,6 +30,9 @@ Optional label for the continuous variable.
 }
   \item{decimals}{
 Number of decimal places for means and standard deviations or standard errors.
+}
+  \item{p.include}{
+If FALSE, statistical test is not performed and p-value is not returned. 
 }
   \item{p.decimals}{
 Number of decimal places for p-values. If a vector is provided rather than a single value, number of decimal places will depend on what range the p-value lies in. See p.cuts.
