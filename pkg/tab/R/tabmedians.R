@@ -81,7 +81,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     parent1 <- tapply(X = y, INDEX = x, FUN = min)
     parent2 <- tapply(X = y, INDEX = x, FUN = max)
     parent <- paste(sprintf(spf, parent2 - parent1))
-    if (is.na(text.label)) {
+    if (is.null(text.label)) {
       text.label <- "Median (Range)"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
