@@ -10,7 +10,9 @@ This function takes an object returned from the svyglm function and generates a 
 tabglm.svy(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, inference = "wald.t",
            decimals = 2, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
            p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, 
-           n = FALSE, events = FALSE, greek.beta = FALSE)
+           n = FALSE, events = FALSE, greek.beta = FALSE, binary.compress = TRUE, 
+           bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
+           predictor.colname = "Variable")
 }
 \arguments{
   \item{svyglmfit}{
@@ -60,6 +62,21 @@ If TRUE, the table returned will include a column for number of events observed.
 }
   \item{greek.beta}{
 If TRUE, column headings refer to regression parameters as Greek letter beta rather than Beta. Only used when latex input is set to TRUE.
+}
+  \item{binary.compress}{
+If TRUE, only one row of the table is dedicated to parameter estimates for each binary factor predictor. If FALSE, the table displays separate rows for the variable name and the two levels for each binary factor predictor, much like the presentation for factor variables with more than two levels.
+}
+  \item{bold.colnames}{
+If TRUE, column headings are printed in bold font. Only applies if latex = TRUE. 
+}
+  \item{bold.varnames}{
+If TRUE, variable names in the first column of the table are printed in bold font. Only applies if latex = TRUE.
+}
+  \item{bold.varlevels}{
+If TRUE, levels of each factor variable are printed in bold font. Only applies if latex = TRUE and there is at least one factor variable included as a predictor.
+}
+  \item{predictor.colname}{
+Character string with desired column heading for the column of predictors.
 }
 }
 \details{

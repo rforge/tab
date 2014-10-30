@@ -1,7 +1,8 @@
 tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1,
                        p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
                        p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, parenth = "iqr", 
-                       text.label = NULL, parenth.sep = "-") {
+                       text.label = NULL, parenth.sep = "-", bold.colnames = TRUE,
+                       bold.varnames = FALSE, variable.colname = "Variable") {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -42,6 +43,15 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   }
   if (!is.character(parenth.sep)) {
     stop("For parenth.sep input, please enter a character string")
+  }
+  if (!is.logical(bold.colnames)) {
+    stop("For bold.colnames input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(bold.varnames)) {
+    stop("For bold.varnames input, please enter TRUE or FALSE")
+  }
+  if (!is.character(variable.colname)) {
+    stop("For variable.colname input, please enter a character string")
   }
   
   # Drop missing values
@@ -145,7 +155,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   }
   
   # Add column names
-  colnames(tbl) <- c("Variable", "N", "Overall", xlevels, "P")
+  colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
   
   # Drop N column if requested
   if (n == FALSE) {
@@ -162,6 +172,12 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
     if (length(plocs) > 0) {
       tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2), sep = "")
+    }
+    if (bold.colnames == TRUE) {
+      colnames(tbl) <- paste("$\\textbf{", colnames(tbl), "}$", sep = "")
+    }
+    if (bold.varnames == TRUE) {
+      tbl[1, 1] <- paste("$\\textbf{", tbl[1, 1], "}$")
     }
   }
   

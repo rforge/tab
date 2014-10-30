@@ -8,8 +8,10 @@ This function performs Cox proportional hazards regression using the R package s
 }
 \usage{
 tabcox(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, p.decimals = c(2, 3), 
-       p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = TRUE,
-       events = TRUE, coef = "n", greek.beta = FALSE)
+       p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
+       n = FALSE, events = FALSE, coef = "n", greek.beta = FALSE, binary.compress = TRUE, 
+       bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
+       predictor.colname = "Variable", suppress.beta = FALSE)
 }
 \arguments{
   \item{x}{
@@ -56,6 +58,24 @@ If set to "x", function will standardize all variables in x that are continuous,
 }
   \item{greek.beta}{
 If TRUE, column headings refer to regression parameters as Greek letter beta rather than Beta. Only used when latex input is set to TRUE.
+}
+  \item{binary.compress}{
+If TRUE, only one row of the table is dedicated to parameter estimates for each binary factor predictor. If FALSE, the table displays separate rows for the variable name and the two levels for each binary factor predictor, much like the presentation for factor variables with more than two levels.
+}
+  \item{bold.colnames}{
+If TRUE, column headings are printed in bold font. Only applies if latex = TRUE. 
+}
+  \item{bold.varnames}{
+If TRUE, variable names in the first column of the table are printed in bold font. Only applies if latex = TRUE.
+}
+  \item{bold.varlevels}{
+If TRUE, levels of each factor variable are printed in bold font. Only applies if latex = TRUE and there is at least one factor variable included as a predictor.
+}
+  \item{predictor.colname}{
+Character string with desired column heading for the column of predictors.
+}
+\item{suppress.beta}{
+If FALSE, the Beta (SE) column is not included. May often be preferred since the point and interval estimate for the hazard ratio contains the same information, but are easier to interpret.
 }
 }
 \details{

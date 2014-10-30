@@ -1,6 +1,7 @@
 tabmeans.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable", 
                          test = "Wald", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
-                         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE) {
+                         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE,
+                         bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable") {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -35,6 +36,15 @@ tabmeans.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y va
   }
   if (!is.logical(n)) {
     stop("For n input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(bold.colnames)) {
+    stop("For bold.colnames input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(bold.varnames)) {
+    stop("For bold.varnames input, please enter TRUE or FALSE")
+  }
+  if (!is.character(variable.colname)) {
+    stop("For variable.colname input, please enter a character string")
   }
   
   # Convert decimals to variable for sprintf
@@ -88,7 +98,7 @@ tabmeans.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y va
   tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
   
   # Add column names
-  colnames(tbl) <- c("Variable", "N", "Overall", xlevels, "P")
+  colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
   
   # Drop N column if requested
   if (n == FALSE) {
@@ -100,6 +110,12 @@ tabmeans.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y va
     plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
     if (length(plocs) > 0) {
       tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2), sep = "")
+    }
+    if (bold.colnames == TRUE) {
+      colnames(tbl) <- paste("$\\textbf{", colnames(tbl), "}$", sep = "")
+    }
+    if (bold.varnames == TRUE) {
+      tbl[1, 1] <- paste("$\\textbf{", tbl[1, 1], "}$")
     }
   }
   

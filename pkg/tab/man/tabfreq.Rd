@@ -10,7 +10,8 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
         test = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01,
         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-        compress = FALSE, compress.val = NULL)
+        compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
+        bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")       
 }
 \arguments{
   \item{x}{
@@ -63,6 +64,18 @@ If y has only two levels, setting compress to TRUE will produce a single row for
 }
   \item{compress.val}{
 When x and y are both binary, and compress is TRUE, compress.val can be used to specify which level of the y variable should be shown. For example, if x is sex and y is obesity status with levels "Obese" and "Not Obese", setting compress to TRUE and compress.val to "Not Obese" would result in the table comparing the proportions of subjects that are not obese by sex.
+}
+  \item{bold.colnames}{
+If TRUE, column headings are printed in bold font. Only applies if latex = TRUE. 
+}
+  \item{bold.varnames}{
+If TRUE, variable name in the first column of the table is printed in bold font. Only applies if latex = TRUE.
+}
+  \item{bold.varlevels}{
+If TRUE, levels of the y variable are printed in bold font. Only applies if latex = TRUE.
+}
+  \item{variable.colname}{
+Character string with desired heading for first column of table, which shows the y variable name and levels.
 }
 }
 \details{

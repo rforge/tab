@@ -9,7 +9,8 @@ This function compares the mean of a continuous variable across levels of a cate
 \usage{
 tabmeans.svy(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable", 
              test = "Wald", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
-             p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE)
+             p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE,
+             bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable")
 }
 \arguments{
   \item{svy}{
@@ -53,6 +54,15 @@ If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly 
 }
   \item{n}{
 If TRUE, the table will have a column for sample size.
+}
+  \item{bold.colnames}{
+If TRUE, column headings are printed in bold font. Only applies if latex = TRUE. 
+}
+  \item{bold.varnames}{
+If TRUE, variable name in the first column of the table is printed in bold font. Only applies if latex = TRUE.
+}
+  \item{variable.colname}{
+Character string with desired heading for first column of table, which shows the y variable name.
 }
 }
 \details{

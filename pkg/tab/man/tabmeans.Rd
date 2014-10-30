@@ -10,7 +10,8 @@ This function compares the mean of a continuous variable across levels of a cate
 tabmeans(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = "Y variable", 
          quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.include = TRUE, 
          p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-         p.avoid1 = FALSE, n = FALSE, se = FALSE, fig = FALSE)
+         p.avoid1 = FALSE, n = FALSE, se = FALSE, bold.colnames = TRUE, 
+         bold.varnames = FALSE, variable.colname = "Variable", fig = FALSE)
 }
 \arguments{
   \item{x}{
@@ -63,6 +64,15 @@ If TRUE, the table will have a column for sample size.
 }
   \item{se}{
 If TRUE, the table will present mean (standard error) rather than mean (standard deviation).
+}
+  \item{bold.colnames}{
+If TRUE, column headings are printed in bold font. Only applies if latex = TRUE. 
+}
+  \item{bold.varnames}{
+If TRUE, variable name in the first column of the table is printed in bold font. Only applies if latex = TRUE.
+}
+  \item{variable.colname}{
+Character string with desired heading for first column of table, which shows the y variable name.
 }
   \item{fig}{
 If TRUE, a figure is returned rather than a table. The figure shows mean (95 percent confidence interval) for each level of x.

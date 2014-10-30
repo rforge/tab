@@ -3,7 +3,8 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
                      freq.tests = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), 
                      p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
                      n = FALSE, se = FALSE, compress = FALSE, parenth = "iqr", text.label = NULL, 
-                     parenth.sep = "-") {
+                     parenth.sep = "-", bold.colnames = TRUE, bold.varnames = FALSE,
+                     bold.varlevels = FALSE, variable.colname = "Variable") {
   
   # If any inputs are not correct class, return error
   if (!is.matrix(dataset) & !is.data.frame(dataset)) {
@@ -75,6 +76,18 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   }
   if (!is.character(parenth.sep)) {
     stop("For parenth.sep input, please enter a character string")
+  }
+  if (!is.logical(bold.colnames)) {
+    stop("For bold.colnames input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(bold.varnames)) {
+    stop("For bold.varnames input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(bold.varlevels)) {
+    stop("For bold.varlevels input, please enter TRUE or FALSE")
+  }
+  if (!is.character(variable.colname)) {
+    stop("For variable.colname input, please enter a character string")
   }
   
   # If listwise.deletion is TRUE, drop observations with missing values for column variable or any row variables

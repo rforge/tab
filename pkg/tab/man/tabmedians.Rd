@@ -10,7 +10,8 @@ This function compares the median of a continuous variable across levels of a ca
 tabmedians(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
            p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
            p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, parenth = "iqr", 
-           text.label = NULL, parenth.sep = "-")
+           text.label = NULL, parenth.sep = "-", bold.colnames = TRUE, 
+           bold.varnames = FALSE, variable.colname = "Variable")
 }
 \arguments{
   \item{x}{
@@ -60,6 +61,15 @@ Optional text to put after the variable name. For example, if parenth is 'q1q3' 
 }
   \item{parenth.sep}{
 Optional character specifying the separator for the two numbers in parentheses when parenth is set to 'minmax' or 'q1q3'. The default is a dash, so values in the table are formatted as Median (Lower-Upper). If you set parenth.sep to ', ' the values in the table would instead be formatted as Median (Lower, Upper).
+}
+  \item{bold.colnames}{
+If TRUE, column headings are printed in bold font. Only applies if latex = TRUE. 
+}
+  \item{bold.varnames}{
+If TRUE, variable name in the first column of the table is printed in bold font. Only applies if latex = TRUE.
+}
+  \item{variable.colname}{
+Character string with desired heading for first column of table, which shows the y variable name.
 }
 }
 \details{
