@@ -9,9 +9,9 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 \usage{
 tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
         test = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01,
-        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
+        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE,
         compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
-        bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")       
+        bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")
 }
 \arguments{
   \item{x}{
