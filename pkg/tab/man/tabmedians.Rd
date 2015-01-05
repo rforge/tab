@@ -103,7 +103,9 @@ If you have suggestions for additional options or features, or if you would like
 \code{\link{tabgee}},
 \code{\link{tabfreq.svy}},
 \code{\link{tabmeans.svy}},
-\code{\link{tabglm.svy}},
+\code{\link{tabmedians.svy}},
+\code{\link{tabmulti.svy}},
+\code{\link{tabglm.svy}}
 }
 \examples{
 # Load in sample dataset d and drop rows with missing values

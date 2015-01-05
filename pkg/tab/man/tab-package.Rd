@@ -27,6 +27,8 @@ The following functions are included in the package:
 \code{\link{tabgee}},
 \code{\link{tabfreq.svy}},
 \code{\link{tabmeans.svy}},
+\code{\link{tabmedians.svy}},
+\code{\link{tabmulti.svy}},
 \code{\link{tabglm.svy}},
 \code{\link{formatp}}
 }

@@ -103,15 +103,17 @@ A function is currently being developed to create a summary table based on an ob
 If you have suggestions for additional options or features, or if you would like some help using any function in the package tab, please e-mail me at vandomed@gmail.com. Thanks!
 }
 \seealso{
-\code{\link{coxph}}
-\code{\link{tabfreq}}
-\code{\link{tabmeans}}
-\code{\link{tabmedians}}
-\code{\link{tabmulti}}
-\code{\link{tabglm}}
-\code{\link{tabgee}}
-\code{\link{tabfreq.svy}}
-\code{\link{tabmeans.svy}}
+\code{\link{coxph}},
+\code{\link{tabfreq}},
+\code{\link{tabmeans}},
+\code{\link{tabmedians}},
+\code{\link{tabmulti}},
+\code{\link{tabglm}},
+\code{\link{tabgee}},
+\code{\link{tabfreq.svy}},
+\code{\link{tabmeans.svy}},
+\code{\link{tabmedians.svy}},
+\code{\link{tabmulti.svy}},
 \code{\link{tabglm.svy}}
 }
 \examples{

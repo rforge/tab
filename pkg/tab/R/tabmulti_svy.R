@@ -165,16 +165,20 @@ tabmulti.svy <- function(svy, xvarname, yvarnames, ymeasures = NULL, listwise.de
   
   # Call tabmeans.svy, tabmedians.svy, or tabfreq.svy repeatedly
   freqindex <- 0
+  meanindex <- 0
+  medianindex <- 0
   for (ii in 1:length(yvarnames)) {
     if (ymeasures[ii] == "mean") {
+      meanindex <- meanindex + 1
       current <- tabmeans.svy(x = xvarname, y = yvarnames[ii], svy = svy, latex = latex, xlevels = xlevels, 
-                              yname = ynames[ii], test = mean.tests[ii], decimals = decimals, p.decimals = p.decimals, 
+                              yname = ynames[ii], test = mean.tests[meanindex], decimals = decimals, p.decimals = p.decimals, 
                               p.cuts = p.cuts, p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1, 
                               n.column = n.column, n.headings = n.headings, bold.colnames = bold.colnames, 
                               bold.varnames = bold.varnames, variable.colname = variable.colname)
     } else if (ymeasures[ii] == "median") {
+      medianindex <- medianindex + 1
       current <- tabmedians.svy(x = xvarname, y = yvarnames[ii], svy = svy, latex = latex, xlevels = xlevels, 
-                                yname = ynames[ii], test = median.tests[ii], decimals = decimals, p.decimals = p.decimals, 
+                                yname = ynames[ii], test = median.tests[medianindex], decimals = decimals, p.decimals = p.decimals, 
                                 p.cuts = p.cuts, p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1, 
                                 n.column = n.column, n.headings = n.headings, parenth = parenth, text.label = text.label,
                                 parenth.sep = parenth.sep, bold.colnames = bold.colnames, bold.varnames = bold.varnames, 
@@ -182,7 +186,7 @@ tabmulti.svy <- function(svy, xvarname, yvarnames, ymeasures = NULL, listwise.de
     } else if (ymeasures[ii] == "freq") {
       freqindex <- freqindex + 1
       current <- tabfreq.svy(x = xvarname, y = yvarnames[ii], svy = svy, latex = latex, xlevels = xlevels, 
-                             yname = ynames[ii], ylevels = ylevels[[freqindex]], test = freq.tests[ii], 
+                             yname = ynames[ii], ylevels = ylevels[[freqindex]], test = freq.tests[freqindex], 
                              decimals = decimals, p.decimals = p.decimals, p.cuts = p.cuts, 
                              p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1, 
                              n.column = n.column, n.headings = n.headings, compress = compress, 

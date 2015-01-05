@@ -17,6 +17,9 @@ tabmulti.svy(svy, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FAL
              bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")
 }
 \arguments{
+  \item{svy}{
+Survey design object created by a call to svydesign [1,2]. 
+}
   \item{xvarname}{
 Character string with name of column variable. Should be one of colnames(dataset).
 }
@@ -40,6 +43,12 @@ Optional labels for the row variables.
 }
   \item{ylevels}{
 Character vector or list of character vectors to label the levels of the categorical row variables.
+}
+  \item{mean.tests}{
+Character string or vector of character strings indicating what statistical tests should be used to compare means for each row variable for which a comparison of means is requested. Elements should be 'Wald' for Wald test or 'LRT' for likelihood ratio test.
+}
+  \item{median.tests}{
+Character string or vector of character strings indicating what statistical tests should be used to compare medians for each row variable for which a comparison of medians is requested. Elements should be possible values for the 'test' input of the svyranktest function in the survey package [1,2]: 'wilcoxon' for Mann-Whitney U/Wilcoxon test of whether one group is from distribution that is stochastically greater than the other; 'vanderWaerden' for  Van der Waerden test of whether the population distribution functions are equal; 'median' for Mood's test for whether the population medians are equal; and 'KruskalWallis' for Kruskal-Wallis test which is Mann-Whitney U/Wilcoxon generalized to three or more groups.
 }
   \item{freq.tests}{
 Character string or vector of character strings indicating what statistical tests should be used to compare distributions of each categorical row variable across levels of the column variable. Elements should be possible values for the 'statistic' input of the svychisq function in the survey package [1,2]: 'F', 'Chisq', 'Wald', 'adjWald', 'lincom', or 'saddlepoint'.
@@ -100,7 +109,7 @@ Character string with desired heading for first column of table, which shows the
 }
 }
 \details{
-Please see help files for tabmeans, tabmedians, and tabfreq for details on statistical tests.
+Please see help files for tabmeans.svy, tabmedians.svy, and tabfreq.svy for details on statistical tests.
 }
 \value{
 A character matrix comparing mean/medians/frequencies of row variables across levels of the column variable. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [3].
@@ -121,6 +130,11 @@ Dane R. Van Domelen
 If you have suggestions for additional options or features, or if you would like some help using any function in the package tab, please e-mail me at vandomed@gmail.com. Thanks!
 }
 \seealso{
+\code{\link{svydesign}},
+\code{\link{svyglm}},
+\code{\link{svychisq}},
+\code{\link{svyquantile}},
+\code{\link{svyranktest}},
 \code{\link{tabfreq}},
 \code{\link{tabmeans}},
 \code{\link{tabmedians}},
@@ -129,42 +143,11 @@ If you have suggestions for additional options or features, or if you would like
 \code{\link{tabgee}},
 \code{\link{tabfreq.svy}},
 \code{\link{tabmeans.svy}},
-\code{\link{tabglm.svy}},
+\code{\link{tabmedians.svy}},
+\code{\link{tabglm.svy}}
 }
 \examples{
-# Load in sample dataset d
-data(d)
-
-# Create labels for group and race
-groups <- c("Control", "Treatment")
-sexes <- c("Female", "Male")
-races <- c("White", "Black", "Mexican American", "Other")
-
-# Compare age, sex, race, and BMI in control vs. treatment group, using all available
-# data for each comparison
-table1 <- tabmulti(dataset = d, xvarname = "group",
-                   yvarnames = c("age", "sex", "race", "bmi"), xlevels = groups,
-                   ynames = c("Age", "Sex", "Race", "BMI"), ylevels = list(sexes, races), 
-                   n = TRUE)
-                   
-# Repeat, but use listwise deletion, i.e. drop observations that do not have complete
-# data for all variables of interest, and suppress sample size column
-table2 <- tabmulti(dataset = d, xvarname = "group",
-                   yvarnames = c("age", "sex", "race", "bmi"), listwise.deletion = TRUE,
-                   xlevels = groups, ynames = c("Age", "Sex", "Race", "BMI"), 
-                   ylevels = list(sexes, races))
-                   
-# Repeat, but compare medians rather than means for BMI
-table3 <- tabmulti(dataset = d, xvarname = "group", 
-                   yvarnames = c("age", "sex", "race", "bmi"), 
-                   ymeasures = c("mean", "freq", "freq", "median"), 
-                   listwise.deletion = TRUE, xlevels = groups, 
-                   ynames = c("Age", "Sex", "Race", "BMI"), ylevels = list(sexes, races))
-
-# Click on table1, table2, or table3 in the Workspace tab of RStudio to see the tables 
-# that could be copied and pasted into a report or manuscript. Alternatively, setting 
-# the latex input to TRUE produces tables that can be inserted into LaTeX using the 
-# xtable package.
+NA
 }
 \keyword{ table }
 \keyword{ means }

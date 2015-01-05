@@ -91,8 +91,8 @@ Dane R. Van Domelen
 Currently this function is fairly basic. Future versions should allow for more flexibility. If you have any specific suggestions for additional options, please e-mail me at vandomed@gmail.com. Thanks!
 }
 \seealso{
-\code{\link{svydesign}}
-\code{\link{svyglm}}
+\code{\link{svydesign}},
+\code{\link{svyglm}},
 \code{\link{tabfreq}},
 \code{\link{tabmeans}},
 \code{\link{tabmedians}},
@@ -101,7 +101,9 @@ Currently this function is fairly basic. Future versions should allow for more f
 \code{\link{tabcox}},
 \code{\link{tabgee}},
 \code{\link{tabfreq.svy}},
-\code{\link{tabglm.svy}},
+\code{\link{tabmedians.svy}},
+\code{\link{tabmulti.svy}},
+\code{\link{tabglm.svy}}
 }
 \examples{
 NA

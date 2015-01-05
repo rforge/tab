@@ -1,5 +1,5 @@
-\name{tabmedians}
-\alias{tabmedians}
+\name{tabmedians.svy}
+\alias{tabmedians.svy}
 \title{
 Generate Summary Tables of Median Comparisons for Statistical Reports (Survey Data)
 }
@@ -7,7 +7,7 @@ Generate Summary Tables of Median Comparisons for Statistical Reports (Survey Da
 This function compares the median of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1,2].
 }
 \usage{
-tabmedians.svy(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
+tabmedians.svy(svy, x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
                test = "wilcoxon", decimals = 1, p.include = TRUE, p.decimals = c(2, 3),
                p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE,
                n.column = FALSE, n.headings = TRUE, parenth = "iqr", text.label = NULL, 
@@ -15,6 +15,9 @@ tabmedians.svy(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable",
                variable.colname = "Variable")
 }
 \arguments{
+  \item{svy}{
+Survey design object created by a call to svydesign [1,2]. 
+}
   \item{x}{
 Vector of values for the categorical variable.
 }
@@ -80,9 +83,7 @@ Character string with desired heading for first column of table, which shows the
 }
 }
 \details{
-If x has two levels, a Mann-Whitney U (also known as Wilcoxon rank-sum) test is used to test whether the distribution of the continuous variable (y) differs in the two groups (x). If x has more than two levels, a Kruskal-Wallis test is used to test whether the distribution of y differs across at least two of the x groups.
-
-Both x and y can have missing values. The function drops observations with missing x or y. 
+NA
 }
 \value{
 A character matrix with the requested table comparing median y across levels of x. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [3].
@@ -103,6 +104,9 @@ Dane R. Van Domelen
 If you have suggestions for additional options or features, or if you would like some help using any function in the package tab, please e-mail me at vandomed@gmail.com. Thanks!
 }
 \seealso{
+\code{\link{svydesign}},
+\code{\link{svyquantile}},
+\code{\link{svyranktest}},
 \code{\link{tabfreq}},
 \code{\link{tabmeans}},
 \code{\link{tabmulti}},
@@ -111,42 +115,12 @@ If you have suggestions for additional options or features, or if you would like
 \code{\link{tabgee}},
 \code{\link{tabfreq.svy}},
 \code{\link{tabmeans.svy}},
-\code{\link{tabglm.svy}},
+\code{\link{tabmulti.svy}},
+\code{\link{tabglm.svy}}
 }
 \examples{
-# Load in sample dataset d and drop rows with missing values
-data(d)
-d <- d[complete.cases(d), ]
-
-# Create labels for group and race
-groups <- c("Control", "Treatment")
-races <- c("White", "Black", "Mexican American", "Other")
-
-# Compare median BMI in control group vs. treatment group
-medtable1 <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
-
-# Repeat, but suppress Min-Max from being shown in parentheses
-medtable2 <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", 
-             parenth = "none")
-
-# Compare median BMI by race and include sample size
-medtable3 <- tabmedians(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = TRUE)
-
-# Create single table comparing median BMI and median age in control vs. treatment group
-medtable4 <- rbind(tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),
-                   tabmedians(x = d$group, y = d$age, xlevels = groups, yname = "Age"))
-                   
-# An easier way to make the above table is to call the tabmulti function
-medtable5 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("bmi", "age"),
-                      ymeasures = "median", xlevels = groups, ynames = c("BMI", "Age"))
-                        
-# medtable4 and medtable5 are equivalent
-all(medtable4 == medtable5)
-
-# Click on medtable1, ... , medtable5 in the Workspace tab of RStudio to see the tables 
-# that could be copied and pasted into a report or manuscript. Alternatively, setting the 
-# latex input to TRUE produces tables that can be inserted into LaTeX using the xtable 
-# package.
+NA
 }
 \keyword{ table }
 \keyword{ median }
+\keyword{ survey }
