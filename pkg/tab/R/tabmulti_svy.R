@@ -42,7 +42,7 @@ tabmulti.svy <- function(svy, xvarname, yvarnames, ymeasures = NULL, listwise.de
          svyranktest function in the survey package: 'wilcoxon', 'vanderWaerden', 'median', or 'KruskalWallis'. See 
          documentation for tabmedians.svy and svyranktest for details.")
   }     
-  if (!all(freq.tests %in% c("F", "Chisq", "Wald", "adjWald", "lincom", "saddlepoint")) {
+  if (!all(freq.tests %in% c("F", "Chisq", "Wald", "adjWald", "lincom", "saddlepoint"))) {
     stop("For freq.tests input, please enter character string or vector of character strings indicating what statistical test
          should be performed for each categorical row variable. Each element should be a possible value for the 'statistic' 
          input of the svychisq function in the survey package: 'F', 'Chisq', 'Wald', 'adjWald', 'lincom', 
