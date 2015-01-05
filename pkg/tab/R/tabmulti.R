@@ -2,9 +2,9 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
                      latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
                      freq.tests = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), 
                      p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-                     n = FALSE, se = FALSE, compress = FALSE, parenth = "iqr", text.label = NULL, 
-                     parenth.sep = "-", bold.colnames = TRUE, bold.varnames = FALSE,
-                     bold.varlevels = FALSE, variable.colname = "Variable") {
+                     n.column = FALSE, n.headings = TRUE, se = FALSE, compress = FALSE, 
+                     parenth = "iqr", text.label = NULL, parenth.sep = "-", bold.colnames = TRUE, 
+                     bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable") {
   
   # If any inputs are not correct class, return error
   if (!is.matrix(dataset) & !is.data.frame(dataset)) {
@@ -59,8 +59,11 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   if (!is.logical(p.avoid1)) {
     stop("For p.avoid1 input, please enter TRUE or FALSE")
   }
-  if (!is.logical(n)) {
-    stop("For n input, please enter TRUE or FALSE")
+  if (!is.logical(n.column)) {
+    stop("For n.column input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(n.headings)) {
+    stop("For n.headings input, please enter TRUE or FALSE")
   }
   if (!is.logical(se)) {
     stop("For se input, please enter TRUE or FALSE")
@@ -68,6 +71,7 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   if (!is.logical(compress)) {
     stop("For compress input, please enter TRUE or FALSE")
   }
+  
   if (! parenth %in% c("minmax", "range", "q1q3", "iqr", "none")) {
     stop("For parenth input, please enter one of the following: 'minmax', 'range', 'q1q3', 'iqr', 'none'")
   }
@@ -100,6 +104,18 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
     
   }
   
+  # If ymeasures is NULL, guess what measures are appropriate based on each variable
+  if (is.null(ymeasures)) {
+    ymeasures <- c()
+    for (ii in 1:length(yvarnames)) {
+      if (is.factor(dataset[, yvarnames[ii]]) | length(unique(dataset[!is.na(dataset[, yvarnames[ii]]), yvarnames[ii]])) <= 5) {
+        ymeasures <- c(ymeasures, "freq")
+      } else {
+        ymeasures <- c(ymeasures, "mean")
+      }
+    }
+  }
+  
   # If ymeasures is single value, create vector of repeat values
   if (length(ymeasures) == 1) {
     ymeasures <- rep(ymeasures, length(yvarnames))
@@ -107,18 +123,7 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   
   # If freq.tests is a single value, create vector of repeat values
   if (length(freq.tests) == 1) {
-    freq.tests <- rep(freq.tests, length(yvarnames))
-  }
-  
-  # If ymeasures is NULL, guess what measures are appropriate based on each variable
-  if (is.null(ymeasures)) {
-    ymeasures <- c()
-    for (ii in 1:length(yvarnames)) {
-      if (is.factor(dataset[, yvarnames[ii]]) | length(unique(dataset[!is.na(dataset[, yvarnames[ii]]), yvarnames[ii]])) <= 5) {
-        ymeasures <- c(ymeasures, "freq")
-      } else
-        ymeasures <- c(ymeasures, "mean")
-    }
+    freq.tests <- rep(freq.tests, sum(ymeasures == "freq"))
   }
   
   # If ylevels is a vector, convert to a list
@@ -133,18 +138,23 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
       current <- tabmeans(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
                           yname = ynames[ii], decimals = decimals, p.include = p.include, p.decimals = p.decimals, 
                           p.cuts = p.cuts, p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
-                          n = n, se = se)
+                          n.column = n.column, n.headings = n.headings, se = se, bold.colnames = bold.colnames,
+                          bold.varnames = bold.varnames, variable.colname = variable.colname)
     } else if (ymeasures[ii] == "median") {
       current <- tabmedians(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
                             yname = ynames[ii], decimals = decimals, p.include = p.include, p.decimals = p.decimals, 
                             p.cuts = p.cuts, p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
-                            n = n, parenth = parenth, text.label = text.label, parenth.sep = parenth.sep)
+                            n.column = n.column, n.headings = n.headings, parenth = parenth, text.label = text.label, 
+                            parenth.sep = parenth.sep, bold.colnames = bold.colnames, bold.varnames = bold.varnames, 
+                            variable.colname = variable.colname)
     } else if (ymeasures[ii] == "freq") {
       freqindex <- freqindex + 1
       current <- tabfreq(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
-                         yname = ynames[ii], ylevels = ylevels[[freqindex]], test = freq.tests[ii], decimals = decimals, 
+                         yname = ynames[ii], ylevels = ylevels[[freqindex]], test = freq.tests[freqindex], decimals = decimals, 
                          p.include = p.include, p.decimals = p.decimals, p.cuts = p.cuts, p.lowerbound = p.lowerbound, 
-                         p.leading0 = p.leading0, p.avoid1 = p.avoid1, n = n, compress = compress)
+                         p.leading0 = p.leading0, p.avoid1 = p.avoid1, n.column = n.column, n.headings = n.headings,
+                         compress = compress, bold.colnames = bold.colnames, bold.varnames = bold.varnames, 
+                         bold.varlevels = bold.varlevels, variable.colname = variable.colname)
     }
     if (ii == 1) {
       results <- current

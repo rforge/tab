@@ -10,8 +10,9 @@ This function compares the mean of a continuous variable across levels of a cate
 tabmeans(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = "Y variable", 
          quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.include = TRUE, 
          p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-         p.avoid1 = FALSE, n = FALSE, se = FALSE, bold.colnames = TRUE, 
-         bold.varnames = FALSE, variable.colname = "Variable", fig = FALSE)
+         p.avoid1 = FALSE, n.column = FALSE, n.headings = TRUE, se = FALSE, 
+         bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable", 
+         fig = FALSE)
 }
 \arguments{
   \item{x}{
@@ -59,8 +60,11 @@ If TRUE, p-values are printed with 0 before decimal place; if FALSE, the leading
   \item{p.avoid1}{
 If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly depending on values for p.decimals and p.cuts). 
 }
-  \item{n}{
-If TRUE, the table will have a column for sample size.
+  \item{n.column}{
+If TRUE, the table will have a column for (unweighted) sample size.
+}
+  \item{n.headings}{
+If TRUE, the table will indicate the (unweighted) sample size overall and in each group in parentheses after the column headings.
 }
   \item{se}{
 If TRUE, the table will present mean (standard error) rather than mean (standard deviation).
@@ -121,8 +125,8 @@ races <- c("White", "Black", "Mexican American", "Other")
 meanstable1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
 meansfig1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", fig = TRUE)
 
-# Compare mean BMI by race - table with sample size and figure
-meanstable2 <- tabmeans(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = TRUE)
+# Compare mean BMI by race - table and figure
+meanstable2 <- tabmeans(x = d$race, y = d$bmi, xlevels = races, yname = "BMI")
 meansfig2 <- tabmeans(x = d$race, y = d$bmi, xname = "Race", xlevels = races, 
                       yname = "BMI", fig = TRUE)
 

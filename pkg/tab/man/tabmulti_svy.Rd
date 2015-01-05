@@ -1,24 +1,22 @@
-\name{tabmulti}
-\alias{tabmulti}
+\name{tabmulti.svy}
+\alias{tabmulti.svy}
 \title{
-Generate Multi-row Tables Comparing Means/Medians/Frequencies of Multiple Variables Across Levels of One Categorical Variable
+Generate Multi-row Tables Comparing Means/Medians/Frequencies of Multiple Variables Across Levels of One Categorical Variable (Survey Data)
 }
 \description{
-This function basically provides an alternative to making multiple calls to tabmeans, tabmedians, and tabfreq, then using rbind to combine the results into a single table.
+This function basically provides an alternative to making multiple calls to tabmeans.svy, tabmedians.svy, and tabfreq.svy, then using rbind to combine the results into a single table. Similar to tabmulti, but for survey data. Relies heavily on the 'survey' package [1,2].
 }
 \usage{
-tabmulti(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FALSE, 
-         latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
-         freq.tests = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), 
-         p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-         n.column = FALSE, n.headings = TRUE, se = FALSE, compress = FALSE,
-         parenth = "iqr", text.label = NULL, parenth.sep = "-", bold.colnames = TRUE, 
-         bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")
+tabmulti.svy(svy, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FALSE, 
+             latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
+             mean.tests = "Wald", median.tests = "wilcoxon", freq.tests = "F", 
+             decimals = 1, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, 
+             p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE, 
+             n.headings = TRUE, se = FALSE, compress = FALSE, parenth = "iqr", 
+             text.label = NULL, parenth.sep = "-", bold.colnames = TRUE, 
+             bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")
 }
 \arguments{
-  \item{dataset}{
-Data frame or matrix containing variables of interest.
-}
   \item{xvarname}{
 Character string with name of column variable. Should be one of colnames(dataset).
 }
@@ -44,7 +42,7 @@ Optional labels for the row variables.
 Character vector or list of character vectors to label the levels of the categorical row variables.
 }
   \item{freq.tests}{
-Character string or vector of character strings indicating what statistical tests should be used to compare distributions of each categorical row variable across levels of the column variable. Elements can be "chi" for Pearson's chi-squared test, which is valid only in large samples; 'fisher' for Fisher's exact test, which is valid in small or large samples; 'z' for z test without continuity correction; or 'z.continuity' for z test with continuity correction. 'z' and 'z.continuity' can only be used for binary column and row variables.
+Character string or vector of character strings indicating what statistical tests should be used to compare distributions of each categorical row variable across levels of the column variable. Elements should be possible values for the 'statistic' input of the svychisq function in the survey package [1,2]: 'F', 'Chisq', 'Wald', 'adjWald', 'lincom', or 'saddlepoint'.
 }
   \item{decimals}{
 Number of decimal places for various cell entries, such as means and percentages. Does not affect p-values.
@@ -77,7 +75,7 @@ If TRUE, the table will indicate the (unweighted) sample size overall and in eac
 If TRUE, the table will present mean (standard error) rather than mean (standard deviation) for continuous row variables.
 }
   \item{compress}{
-Logical indicating whether categorical row variables with two levels should be compressed into a single row rather than two rows for the table.
+If TRUE, categorical row variables with two levels will have a single row for n (percent) for the higher level. For example, if a row variable is sex, with 0 for females and 1 for males, setting compress = TRUE would result in the sex row showing n (percent) for males only. If FALSE, the table would have two rows for sex, one showing n (percent) for males and another sohwing n (percent) for females.
 }
   \item{parenth}{
 For median comparisons, controls what values (if any) are placed in parentheses after the medians in each cell. Possible choices are as follows: 'minmax' for minimum and maximum; 'range' for difference between minimum and maximum; 'q1q3' for first and third quartiles; 'iqr' for difference between first and third quartiles; or 'none' for no parentheses at all.
@@ -105,10 +103,14 @@ Character string with desired heading for first column of table, which shows the
 Please see help files for tabmeans, tabmedians, and tabfreq for details on statistical tests.
 }
 \value{
-A character matrix comparing mean/medians/frequencies of row variables across levels of the column variable. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [1].
+A character matrix comparing mean/medians/frequencies of row variables across levels of the column variable. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [3].
 }
 \references{
-1. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
+1. Lumley T (2012). survey: analysis of complex survey samples. R package version 3.28-2, \url{http://CRAN.R-project.org/package=survey}.
+
+2. Lumley T (2014). Analysis of complex survey samples. Journal of Statistical Software 9(1): 1-19.
+
+3. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
@@ -142,7 +144,8 @@ races <- c("White", "Black", "Mexican American", "Other")
 # data for each comparison
 table1 <- tabmulti(dataset = d, xvarname = "group",
                    yvarnames = c("age", "sex", "race", "bmi"), xlevels = groups,
-                   ynames = c("Age", "Sex", "Race", "BMI"), ylevels = list(sexes, races))
+                   ynames = c("Age", "Sex", "Race", "BMI"), ylevels = list(sexes, races), 
+                   n = TRUE)
                    
 # Repeat, but use listwise deletion, i.e. drop observations that do not have complete
 # data for all variables of interest, and suppress sample size column

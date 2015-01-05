@@ -1,8 +1,8 @@
 tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
                     test = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01,
-                    p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, 
-                    compress = FALSE, compress.val = NULL, bold.colnames = TRUE, bold.varnames = FALSE,
-                    bold.varlevels = FALSE, variable.colname = "Variable") {
+                    p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE,
+                    n.headings = TRUE, compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
+                    bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable") {
   
   # Drop missing values
   locs.complete <- which(!is.na(x) & !is.na(y))
@@ -54,8 +54,11 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
   if (!is.logical(p.avoid1)) {
     stop("For p.avoid1 input, please enter TRUE or FALSE")
   }
-  if (!is.logical(n)) {
-    stop("For n input, please enter TRUE or FALSE")
+  if (!is.logical(n.column)) {
+    stop("For n.column input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(n.headings)) {
+    stop("For n.headings input, please enter TRUE or FALSE")
   }
   if (!is.logical(compress)) {
     stop("For compress input, please enter TRUE or FALSE")
@@ -139,11 +142,15 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", y
     }
   }
   
-  # Add column names
-  colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
+  # Add column names, with sample sizes for each group if requested
+  if (n.headings == FALSE) {
+    colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
+  } else {
+    colnames(tbl) <- c(variable.colname, "N", paste(c("Overall", xlevels), " (n = ", c(sum(counts), apply(counts, 2, sum)), ")", sep = ""), "P")
+  }
   
   # Drop N column if requested
-  if (n == FALSE) {
+  if (n.column == FALSE) {
     tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
   }
   

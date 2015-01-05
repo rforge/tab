@@ -1,21 +1,22 @@
 tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = "Y variable", 
                      quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.include = TRUE,
                      p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-                     p.avoid1 = FALSE, n = FALSE, se = FALSE, bold.colnames = TRUE, 
-                     bold.varnames = FALSE, variable.colname = "Variable", fig = FALSE) {
+                     p.avoid1 = FALSE, n.column = FALSE, n.headings = TRUE, se = FALSE, 
+                     bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable", 
+                     fig = FALSE) {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
   }
   if (!is.null(xlevels) && !is.character(xlevels)) {
-    stop("For xlevels input, please enter vector of character strings.")
+    stop("For xlevels input, please enter vector of character strings")
   }
   if (!is.character(yname)) {
     stop("For yname input, please enter character string")
   }
   if (!is.null(quantiles) && ! (is.numeric(quantiles) & length(quantiles) == 1 && quantiles > 1 & quantiles == round(quantiles))) {
-    stop("For quantiles input, please enter a whole number greater than 1.")
+    stop("For quantiles input, please enter a whole number greater than 1")
   } 
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
@@ -38,8 +39,11 @@ tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = 
   if (!is.logical(p.avoid1)) {
     stop("For p.avoid1 input, please enter TRUE or FALSE")
   }
-  if (!is.logical(n)) {
-    stop("For n input, please enter TRUE or FALSE")
+  if (!is.logical(n.column)) {
+    stop("For n.column input, please enter TRUE or FALSE")
+  }
+  if (!is.logical(n.headings)) {
+    stop("For n.headings input, please enter TRUE or FALSE")
   }
   if (!is.logical(se)) {
     stop("For se input, please enter TRUE or FALSE")
@@ -143,11 +147,15 @@ tabmeans <- function(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = 
       tbl[1, ncol(tbl)] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
     }
     
-    # Add column names
-    colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
+    # Add column names, with sample sizes for each group if requested
+    if (n.headings == FALSE) {
+      colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
+    } else {
+      colnames(tbl) <- c(variable.colname, "N", paste(c("Overall", xlevels), " (n = ", c(sum(ns), ns), ")", sep = ""), "P")
+    }
     
     # Drop N column if requested
-    if (n == FALSE) {
+    if (n.column == FALSE) {
       tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
     }
     

@@ -1,17 +1,17 @@
 \name{tabmedians}
 \alias{tabmedians}
 \title{
-Generate Summary Tables of Median Comparisons for Statistical Reports 
+Generate Summary Tables of Median Comparisons for Statistical Reports (Survey Data)
 }
 \description{
-This function compares the median of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report.
-}
+This function compares the median of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1,2].
 \usage{
-tabmedians(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
-           p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
-           p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE, n.headings = TRUE, 
-           parenth = "iqr", text.label = NULL, parenth.sep = "-", bold.colnames = TRUE, 
-           bold.varnames = FALSE, variable.colname = "Variable")
+tabmedians.svy(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
+               test = "wilcoxon", decimals = 1, p.include = TRUE, p.decimals = c(2, 3),
+               p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE,
+               n.column = FALSE, n.headings = TRUE, parenth = "iqr", text.label = NULL, 
+               parenth.sep = "-", bold.colnames = TRUE, bold.varnames = FALSE, 
+               variable.colname = "Variable")
 }
 \arguments{
   \item{x}{
@@ -28,6 +28,9 @@ Optional character vector to label the levels of x. If unspecified, the function
 }
   \item{yname}{
 Optional label for the continuous variable.
+}
+  \item{test}{
+Controls statistical test. Must be a possible value for the 'test' input of the svyranktest function in the survey package [1,2]: 'wilcoxon' for Mann-Whitney U/Wilcoxon test of whether one group is from distribution that is stochastically greater than the other; 'vanderWaerden' for  Van der Waerden test of whether the population distribution functions are equal; 'median' for Mood's test for whether the population medians are equal; and 'KruskalWallis' for Kruskal-Wallis test which is Mann-Whitney U/Wilcoxon generalized to three or more groups.
 }
   \item{decimals}{
 Number of decimal places for means and standard deviations or standard errors.
@@ -81,10 +84,14 @@ If x has two levels, a Mann-Whitney U (also known as Wilcoxon rank-sum) test is 
 Both x and y can have missing values. The function drops observations with missing x or y. 
 }
 \value{
-A character matrix with the requested table comparing median y across levels of x. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [1].
+A character matrix with the requested table comparing median y across levels of x. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [3].
 }
 \references{
-1. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
+1. Lumley T (2012). survey: analysis of complex survey samples. R package version 3.28-2, \url{http://CRAN.R-project.org/package=survey}.
+
+2. Lumley T (2014). Analysis of complex survey samples. Journal of Statistical Software 9(1): 1-19.
+
+3. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://CRAN.R-project.org/package=xtable}.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
@@ -121,8 +128,8 @@ medtable1 <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
 medtable2 <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", 
              parenth = "none")
 
-# Compare median BMI by race
-medtable3 <- tabmedians(x = d$race, y = d$bmi, xlevels = races, yname = "BMI")
+# Compare median BMI by race and include sample size
+medtable3 <- tabmedians(x = d$race, y = d$bmi, xlevels = races, yname = "BMI", n = TRUE)
 
 # Create single table comparing median BMI and median age in control vs. treatment group
 medtable4 <- rbind(tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),

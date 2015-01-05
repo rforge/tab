@@ -9,8 +9,8 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 \usage{
 tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
         test = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01,
-        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE,
-        compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
+        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE,
+        n.headings = TRUE, compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
         bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")
 }
 \arguments{
@@ -56,8 +56,11 @@ If TRUE, p-values are printed with 0 before decimal place; if FALSE, the leading
   \item{p.avoid1}{
 If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly depending on values for p.decimals and p.cuts). 
 }
-  \item{n}{
-If TRUE, the table will have a column for sample size. 
+  \item{n.column}{
+If TRUE, the table will have a column for (unweighted) sample size.
+}
+  \item{n.headings}{
+If TRUE, the table will indicate the (unweighted) sample size overall and in each group in parentheses after the column headings.
 }
   \item{compress}{
 If y has only two levels, setting compress to TRUE will produce a single row for n (percent) for the higher level. For example, if y is sex with 0 for female, 1 for male, setting compress = TRUE will return a table with n (percent) for males only. If FALSE, the table would show n (percent) for both males and females.
@@ -120,9 +123,9 @@ races <- c("White", "Black", "Mexican American", "Other")
 freqtable1 <- tabfreq(x = d$group, y = d$sex, xlevels = groups, ylevels = sexes, 
                       yname = "Sex")
 
-# Same comparison, but compress table to single row and include sample size
+# Same comparison, but compress table to single row
 freqtable2 <- tabfreq(x = d$group, y = d$sex, xlevels = groups, yname = "Male", 
-                      compress = TRUE, n = TRUE)
+                      compress = TRUE)
 
 # Compare sex distribution by race, with race as column variable
 freqtable3 <- tabfreq(x = d$race, y = d$sex, xlevels = races, yname = "Sex", 

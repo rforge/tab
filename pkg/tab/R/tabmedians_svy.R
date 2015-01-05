@@ -1,8 +1,9 @@
-tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1,
-                       p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
-                       p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE, n.headings = TRUE, 
-                       parenth = "iqr", text.label = NULL, parenth.sep = "-", bold.colnames = TRUE,
-                       bold.varnames = FALSE, variable.colname = "Variable") {
+tabmedians.svy <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable",
+                           test = "wilcoxon", decimals = 1, p.include = TRUE, p.decimals = c(2, 3),
+                           p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE,
+                           n.column = FALSE, n.headings = TRUE, parenth = "iqr", text.label = NULL,
+                           parenth.sep = "-", bold.colnames = TRUE, bold.varnames = FALSE,
+                           variable.colname = "Variable") {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -10,6 +11,15 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   }
   if (!is.null(xlevels) && !is.character(xlevels)) {
     stop("For xlevels input, please enter vector of character strings")
+  }
+  if (!is.character(yname)) {
+    stop("For yname input, please enter character string")
+  }
+  if (! test %in% c("wilcoxon", "vanderWaerden", "median", "KruskalWallis")) {
+    stop("For test input, please enter a possible value for the 'test' input of the 
+         svyranktest function in the survey package: 'wilcoxon', 'vanderWaerden', 
+         'median', or 'KruskalWallis'. See documentation for tabmedians.svy and 
+         svyranktest for details.")
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
@@ -57,13 +67,27 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     stop("For variable.colname input, please enter a character string")
   }
   
-  # Drop missing values
-  locs.complete <- which(!is.na(x) & !is.na(y))
-  x <- x[locs.complete]
-  y <- y[locs.complete]
-  
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
+  
+  # Save x and y as character strings
+  xstring <- x
+  ystring <- y
+  
+  # Extract vectors x and y
+  x <- svy$variables[, xstring]
+  y <- svy$variables[, ystring]
+  
+  # Update survey object to include y and x explicitly
+  svy2 <- update(svy, y = y, x = x)
+  
+  # Drop missing values if present
+  locs <- which(!is.na(x) & !is.na(y))
+  if (length(locs) < nrow(svy2)) {
+    svy2 <- subset(svy2, !is.na(x) & !is.na(y))
+    x <- svy2$variables[, xstring]
+    y <- svy2$variables[, ystring]
+  }
   
   # Get unique values of x
   xvals <- sort(unique(x))
@@ -77,7 +101,9 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
   tbl <- matrix("", nrow = 1, ncol = length(xlevels) + 4)
   
   # Get medians and values for parentheses, and add variable name to 1st cell entry to table
-  medians <- tapply(X = y, INDEX = x, FUN = median)
+  #medians <- c(svyquantile(~y, svy2, 0.5), svyby(~y, ~x, svy2, svyquantile, quantile = 0.5, keep.var = FALSE)[, 2])
+  overallmedian <- svyquantile(~y, svy2, 0.5)
+  medians <- svyby(~y, ~x, svy2, svyquantile, quantile = 0.5, keep.var = FALSE)[, 2]
   ns <- tapply(X = y, INDEX = x, FUN = length)
   if (parenth == "minmax") {
     parent1 <- tapply(X = y, INDEX = x, FUN = min)
@@ -87,8 +113,8 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
       text.label <- "Median (Min-Max)"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
-    tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, min(y)), parenth.sep, sprintf(spf, max(y)), ")", sep = "")
+    tbl[1, 2] <- sprintf("%.0f", sum(ns))
+    tbl[1, 3] <- paste(sprintf(spf, overallmedian), " (", sprintf(spf, min(y)), parenth.sep, sprintf(spf, max(y)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
   } else if (parenth == "range") {
     parent1 <- tapply(X = y, INDEX = x, FUN = min)
@@ -98,56 +124,45 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
       text.label <- "Median (Range)"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
-    tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, max(y) - min(y)), ")", sep = "")
+    tbl[1, 2] <- sprintf("%.0f", sum(ns))
+    tbl[1, 3] <- paste(sprintf(spf, overallmedian), " (", sprintf(spf, max(y) - min(y)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
   } else if (parenth == "q1q3") {
-    parent1 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.25))
-    parent2 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.75))
+    parent1 <- svyby(~y, ~x, svy2, svyquantile, quantile = 0.25, keep.var = FALSE)[, 2]
+    parent2 <- svyby(~y, ~x, svy2, svyquantile, quantile = 0.75, keep.var = FALSE)[, 2]
     parent <- paste(sprintf(spf, parent1), parenth.sep, sprintf(spf, parent2), sep = "")
     if (is.null(text.label)) {
       text.label <- "Median (Q1-Q3)"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
-    tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, quantile(y, probs = 0.25)), parenth.sep, sprintf(spf, quantile(y, 0.75)), ")", sep = "")
+    tbl[1, 2] <- sprintf("%.0f", sum(ns))
+    tbl[1, 3] <- paste(sprintf(spf, overallmedian), " (", sprintf(spf, svyquantile(~y, svy2, 0.25)), 
+                       parenth.sep, sprintf(spf, svyquantile(~y, svy2, 0.75)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
   } else if (parenth == "iqr") {
-    parent1 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.25))
-    parent2 <- tapply(X = y, INDEX = x, FUN = function(x) quantile(x, probs = 0.75))
+    parent1 <- svyby(~y, ~x, svy2, svyquantile, quantile = 0.25, keep.var = FALSE)[, 2]
+    parent2 <- svyby(~y, ~x, svy2, svyquantile, quantile = 0.75, keep.var = FALSE)[, 2]
     parent <- paste(sprintf(spf, parent2 - parent1))
     if (is.null(text.label)) {
       text.label <- "Median (IQR)"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
-    tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1, 3] <- paste(sprintf(spf, median(y)), " (", sprintf(spf, quantile(y, probs = 0.75) - quantile(y, probs = 0.25)), ")", sep = "")
+    tbl[1, 2] <- sprintf("%.0f", sum(ns))
+    tbl[1, 3] <- paste(sprintf(spf, overallmedian), " (", sprintf(spf, svyquantile(~y, svy2, 0.75) - svyquantile(~y, svy2, 0.25)), ")", sep = "")
     tbl[1, 4:(ncol(tbl)-1)] <- paste(sprintf(spf, medians), " (", parent, ")", sep = "")
   } else if (parenth == "none") {
     if (is.null(text.label)) {
       text.label <- "Median"
     }
     tbl[1, 1] <- paste(yname, ", ", text.label, sep = "")
-    tbl[1, 2] <- sprintf("%.0f", length(locs.complete))
-    tbl[1, 3] <- sprintf(spf, median(y))
+    tbl[1, 2] <- sprintf("%.0f", sum(ns))
+    tbl[1, 3] <- sprintf(spf, overallmedian)
     tbl[1, 4:(ncol(tbl)-1)] <- sprintf(spf, medians)
   }
   
-  # Add p-value from statistical test depending on number of levels of x
+  # Add p-value from statistical test
   if (p.include == TRUE) {
-    
-    if (length(xlevels) == 2) {
-      
-      # Mann-Whitney U test a.k.a. Wilcoxon rank-sum test
-      p <- wilcox.test(y ~ x)$p.value
-      
-    } else {
-      
-      # Kruskal-Wallis rank-sum test
-      p <- kruskal.test(y ~ as.factor(x))$p.value
-      
-    }
-    
+    p <- svyranktest(y ~ x, svy2, test)$p.value
   } else {
     p <- NA
   }
