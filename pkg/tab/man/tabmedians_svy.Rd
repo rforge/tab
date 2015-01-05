@@ -5,6 +5,7 @@ Generate Summary Tables of Median Comparisons for Statistical Reports (Survey Da
 }
 \description{
 This function compares the median of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1,2].
+}
 \usage{
 tabmedians.svy(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", 
                test = "wilcoxon", decimals = 1, p.include = TRUE, p.decimals = c(2, 3),
