@@ -120,14 +120,24 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
   }
   tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
   
-  # If y binary and compress is TRUE, compress table to a single row
-  if (nrow(counts) <= 2 & compress == TRUE) {
-    tbl <- matrix(c(tbl[1, 1], tbl[nrow(tbl), 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
-  }
+  #   # If y binary and compress is TRUE, compress table to a single row
+  #   if (nrow(counts) <= 2 & compress == TRUE) {
+  #     tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+  #   }
   
   # If xlevels unspecified, set to actual values
   if (is.null(xlevels)) {
     xlevels <- colnames(counts)
+  }
+  
+  # If y binary and compress is TRUE, compress table to a single row
+  if (nrow(counts) <= 2 & compress == TRUE) {
+    if (is.null(compress.val)) {
+      tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+    } else {
+      whichrow <- which(rownames(counts) == as.character(compress.val)) + 1
+      tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+    }
   }
   
   # Add column names, with sample sizes for each group if requested
@@ -135,16 +145,6 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
     colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
   } else {
     colnames(tbl) <- c(variable.colname, "N", paste(c("Overall", xlevels), " (n = ", c(sum(counts), apply(counts, 2, sum)), ")", sep = ""), "P")
-  }
-  
-  # If y binary and compress is TRUE, compress table to a single row
-  if (nrow(counts) <= 2 & compress == TRUE) {
-    if (!is.null(compress.val)) {
-      tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
-    } else {
-      whichrow <- which(rownames(counts) == as.character(compress.val)) + 1
-      tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
-    }
   }
   
   # Drop N column if requested

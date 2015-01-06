@@ -132,6 +132,16 @@ tabmulti.svy <- function(svy, xvarname, yvarnames, ymeasures = NULL, listwise.de
     freq.tests <- rep(freq.tests, length(yvarnames))
   }
   
+  # If mean.tests is a single value, create vector of repeat values
+  if (length(mean.tests) == 1) {
+    mean.tests <- rep(mean.tests, length(yvarnames))
+  }
+  
+  # If median.tests is a single value, create vector of repeat values
+  if (length(median.tests) == 1) {
+    median.tests <- rep(median.tests, length(yvarnames))
+  }
+  
   # If ymeasures is NULL, guess what measures are appropriate based on each variable
   if (is.null(ymeasures)) {
     ymeasures <- c()
