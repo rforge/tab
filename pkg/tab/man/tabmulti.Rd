@@ -44,7 +44,7 @@ Optional labels for the row variables.
   \item{ylevels}{
 Character vector or list of character vectors to label the levels of the categorical row variables.
 }
-  \item{cell.percent}
+  \item{cell.percent}{
 If TRUE, cells for categorical row variables show column percentages rather than frequencies.
 }
   \item{freq.tests}{

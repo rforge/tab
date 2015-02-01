@@ -33,7 +33,7 @@ Optional label for the y (row) variable.
   \item{ylevels}{
 Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on. Note that levels of y will be listed in the order that they appear when you run table(y, x).
 }
-  \item{cell.percent}
+  \item{cell.percent}{
 If TRUE, cells of table show column percentages rather than frequencies.
 }
   \item{parenth}{
@@ -42,7 +42,7 @@ Controls what values (if any) are placed in parentheses after the values in each
   \item{text.label}{
 Optional text to put after the y variable name, identifying what cell values and parentheses indicate in the table. If unspecified, function uses defaults based on cell.percent and parenth settings. Set to 'none' for no text labels.
 }
-  \item{parenth.sep}
+  \item{parenth.sep}{
 Optional character specifying the separator between lower and upper bound of confidence interval (when requested). Usually either '-' or ', ' depending on user preference.
 }
   \item{test}{
