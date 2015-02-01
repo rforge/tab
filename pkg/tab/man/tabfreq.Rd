@@ -8,6 +8,7 @@ This function creates an I-by-J frequency table and summarizes the results in a 
 }
 \usage{
 tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
+        cell.percent = FALSE, parenth = NULL, text.label = NULL, parenth.sep = "-", 
         test = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01,
         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE,
         n.headings = TRUE, compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
@@ -31,6 +32,18 @@ Optional label for the y (row) variable.
 }
   \item{ylevels}{
 Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on. Note that levels of y will be listed in the order that they appear when you run table(y, x).
+}
+  \item{cell.percent}
+If TRUE, cells of table show column percentages rather than frequencies.
+}
+  \item{parenth}{
+Controls what values (if any) are placed in parentheses after the values in each cell. By default, if cell.percent is FALSE, then the column percent is shown in parentheses; if cell.percent is TRUE, then a 95\% confidence interval (based on exact Binomial test) for the percent is shown in parentheses. Possible values are "none", "percent", "ci", and "se".
+}
+  \item{text.label}{
+Optional text to put after the y variable name, identifying what cell values and parentheses indicate in the table. If unspecified, function uses defaults based on cell.percent and parenth settings. Set to 'none' for no text labels.
+}
+  \item{parenth.sep}
+Optional character specifying the separator between lower and upper bound of confidence interval (when requested). Usually either '-' or ', ' depending on user preference.
 }
   \item{test}{
 Controls test for association between x and y. Use "chi" for Pearson's chi-squared test, which is valid only in large samples; "fisher" for Fisher's exact test, which is valid in small or large samples; "z" for z test without continuity correction; or "z.continuity" for z test with continuity correction. "z" and "z.continuity" can only be used if x and y are binary.

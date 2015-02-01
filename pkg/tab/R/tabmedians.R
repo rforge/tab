@@ -39,13 +39,13 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable"
     stop("For n.headings input, please enter TRUE or FALSE")
   }
   if (! parenth %in% c("minmax", "range", "q1q3", "iqr", "none")) {
-    stop("For parenth input, please enter one of the following: 'minmax', 'range', 'q1q3', 'iqr', 'none'")
+    stop("For parenth input, please enter 'minmax', 'range', 'q1q3', 'iqr', or 'none'")
   }
   if (!is.null(text.label) && !is.character(text.label)) {
-    stop("For text.label input, please enter something like 'Median (IQR)' or just leave it unspecified")
+    stop("For text.label input, please enter a character string or just leave it unspecified")
   }
   if (!is.character(parenth.sep)) {
-    stop("For parenth.sep input, please enter a character string")
+    stop("For parenth.sep input, please enter a character string (usually '-' or ', ')")
   }
   if (!is.logical(bold.colnames)) {
     stop("For bold.colnames input, please enter TRUE or FALSE")

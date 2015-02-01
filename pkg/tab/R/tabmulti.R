@@ -1,10 +1,11 @@
 tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FALSE,
-                     latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
-                     freq.tests = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), 
-                     p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-                     n.column = FALSE, n.headings = TRUE, se = FALSE, compress = FALSE, 
-                     parenth = "iqr", text.label = NULL, parenth.sep = "-", bold.colnames = TRUE, 
-                     bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable") {
+                     latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL,
+                     cell.percent = FALSE, freq.tests = "chi", decimals = 1, p.include = TRUE, 
+                     p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
+                     p.avoid1 = FALSE, n.column = FALSE, n.headings = TRUE, se = FALSE, 
+                     compress = FALSE, parenth = "iqr", text.label = NULL, parenth.sep = "-", 
+                     bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
+                     variable.colname = "Variable") {
   
   # If any inputs are not correct class, return error
   if (!is.matrix(dataset) & !is.data.frame(dataset)) {
@@ -33,6 +34,9 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   }
   if (!is.null(ylevels) && !all(unlist(lapply(X = ylevels, FUN = function(x) all(is.character(x)))))) {
     stop("For ylevels input, please enter vector or list of vectors of character strings")
+  }
+  if (!is.logical(cell.percent)) {
+    stop("For cell.percent input, please enter TRUE or FALSE")
   }
   if (!all(freq.tests %in% c("chi", "fisher", "z", "z.continuity"))) {
     stop("For freq.tests input, please enter character string or vector of character strings indicating what statistical test
@@ -150,7 +154,8 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
     } else if (ymeasures[ii] == "freq") {
       freqindex <- freqindex + 1
       current <- tabfreq(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
-                         yname = ynames[ii], ylevels = ylevels[[freqindex]], test = freq.tests[freqindex], decimals = decimals, 
+                         yname = ynames[ii], ylevels = ylevels[[freqindex]], cell.percent = cell.percent, 
+                         parenth.sep = parenth.sep, test = freq.tests[freqindex], decimals = decimals, 
                          p.include = p.include, p.decimals = p.decimals, p.cuts = p.cuts, p.lowerbound = p.lowerbound, 
                          p.leading0 = p.leading0, p.avoid1 = p.avoid1, n.column = n.column, n.headings = n.headings,
                          compress = compress, bold.colnames = bold.colnames, bold.varnames = bold.varnames, 
