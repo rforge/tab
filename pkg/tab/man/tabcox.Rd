@@ -7,11 +7,12 @@ Generate Summary Tables of Fitted Cox Proportional Hazards Regression Models for
 This function performs Cox proportional hazards regression using the R package survival [1, 2] and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabcox(x, time, delta, latex = FALSE, xlabels = NULL, decimals = 2, p.decimals = c(2, 3), 
-       p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
-       n = FALSE, events = FALSE, coef = "n", greek.beta = FALSE, binary.compress = TRUE, 
-       bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
-       predictor.colname = "Variable", suppress.beta = FALSE)
+tabcox(x, time, delta, latex = FALSE, xlabels = NULL, cluster = NULL, robust.se = TRUE, 
+       decimals = 2, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
+       p.leading0 = TRUE, p.avoid1 = FALSE, n = FALSE, events = FALSE, coef = "n", 
+       greek.beta = FALSE, binary.compress = TRUE, bold.colnames = TRUE, 
+       bold.varnames = FALSE, bold.varlevels = FALSE, predictor.colname = "Variable", 
+       suppress.beta = FALSE)
 }
 \arguments{
   \item{x}{
@@ -29,6 +30,12 @@ If TRUE, object returned will be formatted for printing in LaTeX using xtable [3
   \item{xlabels}{
 Optional character vector to label the x variables and their levels. If unspecified, the function uses generic labels.
 }
+  \item{cluster}{
+Optional vector indicating clusters of subjects.
+}
+  \item{robust.se}{
+Only a valid option if clusters are specified. In that case, setting to TRUE requests robust sandwich method standard errors, while setting to FALSE requests normal standard errors.
+  }
   \item{decimals}{
 Number of decimal places for the regression coefficients, standard errors, hazard ratios, and confidence intervals. 
 }

@@ -13,7 +13,7 @@ Contains functions for generating tables for statistical reports written in Micr
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 2.1.5\cr
-Date: \tab 2015-02-01\cr
+Date: \tab 2015-02-04\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:
