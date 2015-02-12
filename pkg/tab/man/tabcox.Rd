@@ -132,11 +132,11 @@ d <- d[complete.cases(d), ]
 races <- c("White", "Black", "Mexican American", "Other")
 
 # Test whether race is associated with survival
-coxtable1 <- tabcox(x = d$race, time = d$time, delta = d$delta, 
+coxtable1 <- tabcox(x = d$Race, time = d$time, delta = d$delta, 
                     xlabels = c("Race", races))
 
 # Test whether age, sex, race, and treatment group are associated with survival
-coxtable2 <- tabcox(x = d[,c("age", "sex", "race", "group")], time = d$time, 
+coxtable2 <- tabcox(x = d[,c("Age", "Sex", "Race", "Group")], time = d$time, 
                     delta = d$delta, 
                     xlabels = c("Age", "Male", "Race", races, "Treatment"))
 

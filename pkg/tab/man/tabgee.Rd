@@ -135,7 +135,7 @@ library("gee")
 races <- c("White", "Black", "Mexican American", "Other")
 
 # Test whether predictors are associated with blood pressure at 1, 2, and 3 months
-geefit1 <- gee(bp ~ age + sex + race + bmi + group, id = id, data = d2, 
+geefit1 <- gee(bp ~ Age + Sex + Race + BMI + Group, id = id, data = d2, 
                corstr = "unstructured")
                
 # Create summary table using tabgee
@@ -144,7 +144,7 @@ geetable1 <- tabgee(geefit = geefit1, data = d2, n.id = TRUE, n.total = TRUE,
                                "Treatment"))
 
 # Test whether predictors are associated with high blood pressure at 1, 2, and 3 months
-geefit2 <- gee(highbp ~ age + sex + race + bmi + group, id = id, data = d2, 
+geefit2 <- gee(highbp ~ Age + Sex + Race + BMI + Group, id = id, data = d2, 
                family = binomial, corstr = "unstructured")
                
 # Create summary table using tabgee

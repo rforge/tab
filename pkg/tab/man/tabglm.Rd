@@ -124,12 +124,12 @@ d <- d[complete.cases(d), ]
 races <- c("White", "Black", "Mexican American", "Other")
 
 # Test whether age, sex, race, and treatment group are associated with BMI
-glmfit1 <- glm(bmi ~ age + sex + race + group, data = d)
+glmfit1 <- glm(BMI ~ Age + Sex + Race + Group, data = d)
 lintable <- tabglm(glmfit = glmfit1, 
                    xlabels = c("Intercept", "Age", "Male", "Race", races, "Treatment"))
 
 # Test whether age, sex, race, and treatment group are associated with 1-year mortality
-glmfit2 <- glm(death_1yr ~ age + sex + race + group, data = d, family = binomial)
+glmfit2 <- glm(death_1yr ~ Age + Sex + Race + Group, data = d, family = binomial)
 logtable <- tabglm(glmfit = glmfit2, ci.beta = FALSE,
                    xlabels = c("Intercept", "Age", "Male", "Race", races, "Treatment"))
 

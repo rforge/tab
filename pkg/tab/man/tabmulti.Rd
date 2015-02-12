@@ -7,7 +7,7 @@ Generate Multi-row Tables Comparing Means/Medians/Frequencies of Multiple Variab
 This function basically provides an alternative to making multiple calls to tabmeans, tabmedians, and tabfreq, then using rbind to combine the results into a single table.
 }
 \usage{
-tabmulti(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FALSE,
+tabmulti(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = TRUE,
          latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL, 
          quantiles = NULL, quantile.vals = FALSE, parenth.sep = "-", decimals = NULL, 
          cell = "n", freq.parenth = NULL, freq.text.label = NULL, freq.tests = "chi", 
