@@ -136,7 +136,7 @@ medtable2 <- tabmedians(x = d$Group, y = d$BMI, parenth = "q1q3")
 medtable3 <- tabmedians(x = d$Race, y = d$BMI, overall.column = FALSE, n.headings = FALSE)
 
 # Compare median BMI by quartile of age
-medtable4 <- tabmedians2(x = d2$Age, y = d2$BMI, quantiles = 4)
+medtable4 <- tabmedians(x = d$Age, y = d$BMI, quantiles = 4)
 
 # Create single table comparing median BMI and median age in control vs. treatment group
 medtable5 <- rbind(tabmedians(x = d$Group, y = d$BMI), tabmedians(x = d$Group, y = d$Age))
