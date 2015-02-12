@@ -24,7 +24,7 @@ Character string specifying categorical x variable name. Must match one of names
 Character string specifying continuous y variable name. Must match one of names(svy$variables).
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using xtable [3]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned is formatted for printing in LaTeX using xtable [3]; if FALSE, formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
 Optional character vector to label the levels of x. If unspecified, the function uses the values that x takes on.

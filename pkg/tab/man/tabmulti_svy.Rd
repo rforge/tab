@@ -33,7 +33,7 @@ Character string or vector of character strings indicating whether each row vari
 If TRUE, observations with missing values for any row variable are excluded entirely; if FALSE, all available data is used for each comparison. If FALSE, recommend also setting n to TRUE so table shows effective sample size for each comparison.
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned is formatted for printing in LaTeX using xtable [3]; if FALSE, formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
 Optional character vector to label the levels of x. If unspecified, the function uses the values that x takes on.

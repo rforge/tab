@@ -7,12 +7,13 @@ Generate Summary Tables of Mean Comparisons for Statistical Reports
 This function compares the mean of a continuous variable across levels of a categorical variable and summarizes the results in a clean table (or figure) for a statistical report.
 }
 \usage{
-tabmeans(x, y, latex = FALSE, xname = NULL, xlevels = NULL, yname = "Y variable", 
-         quantiles = NULL, quantile.vals = FALSE, decimals = 1, p.include = TRUE, 
-         p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
-         p.avoid1 = FALSE, n.column = FALSE, n.headings = TRUE, se = FALSE, 
+tabmeans(x, y, latex = FALSE, variance = "unequal", xname = NULL, xlevels = NULL, 
+         yname = NULL, quantiles = NULL, quantile.vals = FALSE, parenth = "sd", 
+         text.label = NULL, parenth.sep = "-", decimals = NULL, p.include = TRUE, 
+         p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE,
+         p.avoid1 = FALSE, overall.column = TRUE, n.column = FALSE, n.headings = TRUE,
          bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable", 
-         fig = FALSE)
+         fig = FALSE, fig.errorbars = "z.ci")
 }
 \arguments{
   \item{x}{
@@ -22,16 +23,19 @@ Vector of values for the categorical x variable.
 Vector of values for the continuous y variable.
 }
   \item{latex}{
-If TRUE, object returned is be formatted for printing in LaTeX using xtable [1]; if FALSE, it is formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned is formatted for printing in LaTeX using xtable [1]; if FALSE, formatted for copy-and-pasting from RStudio into a word processor.
+}
+  \item{variance}{
+Controls whether equal variance t-test or unequal variance t-test is used when x has two levels. Possible values are "equal" for equal variance, "unequal" for unequal variance, or "ftest" for F test to determine which version of the t-test to use. Note that unequal variance t-test is less restrictive than equal variance t-test, and the F test is only valid when y is normally distributed in both x groups.
 }
   \item{xname}{
-Label for the categorical variable. Only used if fig is TRUE.  
+Label for the categorical variable. Only used if fig is TRUE.
 }
   \item{xlevels}{
-Character vector of labels for levels of the x variable. If unspecified, the function uses the values that x takes on.
+Optional character vector to label the levels of x, used in the column headings. If unspecified, the function uses the values that x takes on.
 }
   \item{yname}{
-Label for the continuous y variable.
+Optional label for the continuous y variable. If unspecified, variable name of y is used.
 }
   \item{quantiles}{
 If specified, function compares means of the y variable across quantiles of the x variable. For example, if x contains continuous BMI values and y contains continuous HDL cholesterol levels, setting quantiles to 3 would result in mean HDL being compared across tertiles of BMI.
@@ -39,8 +43,17 @@ If specified, function compares means of the y variable across quantiles of the 
   \item{quantile.vals}{
 If TRUE, labels for x show quantile number and corresponding range of the x variable. For example, Q1 [0.00, 0.25). If FALSE, labels for quantiles just show quantile number (e.g. Q1). Only used if xlevels is not specified.
 }
+  \item{parenth}{
+Controls what values (if any) are placed in parentheses after the means in each cell. Possible values are "none", "sd" for standard deviation, "se" for standard error, "t.ci" for 95\% confidence interval for population mean based on t distribution, and "z.ci" for 95\% confidence interval for population mean based on z distribution.
+}
+  \item{text.label}{
+Optional text to put after the y variable name, identifying what cell values and parentheses indicate in the table. If unspecified, function uses default labels based on parenth, e.g. M (SD) if parenth is "sd". Set to "none" for no text labels.
+}
+  \item{parenth.sep}{
+Optional character specifying the separator between lower and upper bound of confidence interval (when requested). Usually either "-" or ", " depending on user preference.
+}
   \item{decimals}{
-Number of decimal places for means and standard deviations or standard errors.
+Number of decimal places for means and standard deviations/standard errors/confidence intervals. If unspecified, function uses 0 decimal places if the largest mean (in magnitude) is in [1,000, Inf), 1 decimal place if [10, 1,000), 2 decimal places if [0.1, 10), 3 decimal places if [0.01, 0.1), 4 decimal places if [0.001, 0.01), 5 decimal places if [0.0001, 0.001), and 6 decimal places if [0, 0.0001).
 }
   \item{p.include}{
 If FALSE, t-test is not performed and p-value is not returned. 
@@ -60,14 +73,14 @@ If TRUE, p-values are printed with 0 before decimal place; if FALSE, the leading
   \item{p.avoid1}{
 If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly depending on values for p.decimals and p.cuts). 
 }
+  \item{overall.column}{
+If FALSE, column showing mean of y in full sample is suppressed.
+}
   \item{n.column}{
 If TRUE, the table will have a column for (unweighted) sample size.
 }
   \item{n.headings}{
 If TRUE, the table will indicate the (unweighted) sample size overall and in each group in parentheses after the column headings.
-}
-  \item{se}{
-If TRUE, the table will present mean (standard error) rather than mean (standard deviation).
 }
   \item{bold.colnames}{
 If TRUE, column headings are printed in bold font. Only applies if latex = TRUE. 
@@ -81,9 +94,12 @@ Character string with desired heading for first column of table, which shows the
   \item{fig}{
 If TRUE, a figure is returned rather than a table. The figure shows mean (95 percent confidence interval) for each level of x.
 }
+  \item{fig.errorbars} {
+Controls error bars around mean when fig is TRUE. Possible values are "sd" for +/- 1 standard deviation, "se" for +/- 1 standard error, "t.ci" for 95\% confidence interval based on t distribution, "z.ci" for 95\% confidence interval based on z distribution, and "none" for no error bars.
+}
 }
 \details{
-If x has two levels, a t-test is used to test for a difference in means. An F test is first used to determine whether the equal variance or unequal variance t-test is appropriate. If x has more than two levels, a one-way analysis of variance is used to test for a difference in means across the groups.
+If x has two levels, a t-test is used to test for a difference in means. If x has more than two levels, a one-way analysis of variance is used to test for a difference in means across the groups.
 
 Both x and y can have missing values. The function drops observations with missing x or y. 
 }
@@ -119,31 +135,24 @@ If you have suggestions for additional options or features, or if you would like
 data(d)
 d <- d[complete.cases(d), ]
 
-# Create labels for group and race
-groups <- c("Control", "Treatment")
-races <- c("White", "Black", "Mexican American", "Other")
-
 # Compare mean BMI in control group vs. treatment group - table and figure
-meanstable1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
-meansfig1 <- tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", fig = TRUE)
+meanstable1 <- tabmeans(x = d$Group, y = d$BMI)
+meansfig1 <- tabmeans(x = d$Group, y = d$BMI, fig = TRUE)
 
 # Compare mean BMI by race - table and figure
-meanstable2 <- tabmeans(x = d$race, y = d$bmi, xlevels = races, yname = "BMI")
-meansfig2 <- tabmeans(x = d$race, y = d$bmi, xname = "Race", xlevels = races, 
-                      yname = "BMI", fig = TRUE)
+meanstable2 <- tabmeans(x = d$Race, y = d$BMI)
+meansfig2 <- tabmeans(x = d$Race, y = d$BMI, fig = TRUE)
 
 # Compare mean baseline systolic BP across tertiles of BMI - table and figure
-meanstable3 <- tabmeans(x = d$bmi, y = d$bp.1, yname = "Systolic BP", quantiles = 3)
-meansfig3 <- tabmeans(x = d$bmi, y = d$bp.1, xname = "BMI Tertile", yname = "Systolic BP",
-                      quantiles = 3, fig = TRUE)
+meanstable3 <- tabmeans(x = d$BMI, y = d$bp.1, yname = "Systolic BP", quantiles = 3)
+meansfig3 <- tabmeans(x = d$BMI, y = d$bp.1, quantiles = 3, fig = TRUE, 
+                      yname = "Systolic BP", xname = "BMI Tertile")
 
 # Create single table comparing mean BMI and mean age in control vs. treatment group
-meanstable4 <- rbind(tabmeans(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),
-                     tabmeans(x = d$group, y = d$age, xlevels = groups, yname = "Age"))
+meanstable4 <- rbind(tabmeans(x = d$Group, y = d$BMI), tabmeans(x = d$Group, y = d$Age))
                      
 # An easier way to make the above table is to call the tabmulti function
-meanstable5 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("bmi", "age"),
-                        xlevels = groups, ynames = c("BMI", "Age"))
+meanstable5 <- tabmulti(dataset = d, xvarname = "Group", yvarnames = c("BMI", "Age"))
                         
 # meanstable4 and meanstable5 are equivalent
 all(meanstable4 == meanstable5)

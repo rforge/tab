@@ -19,7 +19,7 @@ tabglm(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, inference = "wald"
 An object returned from glm function call.
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned is formatted for printing in LaTeX using xtable [1]; if FALSE, formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlabels}{
 Optional character vector to label the x variables and their levels. If unspecified, the function uses the variable names and values themselves.

@@ -7,11 +7,12 @@ Generate Summary Tables of Median Comparisons for Statistical Reports
 This function compares the median of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabmedians(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", decimals = 1, 
-           p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
-           p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE, n.headings = TRUE, 
-           parenth = "iqr", text.label = NULL, parenth.sep = "-", bold.colnames = TRUE, 
-           bold.varnames = FALSE, variable.colname = "Variable")
+tabmedians(x, y, latex = FALSE, xlevels = NULL, yname = NULL, quantiles = NULL, 
+           quantile.vals = FALSE, parenth = "iqr", text.label = NULL, parenth.sep = "-",
+           decimals = NULL, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, 
+           p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
+           overall.column = TRUE, n.column = FALSE, n.headings = TRUE, 
+           bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable")
 }
 \arguments{
   \item{x}{
@@ -21,16 +22,31 @@ Vector of values for the categorical variable.
 Vector of values for the continuous variable.
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned is formatted for printing in LaTeX using xtable [1]; if FALSE, formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
-Optional character vector to label the levels of x. If unspecified, the function uses the values that x takes on.
+Optional character vector to label the levels of x, used in the column headings. If unspecified, the function uses the values that x takes on.
 }
   \item{yname}{
-Optional label for the continuous variable.
+Optional label for the continuous y variable. If unspecified, variable name of y is used.
+}
+  \item{quantiles}{
+If specified, function compares medians of the y variable across quantiles of the x variable. For example, if x contains continuous BMI values and y contains continuous HDL cholesterol levels, setting quantiles to 3 would result in median HDL being compared across tertiles of BMI.
+}
+  \item{quantile.vals}{
+If TRUE, labels for x show quantile number and corresponding range of the x variable. For example, Q1 [0.00, 0.25). If FALSE, labels for quantiles just show quantile number (e.g. Q1). Only used if xlevels is not specified.
+}
+  \item{parenth}{
+Controls what values (if any) are placed in parentheses after the medians in each cell. Possible values are "none", "iqr" for difference between first and third quartiles, "range" for difference between minimum and maximum, "minmax" for minimum and maximum, and "q1q3" for first and third quartiles.
+}
+  \item{text.label}{
+Optional text to put after the y variable name, identifying what cell values and parentheses indicate in the table. If unspecified, function uses default labels based on parenth, e.g. Median (IQR) if parenth is "iqr". Set to "none" for no text labels.
+}
+  \item{parenth.sep}{
+Optional character specifying the separator for the two numbers in parentheses when parenth is set to "minmax" or "q1q3". The default is a dash, so values in the table are formatted as Median (Lower-Upper). If you set parenth.sep to ", " the values in the table would instead be formatted as Median (Lower, Upper).
 }
   \item{decimals}{
-Number of decimal places for means and standard deviations or standard errors.
+Number of decimal places for values in table. If unspecified, function uses 0 decimal places if the largest median (in magnitude) is in [1,000, Inf), 1 decimal place if [10, 1,000), 2 decimal places if [0.1, 10), 3 decimal places if [0.01, 0.1), 4 decimal places if [0.001, 0.01), 5 decimal places if [0.0001, 0.001), and 6 decimal places if [0, 0.0001).
 }
   \item{p.include}{
 If FALSE, statistical test is not performed and p-value is not returned. 
@@ -50,20 +66,14 @@ If TRUE, p-values are printed with 0 before decimal place; if FALSE, the leading
   \item{p.avoid1}{
 If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly depending on values for p.decimals and p.cuts). 
 }
+  \item{overall.column}{
+If FALSE, column showing median of y in full sample is suppressed.
+}
   \item{n.column}{
 If TRUE, the table will have a column for (unweighted) sample size.
 }
   \item{n.headings}{
 If TRUE, the table will indicate the (unweighted) sample size overall and in each group in parentheses after the column headings.
-}
-  \item{parenth}{
-Controls what values (if any) are placed in parentheses after the medians in each cell. Possible choices are as follows: 'minmax' for minimum and maximum; 'range' for difference between minimum and maximum; 'q1q3' for first and third quartiles; 'iqr' for difference between first and third quartiles; or 'none' for no parentheses at all.
-}
-  \item{text.label}{
-Optional text to put after the y variable name. For example, if parenth is 'q1q3' and yname is 'BMI' the default label would be 'BMI, Median (Q1-Q3)'. You might prefer to set text.label to something like 'Med (Quartile 1-Quartile 3)' instead.
-}
-  \item{parenth.sep}{
-Optional character specifying the separator for the two numbers in parentheses when parenth is set to 'minmax' or 'q1q3'. The default is a dash, so values in the table are formatted as Median (Lower-Upper). If you set parenth.sep to ', ' the values in the table would instead be formatted as Median (Lower, Upper).
 }
   \item{bold.colnames}{
 If TRUE, column headings are printed in bold font. Only applies if latex = TRUE. 
@@ -117,27 +127,28 @@ groups <- c("Control", "Treatment")
 races <- c("White", "Black", "Mexican American", "Other")
 
 # Compare median BMI in control group vs. treatment group
-medtable1 <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI")
+medtable1 <- tabmedians(x = d$Group, y = d$BMI)
 
-# Repeat, but suppress Min-Max from being shown in parentheses
-medtable2 <- tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI", 
-             parenth = "none")
+# Repeat, but show first and third quartile rather than IQR in parentheses
+medtable2 <- tabmedians(x = d$Group, y = d$BMI, parenth = "q1q3")
 
-# Compare median BMI by race
-medtable3 <- tabmedians(x = d$race, y = d$bmi, xlevels = races, yname = "BMI")
+# Compare median BMI by race, suppressing overall column and (n = ) part of headings
+medtable3 <- tabmedians(x = d$Race, y = d$BMI, overall.column = FALSE, n.headings = FALSE)
+
+# Compare median BMI by quartile of age
+medtable4 <- tabmedians2(x = d2$Age, y = d2$BMI, quantiles = 4)
 
 # Create single table comparing median BMI and median age in control vs. treatment group
-medtable4 <- rbind(tabmedians(x = d$group, y = d$bmi, xlevels = groups, yname = "BMI"),
-                   tabmedians(x = d$group, y = d$age, xlevels = groups, yname = "Age"))
+medtable5 <- rbind(tabmedians(x = d$Group, y = d$BMI), tabmedians(x = d$Group, y = d$Age))
                    
-# An easier way to make the above table is to call the tabmulti function
-medtable5 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("bmi", "age"),
-                      ymeasures = "median", xlevels = groups, ynames = c("BMI", "Age"))
+# A (usually) faster way to make the above table is to call the tabmulti function
+medtable6 <- tabmulti(dataset = d, xvarname = "Group", yvarnames = c("BMI", "Age"),
+                      ymeasures = "median")
                         
-# medtable4 and medtable5 are equivalent
-all(medtable4 == medtable5)
+# medtable5 and medtable6 are equivalent
+all(medtable5 == medtable6)
 
-# Click on medtable1, ... , medtable5 in the Workspace tab of RStudio to see the tables 
+# Click on medtable1, ... , medtable6 in the Workspace tab of RStudio to see the tables 
 # that could be copied and pasted into a report or manuscript. Alternatively, setting the 
 # latex input to TRUE produces tables that can be inserted into LaTeX using the xtable 
 # package.

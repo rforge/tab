@@ -7,10 +7,11 @@ Generate Frequency Tables for Statistical Reports
 This function creates an I-by-J frequency table and summarizes the results in a clean table for a statistical report.
 }
 \usage{
-tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = "Y variable", ylevels = NULL, 
-        cell.percent = FALSE, parenth = NULL, text.label = NULL, parenth.sep = "-", 
-        test = "chi", decimals = 1, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01,
-        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE,
+tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = NULL, ylevels = NULL, 
+        quantiles = NULL, quantile.vals = FALSE, cell = "n", parenth = NULL, 
+        text.label = NULL, parenth.sep = "-", test = "chi", decimals = NULL, 
+        p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
+        p.leading0 = TRUE, p.avoid1 = FALSE, overall.column = FALSE, n.column = FALSE, 
         n.headings = TRUE, compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
         bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")
 }
@@ -22,34 +23,40 @@ Vector of values indicating group membership for columns of IxJ table.
 Vector of values indicating group membership for rows of IxJ table. 
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using xtable [1]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned is formatted for printing in LaTeX using xtable [1]; if FALSE, formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlevels}{
-Optional character vector to label the levels of x. If unspecified, the function uses the values that x takes on.
+Optional character vector to label the levels of x, used in the column headings. If unspecified, the function uses the values that x takes on.
 }
   \item{yname}{
-Optional label for the y (row) variable.
+Optional label for the y (row) variable. If unspecified, variable name of y is used.
 }
   \item{ylevels}{
 Optional character vector to label the levels of y. If unspecified, the function uses the values that y takes on. Note that levels of y will be listed in the order that they appear when you run table(y, x).
 }
-  \item{cell.percent}{
-If TRUE, cells of table show column percentages rather than frequencies.
+  \item{quantiles}{
+If specified, function compares distribution of the y variable across quantiles of the x variable. For example, if x contains continuous BMI values and y is race, setting quantiles to 3 would result in the distribution of race being compared across tertiles of BMI.
+}
+  \item{quantile.vals}{
+If TRUE, labels for x show quantile number and corresponding range of the x variable. For example, Q1 [0.00, 0.25). If FALSE, labels for quantiles just show quantile number (e.g. Q1). Only used if xlevels is not specified.
+}
+  \item{cell}{
+Controls what value is placed in each cell of the table. Possible choices are "n" for counts, "tot.percent" for table percentage, "col.percent" for column percentage, "row.percent" for row percentage, "tot.prop" for table proportion, "col.prop" for column proportion, "row.prop" for row proportion, "n/totn" for count/total counts, "n/coln" for count/column count, and "n/rown" for count/row count.
 }
   \item{parenth}{
-Controls what values (if any) are placed in parentheses after the values in each cell. By default, if cell.percent is FALSE, then the column percent is shown in parentheses; if cell.percent is TRUE, then a 95\% confidence interval (based on exact Binomial test) for the percent is shown in parentheses. Possible values are "none", "percent", "ci", and "se".
+Controls what values (if any) are placed in parentheses after the values in each cell. By default, if cell is "n", "n/totn", "n/coln", or "n/rown" then the corresponding percentage is shown in parentheses; if cell is "tot.percent", "col.percent", "row.percent", "tot.prop", "col.prop", or "row.prop" then a 95\% confidence interval for the requested percentage of proportion is shown in parentheses. Possible values are "none", "se" (for standard error of requested percentage or proportion based on cell), "ci" (for 95\% confidence interval for requested percentage of proportion based on cell), "tot.percent", "col.percent", "row.percent", "tot.prop", "col.prop", and "row.prop".
 }
   \item{text.label}{
-Optional text to put after the y variable name, identifying what cell values and parentheses indicate in the table. If unspecified, function uses defaults based on cell.percent and parenth settings. Set to 'none' for no text labels.
+Optional text to put after the y variable name, identifying what cell values and parentheses indicate in the table. If unspecified, function uses default labels based on cell and parenth settings. Set to "none" for no text labels.
 }
   \item{parenth.sep}{
-Optional character specifying the separator between lower and upper bound of confidence interval (when requested). Usually either '-' or ', ' depending on user preference.
+Optional character specifying the separator between lower and upper bound of confidence interval (when requested). Usually either "-" or ", "" depending on user preference.
 }
   \item{test}{
 Controls test for association between x and y. Use "chi" for Pearson's chi-squared test, which is valid only in large samples; "fisher" for Fisher's exact test, which is valid in small or large samples; "z" for z test without continuity correction; or "z.continuity" for z test with continuity correction. "z" and "z.continuity" can only be used if x and y are binary.
 }
   \item{decimals}{
-Number of decimal places for percentages.
+Number of decimal places for values in table (no decimals are used for counts). If unspecified, function uses 1 decimal for percentages and 3 decimals for proportions.
 }
   \item{p.include}{
 If FALSE, statistical test is not performed and p-value is not returned. 
@@ -69,14 +76,17 @@ If TRUE, p-values are printed with 0 before decimal place; if FALSE, the leading
   \item{p.avoid1}{
 If TRUE, p-values rounded to 1 are not printed as 1, but as >0.99 (or similarly depending on values for p.decimals and p.cuts). 
 }
+  \item{overall.column}{
+If FALSE, column showing distribution of y in full sample is suppressed.
+}
   \item{n.column}{
-If TRUE, the table will have a column for (unweighted) sample size.
+If TRUE, the table will have a column for sample size.
 }
   \item{n.headings}{
-If TRUE, the table will indicate the (unweighted) sample size overall and in each group in parentheses after the column headings.
+If TRUE, the table will indicate the sample size overall and in each group in parentheses after the column headings.
 }
   \item{compress}{
-If y has only two levels, setting compress to TRUE will produce a single row for n (percent) for the higher level. For example, if y is sex with 0 for female, 1 for male, setting compress = TRUE will return a table with n (percent) for males only. If FALSE, the table would show n (percent) for both males and females.
+If y has only two levels, setting compress to TRUE will produce a single row rather than two rows. For example, if y is sex with 0 for female, 1 for male, and cell = "n" and parenth = "col.pecent", setting compress = TRUE will return a table with n (percent) for males only. If FALSE, the table would show n (percent) for both males and females, which is somewhat redundant.
 }
   \item{compress.val}{
 When x and y are both binary, and compress is TRUE, compress.val can be used to specify which level of the y variable should be shown. For example, if x is sex and y is obesity status with levels "Obese" and "Not Obese", setting compress to TRUE and compress.val to "Not Obese" would result in the table comparing the proportions of subjects that are not obese by sex.
@@ -129,33 +139,23 @@ If you have suggestions for additional options or features, or if you would like
 data(d)
 d <- d[complete.cases(d), ]
 
-# Create labels for treatment group, sex, and race
-groups <- c("Control", "Treatment")
-sexes <- c("Female", "Male")
-races <- c("White", "Black", "Mexican American", "Other")
-
 # Compare sex distribution by group, with group as column variable
-freqtable1 <- tabfreq(x = d$group, y = d$sex, xlevels = groups, ylevels = sexes, 
-                      yname = "Sex")
+freqtable1 <- tabfreq(x = d$Group, y = d$Sex)
 
-# Same comparison, but compress table to single row
-freqtable2 <- tabfreq(x = d$group, y = d$sex, xlevels = groups, yname = "Male", 
-                      compress = TRUE)
+# Same comparison, but compress table to show Female row only, show percent (SE) rather
+# than n (percent), and suppress (n = ) from column headings
+freqtable2 <- tabfreq(x = d$Group, y = d$Sex, compress = TRUE, compress.val = "Female",
+                      cell = "col.percent", parenth = "se", n.headings = FALSE)
 
-# Compare sex distribution by race, with race as column variable
-freqtable3 <- tabfreq(x = d$race, y = d$sex, xlevels = races, yname = "Sex", 
-                      ylevels = sexes)
+# Compare sex distribution by race, suppressing (n = ) from column headings and 
+# showing percent (95\% CI) rather than n (percent)
+freqtable3 <- tabfreq(x = d$Race, y = d$Sex, n.headings = FALSE, cell = "col.percent")
 
 # Use rbind to create single table comparing sex and race in control vs. treatment group
-freqtable4 <- rbind(tabfreq(x = d$group, y = d$sex, xlevels = groups, 
-                            ylevels = sexes, yname = "Sex"),
-                    tabfreq(x = d$group, y = d$race, xlevels = groups, 
-                            ylevels = races, yname = "Race"))
+freqtable4 <- rbind(tabfreq(x = d$Group, y = d$Sex), tabfreq(x = d$Group, y = d$Race))
                             
-# An easier way to make the above table is to call the tabmulti function
-freqtable5 <- tabmulti(dataset = d, xvarname = "group", yvarnames = c("sex", "race"),
-                       xlevels = groups, ynames = c("Sex", "Race"), 
-                       ylevels = list(sexes, races))
+# A (usually) faster way to make the above table is to call the the tabmulti function
+freqtable5 <- tabmulti(dataset = d, xvarname = "Group", yvarnames = c("Sex", "Race"))
                         
 # freqtable4 and freqtable5 are equivalent
 all(freqtable4 == freqtable5)

@@ -25,7 +25,7 @@ Numeric values for time to event or censoring.
 Indicator variable where 1 = event observed, 0 = censored.
 }
   \item{latex}{
-If TRUE, object returned will be formatted for printing in LaTeX using xtable [3]; if FALSE, it will be formatted for copy-and-pasting from RStudio into a word processor.
+If TRUE, object returned is formatted for printing in LaTeX using xtable [3]; if FALSE, formatted for copy-and-pasting from RStudio into a word processor.
 }
   \item{xlabels}{
 Optional character vector to label the x variables and their levels. If unspecified, the function uses generic labels.
