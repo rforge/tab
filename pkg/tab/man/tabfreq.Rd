@@ -11,7 +11,7 @@ tabfreq(x, y, latex = FALSE, xlevels = NULL, yname = NULL, ylevels = NULL,
         quantiles = NULL, quantile.vals = FALSE, cell = "n", parenth = NULL, 
         text.label = NULL, parenth.sep = "-", test = "chi", decimals = NULL, 
         p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
-        p.leading0 = TRUE, p.avoid1 = FALSE, overall.column = FALSE, n.column = FALSE, 
+        p.leading0 = TRUE, p.avoid1 = FALSE, overall.column = TRUE, n.column = FALSE, 
         n.headings = TRUE, compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
         bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable")
 }

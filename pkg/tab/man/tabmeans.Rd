@@ -94,7 +94,7 @@ Character string with desired heading for first column of table, which shows the
   \item{fig}{
 If TRUE, a figure is returned rather than a table. The figure shows mean (95 percent confidence interval) for each level of x.
 }
-  \item{fig.errorbars} {
+  \item{fig.errorbars}{
 Controls error bars around mean when fig is TRUE. Possible values are "sd" for +/- 1 standard deviation, "se" for +/- 1 standard error, "t.ci" for 95\% confidence interval based on t distribution, "z.ci" for 95\% confidence interval based on z distribution, and "none" for no error bars.
 }
 }

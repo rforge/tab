@@ -2,7 +2,7 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
                      latex = FALSE, xlevels = NULL, ynames = yvarnames, ylevels = NULL,
                      quantiles = NULL, quantile.vals = FALSE, parenth.sep = "-", decimals = NULL,
                      cell = "n", freq.parenth = NULL, freq.text.label = NULL, freq.tests = "chi", 
-                     mean.parenth = "sd", means.text.label = NULL, variance = "unequal", 
+                     means.parenth = "sd", means.text.label = NULL, variance = "unequal", 
                      medians.parenth = "iqr", medians.text.label = NULL, p.include = TRUE, 
                      p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, 
                      p.avoid1 = FALSE, overall.column = TRUE, n.column = FALSE, n.headings = TRUE, 
