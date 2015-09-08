@@ -193,7 +193,11 @@ tabmeans <- function(x, y, latex = FALSE, variance = "unequal", xname = NULL, xl
       } else if (parenth == "se") {
         text.label <- ", M (SE)"
       } else if (parenth %in% c("t.ci", "z.ci")) {
-        text.label <- ", M (95% CI)"
+        if (latex == TRUE) {
+          text.label <- ", M (95\\% CI)"
+        } else {
+          text.label <- ", M (95% CI)"
+        }
       } else if (parenth == "none") {
         text.label <- ", M"
       }

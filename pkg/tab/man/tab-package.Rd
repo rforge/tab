@@ -12,8 +12,8 @@ Contains functions for generating tables for statistical reports written in Micr
 \tabular{ll}{
 Package: \tab tab\cr
 Type: \tab Package\cr
-Version: \tab 3.1.1\cr
-Date: \tab 2015-03-14\cr
+Version: \tab 3.1.2\cr
+Date: \tab 2015-09-07\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in the package:

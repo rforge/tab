@@ -37,7 +37,7 @@ If specified, function compares medians of the y variable across quantiles of th
 If TRUE, labels for x show quantile number and corresponding range of the x variable. For example, Q1 [0.00, 0.25). If FALSE, labels for quantiles just show quantile number (e.g. Q1). Only used if xlevels is not specified.
 }
   \item{parenth}{
-Controls what values (if any) are placed in parentheses after the medians in each cell. Possible values are "none", "iqr" for difference between first and third quartiles, "range" for difference between minimum and maximum, "minmax" for minimum and maximum, and "q1q3" for first and third quartiles.
+Controls what values (if any) are placed in parentheses after the medians in each cell. Possible values are "none", "iqr" for difference between first and third quartiles, "range" for difference between minimum and maximum, "minmax" for minimum and maximum, "q1q3" for first and third quartiles, or "ci.90", "ci.95", or "ci.99" for confidence intervals for the medians (based on binomial probabilities if one or more groups have n less than 10, otherwise based on normal approximation to binomial).
 }
   \item{text.label}{
 Optional text to put after the y variable name, identifying what cell values and parentheses indicate in the table. If unspecified, function uses default labels based on parenth, e.g. Median (IQR) if parenth is "iqr". Set to "none" for no text labels.
