@@ -16,7 +16,7 @@ Version: \tab 3.1.2\cr
 Date: \tab 2016-04-18\cr
 License: \tab GPL-2\cr
 }
-The following functions are included in the package:
+The following functions are included:
 
 \code{\link{tabfreq}},
 \code{\link{tabmeans}},
