@@ -6,7 +6,7 @@ tabmeans <- function(x, y, latex = FALSE, variance = "unequal", xname = NULL, xl
                      bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable", 
                      fig = FALSE, fig.errorbars = "z.ci", fig.title = NULL) {
   
-  # If yname/xname unspecified, use variable names
+  # If yname or xname unspecified, use variable names
   if (is.null(yname)) {
     yname <- deparse(substitute(y))
     if (grepl("\\$", yname)) {

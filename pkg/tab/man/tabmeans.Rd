@@ -13,7 +13,7 @@ tabmeans(x, y, latex = FALSE, variance = "unequal", xname = NULL, xlevels = NULL
          p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE,
          p.avoid1 = FALSE, overall.column = TRUE, n.column = FALSE, n.headings = TRUE,
          bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable", 
-         fig = FALSE, fig.errorbars = "z.ci")
+         fig = FALSE, fig.errorbars = "z.ci", fig.title = NULL)
 }
 \arguments{
   \item{x}{
@@ -96,6 +96,9 @@ If TRUE, a figure is returned rather than a table. The figure shows mean (95 per
 }
   \item{fig.errorbars}{
 Controls error bars around mean when fig is TRUE. Possible values are "sd" for +/- 1 standard deviation, "se" for +/- 1 standard error, "t.ci" for 95\% confidence interval based on t distribution, "z.ci" for 95\% confidence interval based on z distribution, and "none" for no error bars.
+}
+  \item{fig.title}{
+Title of figure. If unspecified, title is set to "Mean yname by xname".
 }
 }
 \details{
