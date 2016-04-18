@@ -360,11 +360,11 @@ tabfreq <- function(x, y, latex = FALSE, xlevels = NULL, yname = NULL, ylevels =
   # If y binary and compress is TRUE, compress table to a single row
   if (nrow(counts) <= 2 & compress == TRUE) {
     if (is.null(compress.val)) {
-      tbl <- matrix(c(paste(ylevels[2], text.label, sep = ""), tbl[3, 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+      tbl <- matrix(c(paste(yname, text.label, sep = ""), tbl[3, 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
       #tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
     } else {
       whichrow <- which(rownames(counts) == as.character(compress.val)) + 1
-      tbl <- matrix(c(paste(ylevels[whichrow - 1], text.label, sep = ""), tbl[whichrow, 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+      tbl <- matrix(c(paste(yname, text.label, sep = ""), tbl[whichrow, 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
       #tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
     }
   }

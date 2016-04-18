@@ -4,7 +4,7 @@ tabmeans <- function(x, y, latex = FALSE, variance = "unequal", xname = NULL, xl
                      p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE,
                      p.avoid1 = FALSE, overall.column = TRUE, n.column = FALSE, n.headings = TRUE,
                      bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable", 
-                     fig = FALSE, fig.errorbars = "z.ci") {
+                     fig = FALSE, fig.errorbars = "z.ci", fig.title = NULL) {
   
   # If yname/xname unspecified, use variable names
   if (is.null(yname)) {
@@ -327,7 +327,11 @@ tabmeans <- function(x, y, latex = FALSE, variance = "unequal", xname = NULL, xl
       ylim1 <- min(c(lowerbars, upperbars) - 0.1*bar.range)
       ylim2 <- max(c(lowerbars, upperbars) + 0.1*bar.range)
       
-      tbl <- plot(x = NULL, y = NULL, main = paste("Mean ", yname, "by ", xname), 
+      if (is.null(fig.title)) {
+        fig.title <- paste("Mean ", yname, " by ", xname, sep = "")
+      }
+      
+      tbl <- plot(x = NULL, y = NULL, main = fig.title, 
                   xlim = c(0.5, (length(xlevels)+0.5)), ylim = c(ylim1, ylim2), 
                   ylab = ylabel, xlab = xname, xaxt = "n", cex.lab = 1.1)
       
