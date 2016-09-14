@@ -5,7 +5,7 @@ import(gee)
 import(xtable)
 importFrom("grDevices", "recordPlot")
 importFrom("graphics", "axis", "lines", "plot", "points")
-importFrom("stats", "anova", "binom.test", "chisq.test", 
+importFrom("stats", "dbinom", "anova", "binom.test", "chisq.test", 
            "complete.cases", "confint", "fisher.test", "kruskal.test",
            "lm", "median", "pnorm", "prop.test", "pt", "qnorm", "qt",
            "quantile", "sd", "t.test", "update", "var.test",
