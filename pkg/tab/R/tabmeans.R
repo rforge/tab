@@ -353,7 +353,6 @@ tabmeans <- function(x, y, latex = FALSE, variance = "unequal", xname = NULL, xl
     
   }
   
-  
   # Print html version of table if requested
   if (print.html) {
     
