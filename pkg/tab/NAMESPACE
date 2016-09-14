@@ -2,6 +2,7 @@ exportPattern("^[[:alpha:]]+")
 import(survey)
 import(survival)
 import(gee)
+import(xtable)
 importFrom("grDevices", "recordPlot")
 importFrom("graphics", "axis", "lines", "plot", "points")
 importFrom("stats", "anova", "binom.test", "chisq.test", 

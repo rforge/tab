@@ -4,7 +4,8 @@ tabmeans <- function(x, y, latex = FALSE, variance = "unequal", xname = NULL, xl
                      p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE,
                      p.avoid1 = FALSE, overall.column = TRUE, n.column = FALSE, n.headings = TRUE,
                      bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable", 
-                     fig = FALSE, fig.errorbars = "z.ci", fig.title = NULL) {
+                     fig = FALSE, fig.errorbars = "z.ci", fig.title = NULL, print.html = FALSE,
+                     html.filename = "table1.html") {
   
   # If yname or xname unspecified, use variable names
   if (is.null(yname)) {
@@ -349,6 +350,16 @@ tabmeans <- function(x, y, latex = FALSE, variance = "unequal", xname = NULL, xl
     }
     
     tbl <- recordPlot()
+    
+  }
+  
+  
+  # Print html version of table if requested
+  if (print.html) {
+    
+    tbl.xtable <- xtable(tbl, align = paste("ll", paste(rep("r", ncol(tbl) - 1), collapse = ""), sep = "", collapse = ""))
+    print(tbl.xtable, include.rownames = FALSE, type = "html", file = html.filename,
+          sanitize.text.function = function(x) {ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)})
     
   }
   

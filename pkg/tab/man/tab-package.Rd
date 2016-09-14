@@ -13,7 +13,7 @@ Contains functions for generating tables for statistical reports written in Micr
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 3.1.2\cr
-Date: \tab 2016-04-18\cr
+Date: \tab 2016-09-13\cr
 License: \tab GPL-2\cr
 }
 The following functions are included:
@@ -92,6 +92,9 @@ coxtable <- tabcox(x = d[,c("Age", "Sex", "Race", "Group")], time = d$time,
 
 # Click on freqtable, meanstable, table1, lintable, logtable, or coxtable in 
 # the Workspace tab of RStudio to see the tables that could be copied and pasted 
-# into a Word document. Alternatively, setting the latex input to TRUE produces
-# tables that can be inserted into LaTeX using the xtable package.
+# into a Word document. With newer versions of RStudio, it works better to 
+# set the print.html input to TRUE, and then copy the table from the .html file
+# that prints to your current working directory. Alternatively, setting the latex 
+# input to TRUE produces tables that can be inserted into LaTeX using the xtable 
+# package.
 }

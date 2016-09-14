@@ -12,7 +12,8 @@ tabmedians(x, y, latex = FALSE, xlevels = NULL, yname = NULL, quantiles = NULL,
            decimals = NULL, p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, 
            p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, 
            overall.column = TRUE, n.column = FALSE, n.headings = TRUE, 
-           bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable")
+           bold.colnames = TRUE, bold.varnames = FALSE, variable.colname = "Variable", 
+           print.html = FALSE, html.filename = "table1.html")
 }
 \arguments{
   \item{x}{
@@ -84,6 +85,12 @@ If TRUE, variable name in the first column of the table is printed in bold font.
   \item{variable.colname}{
 Character string with desired heading for first column of table, which shows the y variable name.
 }
+  \item{print.html}{
+If TRUE, function prints a .html file to the current working directory.
+}
+  \item{html.filename}{
+Character string indicating the name of the .html file that gets printed if print.html is set to TRUE.
+}
 }
 \details{
 If x has two levels, a Mann-Whitney U (also known as Wilcoxon rank-sum) test is used to test whether the distribution of the continuous variable (y) differs in the two groups (x). If x has more than two levels, a Kruskal-Wallis test is used to test whether the distribution of y differs across at least two of the x groups.
@@ -102,6 +109,8 @@ Acknowledgment: This material is based upon work supported by the National Scien
 Dane R. Van Domelen
 }
 \note{
+In older versions of RStudio, it was easier to copy tables from the Viewer and paste them directly into a text editor. The Viewer changed a few versions ago, and now it seems to work better if you paste into Microsoft Excel, and then copy again and paste into Microsoft Word. This is a little clumsy, so I recently added the new option to print a .html file with the table to your current working directory (see function inputs print.html and html.filename). Copying and pasting from the table from the .html file into a text editor seems to work well.
+
 If you have suggestions for additional options or features, or if you would like some help using any function in the package tab, please e-mail me at vandomed@gmail.com. Thanks!
 }
 \seealso{
