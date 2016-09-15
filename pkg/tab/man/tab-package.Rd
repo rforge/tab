@@ -13,7 +13,7 @@ Contains functions for generating tables for statistical reports written in Micr
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 3.1.2\cr
-Date: \tab 2016-09-14\cr
+Date: \tab 2016-09-15\cr
 License: \tab GPL-2\cr
 }
 The following functions are included:
@@ -38,12 +38,12 @@ Dane R. Van Domelen
 Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 }
 \references{
-1. Therneau T (2013). A Package for Survival Analysis in S. R package version 2.37-4, \url{http://cran.r-project.org/package=survival}.
+1. Therneau T (2013). A Package for Survival Analysis in S. R package version 2.37-4, \url{https://cran.r-project.org/package=survival}.
 
 2. Terry M. Therneau and Patricia M. Grambsch (2000). Modeling Survival Data: Extending the Cox Model.
 Springer, New York. ISBN 0-387-98784-3.
 
-3. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{http://cran.r-project.org/package=xtable}.
+3. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{https://cran.r-project.org/package=xtable}.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
