@@ -4,18 +4,19 @@
 Generate Summary Tables of Mean Comparisons for Statistical Reports (Survey Data)
 }
 \description{
-This function compares the mean of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1,2].
+This function compares the mean of a continuous variable across levels of a categorical variable and summarizes the results in a clean table for a statistical report. Similar to tabmeans, but for survey data. Relies heavily on the 'survey' package [1, 2].
 }
 \usage{
 tabmeans.svy(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable", 
              test = "Wald", decimals = 1, p.decimals = c(2, 3), p.cuts = 0.01, 
              p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE,
              n.headings = TRUE, bold.colnames = TRUE, bold.varnames = FALSE, 
-             variable.colname = "Variable")
+             variable.colname = "Variable", print.html = FALSE, 
+             html.filename = "table1.html")
 }
 \arguments{
   \item{svy}{
-Survey design object created by a call to svydesign [1,2]. 
+Survey design object created by a call to svydesign [1, 2]. 
 }
   \item{x}{
 Character string specifying categorical x variable name. Must match one of names(svy$variables).
@@ -68,12 +69,18 @@ If TRUE, variable name in the first column of the table is printed in bold font.
   \item{variable.colname}{
 Character string with desired heading for first column of table, which shows the y variable name.
 }
+  \item{print.html}{
+If TRUE, function prints a .html file to the current working directory.
+}
+  \item{html.filename}{
+Character string indicating the name of the .html file that gets printed if print.html is set to TRUE.
+}
 }
 \details{
 NA
 }
 \value{
-A character matrix with the requested table comparing mean y across levels of x. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [3].
+A character matrix with the requested table comparing mean y across levels of x. If latex is set to TRUE, the character matrix will be formatted for inserting into a Markdown/Sweave/knitr report using the xtable package [3].
 }
 \references{
 1. Lumley T (2012). survey: analysis of complex survey samples. R package version 3.28-2, \url{https://cran.r-project.org/package=survey}.
@@ -82,13 +89,23 @@ A character matrix with the requested table comparing mean y across levels of x.
 
 3. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{https://cran.r-project.org/package=xtable}.
 
+4. Kevin Ushey (2013). Kmisc: Kevin Miscellaneous. R package version 0.5.0. \url{https://CRAN.R-project.org/package=Kmisc}.
+
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
 \author{
 Dane R. Van Domelen
 }
 \note{
-Currently this function is fairly basic. Future versions should allow for more flexibility. If you have any specific suggestions for additional options, please e-mail me at vandomed@gmail.com. Thanks!
+If you wish to paste your tables into Word, you can use either of these approaches:
+
+1. Use the write.cb function in the Kmisc package [4]. If your table is stored in a character matrix named table1, use write.cb(table1) to copy the table to your clipboard. Paste the result into Word, then highlight the text and go to Insert - Table - Convert Text to Table... OK. 
+
+2. Set the print.html input to TRUE. This will result in a .html file writing to your current working directory. When you open this file, you will see a nice looking table that you can copy and paste into Word. You can control the name of this file with the html.filename input. 
+
+If you wish to use LaTeX, R Markdown, knitr, Sweave, etc., please see the package vignette for examples. In most cases, you have to set the latex input to TRUE and then use the xtable package [1]. 
+
+If you have suggestions for additional options or features, or if you would like some help using any function in the package tab, please e-mail me at vandomed@gmail.com. Thanks!
 }
 \seealso{
 \code{\link{svydesign}},

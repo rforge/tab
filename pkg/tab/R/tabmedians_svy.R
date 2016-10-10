@@ -3,7 +3,8 @@ tabmedians.svy <- function(svy, x, y, latex = FALSE, xlevels = NULL, yname = "Y 
                            p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE,
                            n.column = FALSE, n.headings = TRUE, parenth = "iqr", text.label = NULL,
                            parenth.sep = "-", bold.colnames = TRUE, bold.varnames = FALSE,
-                           variable.colname = "Variable") {
+                           variable.colname = "Variable", print.html = FALSE, 
+                           html.filename = "table1.html") {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -201,6 +202,15 @@ tabmedians.svy <- function(svy, x, y, latex = FALSE, xlevels = NULL, yname = "Y 
     if (bold.varnames == TRUE) {
       tbl[1, 1] <- paste("$\\textbf{", tbl[1, 1], "}$")
     }
+  }
+  
+  # Print html version of table if requested
+  if (print.html) {
+    
+    tbl.xtable <- xtable(tbl, align = paste("ll", paste(rep("r", ncol(tbl) - 1), collapse = ""), sep = "", collapse = ""))
+    print(tbl.xtable, include.rownames = FALSE, type = "html", file = html.filename,
+          sanitize.text.function = function(x) {ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)})
+    
   }
   
   # Return table

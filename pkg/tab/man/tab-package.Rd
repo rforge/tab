@@ -12,8 +12,8 @@ Contains functions for generating tables for statistical reports written in Micr
 \tabular{ll}{
 Package: \tab tab\cr
 Type: \tab Package\cr
-Version: \tab 3.1.2\cr
-Date: \tab 2016-09-16\cr
+Version: \tab 3.1.3\cr
+Date: \tab 2016-10-10\cr
 License: \tab GPL-2\cr
 }
 The following functions are included:
@@ -44,6 +44,8 @@ Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 Springer, New York. ISBN 0-387-98784-3.
 
 3. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{https://cran.r-project.org/package=xtable}.
+
+4. Kevin Ushey (2013). Kmisc: Kevin Miscellaneous. R package version 0.5.0. \url{https://CRAN.R-project.org/package=Kmisc}.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
@@ -89,12 +91,14 @@ logtable <- tabglm(glmfit = glmfit2, ci.beta = FALSE,
 coxtable <- tabcox(x = d[,c("Age", "Sex", "Race", "Group")], time = d$time, 
                    delta = d$delta, 
                    xlabels = c("Age", "Male", "Race", races, "Treatment"))
+                   
+# To move freqtable into Word, run write.cb(freqtable) to copy the table onto your
+# clipboard. Paste into Word, highlight the table and go to Insert - Table - Convert Text 
+# to Table... OK. Alternatively, if you set print.html to TRUE, the function will write 
+# a html file named html.filename to your current working directory. You can open this 
+# file, copy the table, and paste it into Word.
 
-# Click on freqtable, meanstable, table1, lintable, logtable, or coxtable in 
-# the Workspace tab of RStudio to see the tables that could be copied and pasted 
-# into a Word document. With newer versions of RStudio, it works better to 
-# set the print.html input to TRUE, and then copy the table from the .html file
-# that prints to your current working directory. Alternatively, setting the latex 
-# input to TRUE produces tables that can be inserted into LaTeX using the xtable 
-# package.
+# If you wish to use LaTeX, R Markdown, knitr, Sweave, etc., please see the package 
+# vignette for examples. In most cases, you have to set the latex input to TRUE and then 
+# use the xtable package [3].
 }

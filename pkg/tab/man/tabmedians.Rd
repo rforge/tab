@@ -98,10 +98,12 @@ If x has two levels, a Mann-Whitney U (also known as Wilcoxon rank-sum) test is 
 Both x and y can have missing values. The function drops observations with missing x or y. 
 }
 \value{
-A character matrix with the requested table comparing median y across levels of x. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [1].
+A character matrix with the requested table comparing median y across levels of x. If latex is set to TRUE, the character matrix will be formatted for inserting into a Markdown/Sweave/knitr report using the xtable package [1].
 }
 \references{
 1. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{https://cran.r-project.org/package=xtable}.
+
+2. Kevin Ushey (2013). Kmisc: Kevin Miscellaneous. R package version 0.5.0. \url{https://CRAN.R-project.org/package=Kmisc}.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
@@ -109,7 +111,13 @@ Acknowledgment: This material is based upon work supported by the National Scien
 Dane R. Van Domelen
 }
 \note{
-In older versions of RStudio, it was easier to copy tables from the Viewer and paste them directly into a text editor. The Viewer changed a few versions ago, and now it seems to work better if you paste into Microsoft Excel, and then copy again and paste into Microsoft Word. This is a little clumsy, so I recently added the new option to print a .html file with the table to your current working directory (see function inputs print.html and html.filename). Copying and pasting from the table from the .html file into a text editor seems to work well.
+If you wish to paste your tables into Word, you can use either of these approaches:
+
+1. Use the write.cb function in the Kmisc package [2]. If your table is stored in a character matrix named table1, use write.cb(table1) to copy the table to your clipboard. Paste the result into Word, then highlight the text and go to Insert - Table - Convert Text to Table... OK. 
+
+2. Set the print.html input to TRUE. This will result in a .html file writing to your current working directory. When you open this file, you will see a nice looking table that you can copy and paste into Word. You can control the name of this file with the html.filename input. 
+
+If you wish to use LaTeX, R Markdown, knitr, Sweave, etc., please see the package vignette for examples. In most cases, you have to set the latex input to TRUE and then use the xtable package [1]. 
 
 If you have suggestions for additional options or features, or if you would like some help using any function in the package tab, please e-mail me at vandomed@gmail.com. Thanks!
 }
@@ -157,10 +165,11 @@ medtable6 <- tabmulti(dataset = d, xvarname = "Group", yvarnames = c("BMI", "Age
 # medtable5 and medtable6 are equivalent
 all(medtable5 == medtable6)
 
-# Click on medtable1, ... , medtable6 in the Workspace tab of RStudio to see the tables 
-# that could be copied and pasted into a report or manuscript. Alternatively, setting the 
-# latex input to TRUE produces tables that can be inserted into LaTeX using the xtable 
-# package.
+# To move medtable1 into Word, run write.cb(medtable1) to copy the table onto your
+# clipboard. Paste into Word, highlight the table and go to Insert - Table - Convert Text 
+# to Table... OK. Alternatively, if you set print.html to TRUE, the function will write 
+# a html file named html.filename to your current working directory. You can open this 
+# file, copy the table, and paste it into Word.
 }
 \keyword{ table }
 \keyword{ median }

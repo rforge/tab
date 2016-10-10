@@ -261,7 +261,7 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
     if (latex == TRUE) {
       spacelocs <- which(substr(tbl[, variable.colname], 1, 2) == "  ")
       if (length(spacelocs) > 0) {
-        tbl[spacelocs, variable.colname] <- paste("\\hskip .4cm ", substring(tbl[spacelocs, variable.colname], 3), sep = "")
+        tbl[spacelocs, variable.colname] <- paste("$\\hskip .4cm$", substring(tbl[spacelocs, variable.colname], 3), sep = "")
       }
       chars <- strsplit(colnames(tbl), "")
       for (ii in 1:length(chars)) {
@@ -532,7 +532,7 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
       }
       spacelocs <- which(substr(tbl[, variable.colname], 1, 2) == "  ")
       if (length(spacelocs) > 0) {
-        tbl[spacelocs, variable.colname] <- paste("\\hskip .4cm ", substring(tbl[spacelocs, variable.colname], 3), sep = "")
+        tbl[spacelocs, variable.colname] <- paste("$\\hskip .4cm$", substring(tbl[spacelocs, variable.colname], 3), sep = "")
       }
       chars <- strsplit(tbl[, variable.colname], "")
       for (ii in 1:length(chars)) {

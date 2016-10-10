@@ -304,7 +304,7 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, infere
     }
     spacelocs <- which(substr(tbl[, predictor.colname], 1, 2) == "  ")
     if (length(spacelocs) > 0) {
-      tbl[spacelocs, predictor.colname] <- paste("\\hskip .4cm ", substring(tbl[spacelocs, predictor.colname], 3), sep = "")
+      tbl[spacelocs, predictor.colname] <- paste("$\\hskip .4cm$", substring(tbl[spacelocs, predictor.colname], 3), sep = "")
     }
     chars <- strsplit(colnames(tbl), "")
     for (ii in 1:length(chars)) {

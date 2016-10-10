@@ -12,7 +12,8 @@ tabmedians.svy(svy, x, y, latex = FALSE, xlevels = NULL, yname = "Y variable",
                p.cuts = 0.01, p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE,
                n.column = FALSE, n.headings = TRUE, parenth = "iqr", text.label = NULL, 
                parenth.sep = "-", bold.colnames = TRUE, bold.varnames = FALSE, 
-               variable.colname = "Variable")
+               variable.colname = "Variable", print.html = FALSE, 
+               html.filename = "table1.html")
 }
 \arguments{
   \item{svy}{
@@ -81,12 +82,18 @@ If TRUE, variable name in the first column of the table is printed in bold font.
   \item{variable.colname}{
 Character string with desired heading for first column of table, which shows the y variable name.
 }
+  \item{print.html}{
+If TRUE, function prints a .html file to the current working directory.
+}
+  \item{html.filename}{
+Character string indicating the name of the .html file that gets printed if print.html is set to TRUE.
+}
 }
 \details{
 NA
 }
 \value{
-A character matrix with the requested table comparing median y across levels of x. If you click on the matrix name under "Data" in the RStudio Workspace tab, you will see a clean table that you can copy and paste into a statistical report or manuscript. If latex is set to TRUE, the character matrix will be formatted for inserting into an Sweave or Knitr report using the xtable package [3].
+A character matrix with the requested table comparing median y across levels of x. If latex is set to TRUE, the character matrix will be formatted for inserting into a Markdown/Sweave/knitr report using the xtable package [3].
 }
 \references{
 1. Lumley T (2012). survey: analysis of complex survey samples. R package version 3.28-2, \url{https://cran.r-project.org/package=survey}.
@@ -94,6 +101,8 @@ A character matrix with the requested table comparing median y across levels of 
 2. Lumley T (2014). Analysis of complex survey samples. Journal of Statistical Software 9(1): 1-19.
 
 3. Dahl DB (2013). xtable: Export tables to LaTeX or HTML. R package version 1.7-1, \url{https://cran.r-project.org/package=xtable}.
+
+4. Kevin Ushey (2013). Kmisc: Kevin Miscellaneous. R package version 0.5.0. \url{https://CRAN.R-project.org/package=Kmisc}.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }

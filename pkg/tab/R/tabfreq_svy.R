@@ -3,7 +3,8 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
                         p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE,
                         n.headings = TRUE, compress = FALSE, compress.val = NULL, 
                         bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
-                        variable.colname = "Variable") {
+                        variable.colname = "Variable", print.html = FALSE, 
+                        html.filename = "table1.html") {
   
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
@@ -160,7 +161,7 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
     }
     spacelocs <- which(substr(tbl[, variable.colname], 1, 2) == "  ")
     if (length(spacelocs) > 0) {
-      tbl[spacelocs, variable.colname] <- paste("\\hskip .3cm ", substring(tbl[spacelocs, variable.colname], 3), sep = "")
+      tbl[spacelocs, variable.colname] <- paste("$\\hskip .4cm$", substring(tbl[spacelocs, variable.colname], 3), sep = "")
     }
     chars <- strsplit(tbl[, variable.colname], "")
     for (ii in 1:length(chars)) {
@@ -179,6 +180,15 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
     if (bold.varlevels == TRUE) {
       tbl[2:nrow(tbl), 1] <- paste("$\\textbf{", tbl[2:nrow(tbl), 1], "}$", sep = "")
     }
+  }
+  
+  # Print html version of table if requested
+  if (print.html) {
+    
+    tbl.xtable <- xtable(tbl, align = paste("ll", paste(rep("r", ncol(tbl) - 1), collapse = ""), sep = "", collapse = ""))
+    print(tbl.xtable, include.rownames = FALSE, type = "html", file = html.filename,
+          sanitize.text.function = function(x) {ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)})
+    
   }
   
   # Return table

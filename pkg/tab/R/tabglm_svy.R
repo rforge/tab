@@ -3,7 +3,8 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
                        p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, 
                        n = FALSE, events = FALSE, greek.beta = FALSE, binary.compress = TRUE, 
                        bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
-                       predictor.colname = "Variable") {
+                       predictor.colname = "Variable", print.html = FALSE, 
+                       html.filename = "table1.html" {
   
   # If svyglmfit is not correct class, return error
   if (!all(class(svyglmfit) == c("svyglm", "glm", "lm"))) {
@@ -268,7 +269,7 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
     }
     spacelocs <- which(substr(tbl[, predictor.colname], 1, 2) == "  ")
     if (length(spacelocs) > 0) {
-      tbl[spacelocs, predictor.colname] <- paste("\\hskip .4cm ", substring(tbl[spacelocs, predictor.colname], 3), sep = "")
+      tbl[spacelocs, predictor.colname] <- paste("$\\hskip .4cm$", substring(tbl[spacelocs, predictor.colname], 3), sep = "")
     }
     chars <- strsplit(colnames(tbl), "")
     for (ii in 1:length(chars)) {
@@ -287,6 +288,15 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
     if (bold.varlevels == TRUE) {
       tbl[c(1:nrow(tbl))[! c(1:nrow(tbl)) %in% pred], 1] <- paste("$\\textbf{", tbl[c(1:nrow(tbl))[! c(1:nrow(tbl)) %in% pred], 1], "}$", sep = "")
     }
+  }
+  
+  # Print html version of table if requested
+  if (print.html) {
+    
+    tbl.xtable <- xtable(tbl, align = paste("ll", paste(rep("r", ncol(tbl) - 1), collapse = ""), sep = "", collapse = ""))
+    print(tbl.xtable, include.rownames = FALSE, type = "html", file = html.filename,
+          sanitize.text.function = function(x) {ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)})
+    
   }
   
   # Return tbl
