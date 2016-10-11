@@ -13,7 +13,7 @@ tabglm.svy(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, inference =
            n = FALSE, events = FALSE, greek.beta = FALSE, binary.compress = TRUE, 
            bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
            predictor.colname = "Variable", print.html = FALSE, 
-           html.filename = "table1.html)
+           html.filename = "table1.html")
 }
 \arguments{
   \item{svyglmfit}{
