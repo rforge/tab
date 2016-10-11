@@ -4,7 +4,7 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
                        n = FALSE, events = FALSE, greek.beta = FALSE, binary.compress = TRUE, 
                        bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
                        predictor.colname = "Variable", print.html = FALSE, 
-                       html.filename = "table1.html" {
+                       html.filename = "table1.html") {
   
   # If svyglmfit is not correct class, return error
   if (!all(class(svyglmfit) == c("svyglm", "glm", "lm"))) {
