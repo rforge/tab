@@ -14,7 +14,7 @@ tabmulti.svy(svy, xvarname, yvarnames, ymeasures = NULL, listwise.deletion = FAL
              p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE, 
              n.headings = TRUE, se = FALSE, compress = FALSE, parenth = "iqr", 
              text.label = NULL, parenth.sep = "-", bold.colnames = TRUE, 
-             bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable", 
+             bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable",
              print.html = FALSE, html.filename = "table1.html")
 }
 \arguments{

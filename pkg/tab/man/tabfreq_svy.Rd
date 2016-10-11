@@ -13,7 +13,7 @@ tabfreq.svy(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable",
             n.headings = TRUE, compress = FALSE, compress.val = NULL, 
             bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
             variable.colname = "Variable", print.html = FALSE, 
-            tml.filename = "table1.html")
+            html.filename = "table1.html")
 }
 \arguments{
   \item{svy}{
