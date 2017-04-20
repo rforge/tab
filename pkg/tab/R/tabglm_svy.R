@@ -77,13 +77,31 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
   
-  # Store glm.fit results
+  # Store svyglmfit results
   coef <- summary(svyglmfit)$coefficients
   xnames <- rownames(coef)
-  model <- svyglmfit$model
+  model <- as.list(as.data.frame(as.list(svyglmfit$model)))
+  variable.classes <- sapply(model, class)
   
-  # Convert model to list to handle polynomial terms
-  model <- lapply(apply(model, 2, as.list), unlist)
+  # If polynomial terms are present, clean up column names on model
+  if ("poly" %in% sapply(svyglmfit$model, function(x) class(x)[1])) {
+    for (ii in 1: length(model)) {
+      name.split <- unlist(strsplit(names(model)[ii], "[.]"))
+      if (name.split[1] == "poly") {
+        varname <- name.split[2]
+        poly.order <- name.split[length(name.split)]
+        if (poly.order == 1) {
+          names(model)[ii] <- varname
+        } else if (poly.order == 2) {
+          names(model)[ii] <- paste(varname, "squared")
+        } else if (poly.order == 3) {
+          names(model)[ii] <- paste(varname, "cubed")
+        } else {
+          names(model)[ii] <- paste(varname, "^", poly.order)
+        }
+      }
+    }
+  }
   
   # Calculate p-values and CI's for all coefficients
   ci <- matrix(NA, nrow = nrow(coef), ncol = 2)
@@ -117,30 +135,12 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
     pred <- c(1, pred + 1)
   }
   
-  # # Get indices of variable names
-  # predcounter <- 0
-  # pred <- c()
-  # for (ii in 2:ncol(model)) {
-  #   pred[(ii-1)] <- predcounter + 1
-  #   if (! class(model[, ii]) == "factor" | (class(model[, ii]) == "factor" & length(unique(model[, ii])) == 2 & binary.compress == TRUE)) {
-  #     predcounter <- predcounter + 1
-  #   } else {
-  #     predcounter <- predcounter + length(unique(model[, ii])) + 1
-  #   }
-  # }
-  # if (intercept == TRUE) {
-  #   pred <- c(1, pred + 1)
-  # }
-  
   # Initialize table
   tbl <- matrix("", nrow = 100, ncol = 8)
-  tbl[1, 2] <- length(glmfit$residuals)
-  tbl[1, 3] <- sprintf("%0.0f", sum(model[[1]]))
-  
-  # # Initialize table
-  # tbl <- matrix("", nrow = 100, ncol = 8)
-  # tbl[1, 2] <- nrow(model)
-  # tbl[1, 3] <- sprintf("%0.0f", sum(model[, 1]))
+  tbl[1, 2] <- length(svyglmfit$residuals)
+  if (svyglmfit$family$family == "binomial" & events) {
+    tbl[1, 3] <- sprintf("%0.0f", sum(model[[1]]))
+  }
   
   # Create index variables for table and glm coefficients
   tabindex <- 1
