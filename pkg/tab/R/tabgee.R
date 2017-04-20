@@ -97,12 +97,26 @@ tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   pred <- c()
   for (ii in 1:(length(model)-1)) {
     pred[ii] <- predcounter + 1
-    if (! model[ii] == "factor" | (model[ii] == "factor" & length(unique(data[, names(model)[ii]])) == 2 & binary.compress == TRUE)) {
+    if (substr(model[ii], 1, 7) == "nmatrix") {
+      predcounter <- predcounter + as.numeric(strsplit(model[ii], "[.]")[[1]][2])
+    } else if (! model[ii] == "factor" | (model[ii] == "factor" & length(unique(data[, names(model)[ii]])) == 2 & binary.compress == TRUE)) {
       predcounter <- predcounter + 1
     } else {
       predcounter <- predcounter + length(unique(data[, names(model)[ii]]))
     }
   }
+  
+  # # Get indices of variable names
+  # predcounter <- 0
+  # pred <- c()
+  # for (ii in 1:(length(model)-1)) {
+  #   pred[ii] <- predcounter + 1
+  #   if (! model[ii] == "factor" | (model[ii] == "factor" & length(unique(data[, names(model)[ii]])) == 2 & binary.compress == TRUE)) {
+  #     predcounter <- predcounter + 1
+  #   } else {
+  #     predcounter <- predcounter + length(unique(data[, names(model)[ii]]))
+  #   }
+  # }
   
   # Initialize table
   tbl <- matrix("", nrow = 100, ncol = 8)
@@ -152,7 +166,26 @@ tabgee <- function(geefit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, decima
   
     # Otherwise format factors neatly
     for (ii in 2:(length(model)-1)) {
-      if (model[ii] != "factor" | (model[ii] == "factor" & length(unique(data[, names(model)[ii]])) == 2 & binary.compress == TRUE))  {
+      model.ii <- model[ii]
+      if (substr(model.ii, 1, 7) == "nmatrix") {
+        poly.num <- as.numeric(strsplit(model.ii, "[.]")[[1]][2])
+        coefindex <- c(coefindex, coefindex + poly.num - 1)
+        tabindex <- c(tabindex, tabindex + poly.num - 1)
+        beta <- coef[coefindex, 1]
+        se <- coef[coefindex, secol]
+        or <- exp(beta)
+        z <- coef[coefindex, zcol]
+        p <- pnorm(-abs(z))*2
+        tbl[tabindex, 1] <- rownames(coef)[coefindex]
+        tbl[tabindex, 4] <- paste(sprintf(spf, beta), " (", sprintf(spf, se), ")", sep = "")
+        tbl[tabindex, 5] <- paste("(", sprintf(spf, beta-1.96*se), ", ", sprintf(spf, beta+1.96*se), ")", sep = "")
+        tbl[tabindex, 6] <- sprintf(spf, exp(beta))
+        tbl[tabindex, 7] <- paste("(", sprintf(spf, exp(beta-1.96*se)), ", ", sprintf(spf, exp(beta+1.96*se)), ")", sep = "")
+        tbl[tabindex, 8] <- formatp(p = p, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound,
+                                    leading0 = p.leading0, avoid1 = p.avoid1)
+        tabindex <- tabindex[length(tabindex)] + 1
+        coefindex <- coefindex[length(coefindex)] + 1
+      } else if (model[ii] != "factor" | (model[ii] == "factor" & length(unique(data[, names(model)[ii]])) == 2 & binary.compress == TRUE))  {
         beta <- coef[coefindex, 1]
         se <- coef[coefindex, secol]
         or <- exp(beta)

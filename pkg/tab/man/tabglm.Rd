@@ -90,7 +90,7 @@ Character string indicating the name of the .html file that gets printed if prin
 \details{
 The function should work well with categorical predictors (factors), provided they are not ordered. For ordered factors, just convert to unordered before creating the glm object to pass to tabglm. Note that you can define the levels of an unordered factor to control, which dictates which level is used as the reference group in regression models. For example, suppose a factor variable x takes values "low", "medium", and "high". If you write x = factor(x = x, levels = c("low", "medium", "high")), then you can run levels(x) to see that the levels are now arranged "low", "medium", "high". It is still a regular factor, but now if you use x as a predictor in a call to glm, "low" will be the reference group.
 
-Interaction terms are compatible with tabglm, but the table will be formatted a little differently if interaction terms are present. Basically including an interaction is equivalent to setting basic.form to TRUE. All variable names and levels will be exactly as they appear when you run summary(glmfit), where glmfit is the object returned from a call to glm.
+Interaction and polynomial terms are compatible with tabglm. If interaction terms are included, the table will be formatted a little differently. Basically including an interaction is equivalent to setting basic.form to TRUE. All variable names and levels will be exactly as they appear when you run summary(glmfit), where glmfit is the object returned from a call to glm.
 }
 \value{
 A character matrix that summarizes the fitted generalized linear model. If latex is set to TRUE, the character matrix will be formatted for inserting into a Markdown/Sweave/knitr report using the xtable package [1].

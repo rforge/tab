@@ -82,6 +82,9 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
   xnames <- rownames(coef)
   model <- svyglmfit$model
   
+  # Convert model to list to handle polynomial terms
+  model <- lapply(apply(model, 2, as.list), unlist)
+  
   # Calculate p-values and CI's for all coefficients
   ci <- matrix(NA, nrow = nrow(coef), ncol = 2)
   if (inference == "wald.t") {
@@ -101,22 +104,43 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
   # Get indices of variable names
   predcounter <- 0
   pred <- c()
-  for (ii in 2:ncol(model)) {
-    pred[(ii-1)] <- predcounter + 1
-    if (! class(model[, ii]) == "factor" | (class(model[, ii]) == "factor" & length(unique(model[, ii])) == 2 & binary.compress == TRUE)) {
+  for (ii in 2: length(model)) {
+    pred[(ii - 1)] <- predcounter + 1
+    model.ii <- model[[ii]]
+    if (! class(model.ii) == "factor" | (class(model.ii) == "factor" & length(unique(model.ii)) == 2 & binary.compress == TRUE)) {
       predcounter <- predcounter + 1
     } else {
-      predcounter <- predcounter + length(unique(model[, ii])) + 1
+      predcounter <- predcounter + length(unique(model.ii)) + 1
     }
   }
   if (intercept == TRUE) {
     pred <- c(1, pred + 1)
   }
   
+  # # Get indices of variable names
+  # predcounter <- 0
+  # pred <- c()
+  # for (ii in 2:ncol(model)) {
+  #   pred[(ii-1)] <- predcounter + 1
+  #   if (! class(model[, ii]) == "factor" | (class(model[, ii]) == "factor" & length(unique(model[, ii])) == 2 & binary.compress == TRUE)) {
+  #     predcounter <- predcounter + 1
+  #   } else {
+  #     predcounter <- predcounter + length(unique(model[, ii])) + 1
+  #   }
+  # }
+  # if (intercept == TRUE) {
+  #   pred <- c(1, pred + 1)
+  # }
+  
   # Initialize table
   tbl <- matrix("", nrow = 100, ncol = 8)
-  tbl[1, 2] <- nrow(model)
-  tbl[1, 3] <- sprintf("%0.0f", sum(model[, 1]))
+  tbl[1, 2] <- length(glmfit$residuals)
+  tbl[1, 3] <- sprintf("%0.0f", sum(model[[1]]))
+  
+  # # Initialize table
+  # tbl <- matrix("", nrow = 100, ncol = 8)
+  # tbl[1, 2] <- nrow(model)
+  # tbl[1, 3] <- sprintf("%0.0f", sum(model[, 1]))
   
   # Create index variables for table and glm coefficients
   tabindex <- 1
@@ -158,13 +182,14 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
   } else {
     
     # Otherwise format factors neatly
-    for (ii in 2:(ncol(model)-1)) {
-      if (class(model[, ii])[1] != "factor" | (class(model[, ii]) == "factor" & length(unique(model[, ii])) == 2 & binary.compress == TRUE)) {
+    for (ii in 2: (length(model) - 1)) {
+      model.ii <- model[[ii]]
+      if (class(model.ii)[1] != "factor" | (class(model.ii) == "factor" & length(unique(model.ii)) == 2 & binary.compress == TRUE)) {
         beta <- coef[coefindex, 1]
         se <- coef[coefindex, 2]
         or <- exp(beta)
         p <- pvals[coefindex]
-        tbl[tabindex, 1] <- colnames(model)[ii]
+        tbl[tabindex, 1] <- names(model)[ii]
         tbl[tabindex, 4] <- paste(sprintf(spf, beta), " (", sprintf(spf, se), ")", sep = "")
         tbl[tabindex, 5] <- paste("(", sprintf(spf, ci[coefindex, 1]), ", ", sprintf(spf, ci[coefindex, 2]), ")", sep = "")
         tbl[tabindex, 6] <- sprintf(spf, exp(beta))
@@ -175,7 +200,7 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
         coefindex <- coefindex + 1
         
       } else {
-        levels <- sort(unique(model[, ii]))
+        levels <- sort(unique(model.ii))
         if (length(levels) == 2 & binary.compress == TRUE) {
           beta <- coef[coefindex, 1]
           se <- coef[coefindex, 2]
@@ -191,7 +216,7 @@ tabglm.svy <- function(svyglmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE,
           tabindex <- tabindex + 1
           coefindex <- coefindex + 1
         } else {
-          tbl[tabindex, 1] <- colnames(model)[ii]
+          tbl[tabindex, 1] <- names(model)[ii]
           tabindex <- tabindex + 1
           tbl[tabindex, 1] <- paste("  ", levels[1], " (ref)", sep = "")
           tbl[tabindex, 4:8] <- "-"

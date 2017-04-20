@@ -96,7 +96,7 @@ tabmedians <- function(x, y, latex = FALSE, xlevels = NULL, yname = NULL, quanti
   # If decimals is unspecified, set to appropriate value
   if (is.null(decimals)) {
     max.median <- max(abs(medians))
-    if (max.median >= 1000) {
+    if (max.median >= 1000 | max.median == 0) {
       decimals <- 0
     } else if (max.median < 1000 & max.median >= 10) {
       decimals <- 1

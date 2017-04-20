@@ -140,7 +140,7 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL, listwise.de
   if (is.null(ymeasures)) {
     ymeasures <- c()
     for (ii in 1:length(yvarnames)) {
-      if (is.factor(dataset[, yvarnames[ii]]) | length(unique(dataset[!is.na(dataset[, yvarnames[ii]]), yvarnames[ii]])) <= 5) {
+      if (is.factor(dataset[, yvarnames[ii]]) | is.character(dataset[, yvarnames[ii]]) | length(unique(dataset[!is.na(dataset[, yvarnames[ii]]), yvarnames[ii]])) <= 5) {
         ymeasures <- c(ymeasures, "freq")
       } else {
         ymeasures <- c(ymeasures, "mean")

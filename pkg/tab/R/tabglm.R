@@ -1,3 +1,7 @@
+# Notes/future plans:
+
+# 1. Odds ratio for higher-order term may not be meaningful, e.g. for polynomial term on continuous variable. 
+# Could simply replace odds ratio with - if first five characters are 'poly('
 tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, inference = "wald", 
                    decimals = 2, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
                    p.leading0 = TRUE, p.avoid1 = FALSE, basic.form = FALSE, intercept = TRUE, 
@@ -82,6 +86,9 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, infere
   xnames <- rownames(coef)
   model <- glmfit$model
   
+  # Convert model to list to handle polynomial terms
+  model <- lapply(apply(model, 2, as.list), unlist)
+  
   # Assign perc variable for constructing confidence intervals
   if (inference %in% c("wald", "profile")) {
     if (colnames(summary(glmfit)$coefficients)[3] == "t value") {
@@ -106,22 +113,43 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, infere
   # Get indices of variable names
   predcounter <- 0
   pred <- c()
-  for (ii in 2:ncol(model)) {
-    pred[(ii-1)] <- predcounter + 1
-    if (! class(model[, ii]) == "factor" | (class(model[, ii]) == "factor" & length(unique(model[, ii])) == 2 & binary.compress == TRUE)) {
+  for (ii in 2: length(model)) {
+    pred[(ii - 1)] <- predcounter + 1
+    model.ii <- model[[ii]]
+    if (! class(model.ii) == "factor" | (class(model.ii) == "factor" & length(unique(model.ii)) == 2 & binary.compress == TRUE)) {
       predcounter <- predcounter + 1
     } else {
-      predcounter <- predcounter + length(unique(model[, ii])) + 1
+      predcounter <- predcounter + length(unique(model.ii)) + 1
     }
   }
   if (intercept == TRUE) {
     pred <- c(1, pred + 1)
   }
   
+  # # Get indices of variable names
+  # predcounter <- 0
+  # pred <- c()
+  # for (ii in 2:ncol(model)) {
+  #   pred[(ii-1)] <- predcounter + 1
+  #   if (! class(model[, ii]) == "factor" | (class(model[, ii]) == "factor" & length(unique(model[, ii])) == 2 & binary.compress == TRUE)) {
+  #     predcounter <- predcounter + 1
+  #   } else {
+  #     predcounter <- predcounter + length(unique(model[, ii])) + 1
+  #   }
+  # }
+  # if (intercept == TRUE) {
+  #   pred <- c(1, pred + 1)
+  # }
+  
   # Initialize table
   tbl <- matrix("", nrow = 100, ncol = 8)
-  tbl[1, 2] <- nrow(model)
-  tbl[1, 3] <- sprintf("%0.0f", sum(model[, 1]))
+  tbl[1, 2] <- length(glmfit$residuals)
+  tbl[1, 3] <- sprintf("%0.0f", sum(model[[1]]))
+  
+  # # Initialize table
+  # tbl <- matrix("", nrow = 100, ncol = 8)
+  # tbl[1, 2] <- nrow(model)
+  # tbl[1, 3] <- sprintf("%0.0f", sum(model[, 1]))
   
   # Create index variables for table and glm coefficients
   tabindex <- 1
@@ -175,14 +203,15 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, infere
   } else {
   
     # Otherwise format factors neatly
-    for (ii in 2:ncol(model)) {
-      if (class(model[, ii])[1] != "factor" | (class(model[, ii]) == "factor" & length(unique(model[, ii])) == 2 & binary.compress == TRUE)) {
+    for (ii in 2: length(model)) {
+      model.ii <- model[[ii]]
+      if (class(model.ii)[1] != "factor" | (class(model.ii) == "factor" & length(unique(model.ii)) == 2 & binary.compress == TRUE)) {
         beta <- coef[coefindex, 1]
         se <- coef[coefindex, 2]
         stat <- coef[coefindex, 3]
         or <- exp(beta)
         p <- pt(-abs(stat), degfree)*2
-        tbl[tabindex, 1] <- colnames(model)[ii]
+        tbl[tabindex, 1] <- names(model)[ii]
         tbl[tabindex, 4] <- paste(sprintf(spf, beta), " (", sprintf(spf, se), ")", sep = "")
         if (inference %in% c("wald", "wald.z")) {
           tbl[tabindex, 5] <- paste("(", sprintf(spf, beta-perc*se), ", ", sprintf(spf, beta+perc*se), ")", sep = "")
@@ -198,7 +227,7 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, infere
         coefindex <- coefindex + 1
         
       } else {
-        levels <- sort(unique(model[, ii]))
+        levels <- sort(unique(model.ii))
         if (length(levels) == 2 & binary.compress == TRUE) {
           beta <- coef[coefindex, 1]
           se <- coef[coefindex, 2]
@@ -220,7 +249,7 @@ tabglm <- function(glmfit, latex = FALSE, xlabels = NULL, ci.beta = TRUE, infere
           tabindex <- tabindex + 1
           coefindex <- coefindex + 1
         } else {
-          tbl[tabindex, 1] <- colnames(model)[ii]
+          tbl[tabindex, 1] <- names(model)[ii]
           tabindex <- tabindex + 1
           tbl[tabindex, 1] <- paste("  ", levels[1], " (ref)", sep = "")
           tbl[tabindex, 4:8] <- "-"
