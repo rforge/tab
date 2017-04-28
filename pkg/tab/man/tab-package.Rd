@@ -13,23 +13,23 @@ Contains functions for generating tables for statistical reports written in Micr
 Package: \tab tab\cr
 Type: \tab Package\cr
 Version: \tab 3.1.3\cr
-Date: \tab 2017-04-20\cr
+Date: \tab 2017-04-28\cr
 License: \tab GPL-2\cr
 }
 The following functions are included:
 
-\code{\link{tabfreq}},
-\code{\link{tabmeans}},
-\code{\link{tabmedians}},
-\code{\link{tabmulti}},
-\code{\link{tabglm}},
-\code{\link{tabcox}},
-\code{\link{tabgee}},
-\code{\link{tabfreq.svy}},
-\code{\link{tabmeans.svy}},
-\code{\link{tabmedians.svy}},
-\code{\link{tabmulti.svy}},
-\code{\link{tabglm.svy}},
+\code{\link{tabfreq}}\cr
+\code{\link{tabmeans}}\cr
+\code{\link{tabmedians}}\cr
+\code{\link{tabmulti}}\cr
+\code{\link{tabglm}}\cr
+\code{\link{tabcox}}\cr
+\code{\link{tabgee}}\cr
+\code{\link{tabfreq.svy}}\cr
+\code{\link{tabmeans.svy}}\cr
+\code{\link{tabmedians.svy}}\cr
+\code{\link{tabmulti.svy}}\cr
+\code{\link{tabglm.svy}}\cr
 \code{\link{formatp}}
 }
 \author{
