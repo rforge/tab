@@ -1,12 +1,15 @@
-tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, ylevels = NULL, 
-                    quantiles = NULL, quantile.vals = FALSE, cell = "n", parenth = NULL, 
-                    text.label = NULL, parenth.sep = "-", test = "chi", decimals = NULL, 
-                    p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01, p.lowerbound = 0.001, 
-                    p.leading0 = TRUE, p.avoid1 = FALSE, overall.column = TRUE, n.column = FALSE, 
-                    n.headings = TRUE, compress = FALSE, compress.val = NULL, bold.colnames = TRUE, 
-                    bold.varnames = FALSE, bold.varlevels = FALSE, variable.colname = "Variable",
-                    print.html = FALSE, html.filename = "table1.html") {
-  
+tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL,
+                    ylevels = NULL, quantiles = NULL, quantile.vals = FALSE,
+                    cell = "n", parenth = NULL, text.label = NULL,
+                    parenth.sep = "-", test = "chi", decimals = NULL,
+                    p.include = TRUE, p.decimals = c(2, 3), p.cuts = 0.01,
+                    p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE,
+                    overall.column = TRUE, n.column = FALSE, n.headings = TRUE,
+                    compress = FALSE, compress.val = NULL, bold.colnames = TRUE,
+                    bold.varnames = FALSE, bold.varlevels = FALSE,
+                    variable.colname = "Variable", print.html = FALSE,
+                    html.filename = "table1.html") {
+
   # If yname unspecified, use variable name
   if (is.null(yname)) {
     yname <- deparse(substitute(y))
@@ -14,28 +17,29 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
       yname <- strsplit(yname, "\\$")[[1]][2]
     }
   }
-  
+
   # If x is NULL, set to a vector of 1's
   if (is.null(x)) {
     x <- rep(1, length(y))
     p.include <- FALSE
   }
-  
+
   # Drop missing values
   locs.complete <- which(!is.na(x) & !is.na(y))
   x <- x[locs.complete]
   y <- y[locs.complete]
-  
+
   # Create quantiles if necessary
   if (!is.null(quantiles)) {
-    x <- cut(x = x, breaks = quantile(x, probs = seq(0, 1, 1/quantiles)), include.lowest = TRUE, right = TRUE, dig.lab = 3)
+    x <- cut(x = x, breaks = quantile(x, probs = seq(0, 1, 1/quantiles)),
+             include.lowest = TRUE, right = TRUE, dig.lab = 3)
   }
-  
+
   # Get cell counts and proportions
   counts <- table(y, x)
   props <- 100*prop.table(counts)
   colprops <- 100*prop.table(counts, margin = 2)
-  
+
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
@@ -49,21 +53,23 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
   if (!is.null(ylevels) && !is.character(ylevels)) {
     stop("For ylevels input, please enter vector of character strings")
   }
-  if (!is.null(quantiles) && ! (is.numeric(quantiles) & length(quantiles) == 1 && quantiles > 1 & quantiles == round(quantiles))) {
+  if (!is.null(quantiles) && ! (is.numeric(quantiles) &
+                                length(quantiles) == 1 && quantiles > 1 &
+                                quantiles == round(quantiles))) {
     stop("For quantiles input, please enter a whole number greater than 1")
   }
   if (!is.logical(quantile.vals)) {
     stop("For quantile.vals input, please enter TRUE or FALSE")
   }
-  if (! cell %in% c("n", "percent", "tot.percent", "col.percent", "row.percent", "tot.prop",
-                    "col.prop", "row.prop", "n/totn", "n/coln", "n/rown")) {
-    stop("For cell input, please enter 'n', 'tot.percent', 'col.percent', 'row.percent', 
-         'tot.prop', 'col.prop', 'row.prop', 'n/totn', 'n/coln', or 'n/rown'")
+  if (! cell %in% c("n", "percent", "tot.percent", "col.percent", "row.percent",
+                    "tot.prop", "col.prop", "row.prop", "n/totn", "n/coln",
+                    "n/rown")) {
+    stop("For cell input, please enter 'n', 'tot.percent', 'col.percent', 'row.percent', 'tot.prop', 'col.prop', 'row.prop', 'n/totn', 'n/coln', or 'n/rown'")
   }
-  if (!is.null(parenth) && ! parenth %in% c("none", "se", "ci", "tot.percent", "col.percent", "row.percent", 
-                                            "tot.prop", "col.prop", "row.prop")) {
-    stop("For parenth input, please enter 'none', 'se', 'ci', 'tot.percent', 'col.percent', 'row.percent', 
-         'tot.prop', 'col.prop', or 'row.prop'")
+  if (!is.null(parenth) &&
+      ! parenth %in% c("none", "se", "ci", "tot.percent", "col.percent",
+                       "row.percent", "tot.prop", "col.prop", "row.prop")) {
+    stop("For parenth input, please enter 'none', 'se', 'ci', 'tot.percent', 'col.percent', 'row.percent', 'tot.prop', 'col.prop', or 'row.prop'")
   }
   if (!is.null(text.label) && !is.character(text.label)) {
     stop("For text.label input, please enter a character string or just leave it unspecified. Use 'none' to request no label")
@@ -86,7 +92,7 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
   if (!is.numeric(p.decimals)) {
     stop("For p.decimals input, please enter numeric value or vector")
   }
-  if (!is.numeric(p.cuts)) {  
+  if (!is.numeric(p.cuts)) {
     stop("For p.cuts input, please enter numeric value or vector")
   }
   if (!is.numeric(p.lowerbound)) {
@@ -110,7 +116,8 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
   if (!is.logical(compress)) {
     stop("For compress input, please enter TRUE or FALSE")
   }
-  if (!is.null(compress) && !is.null(compress.val) && ! compress.val %in% unique(y)) {
+  if (!is.null(compress) && !is.null(compress.val) &&
+      ! compress.val %in% unique(y)) {
     stop("For compress.val input, please ensure that you enter one of the values that y takes on")
   }
   if (!is.logical(bold.colnames)) {
@@ -125,12 +132,12 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
   if (!is.character(variable.colname)) {
     stop("For variable.colname input, please enter a character string")
   }
-  
+
   # If cell is "percent" change to "col.percent"
   if (cell == "percent") {
     cell <- "col.percent"
   }
-  
+
   # If parenth is NULL, set default value based on cell
   if (is.null(parenth)) {
     if (cell %in% c("n", "n/coln")) {
@@ -139,34 +146,36 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
       parenth <- "tot.percent"
     } else if (cell == "n/rown") {
       parenth <- "row.percent"
-    } else if (cell %in% c("tot.percent", "col.percent", "row.percent", "tot.prop", "col.prop", "row.prop")) {
+    } else if (cell %in% c("tot.percent", "col.percent", "row.percent",
+                           "tot.prop", "col.prop", "row.prop")) {
       parenth <- "ci"
     }
   }
-  
+
   # If decimals is unspecified, set to appropriate value
   if (is.null(decimals)) {
-    if (cell %in% c("tot.percent", "col.percent", "row.percent") | parenth %in% c("tot.percent", "col.percent", "row.percent")) {
+    if (cell %in% c("tot.percent", "col.percent", "row.percent") |
+        parenth %in% c("tot.percent", "col.percent", "row.percent")) {
       decimals <- 1
     } else {
       decimals <- 3
     }
   }
-  
+
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
-  
+
   # If ylevels unspecified, set to actual values
   if (is.null(ylevels)) {
     ylevels <- rownames(counts)
   }
-  
+
   # Create table for univariate case
   if (ncol(counts) == 1) {
-    
+
     # Initialize table
     tbl <- matrix("", nrow = nrow(counts) + 1, ncol = 3)
-    
+
     # Figure out text.label
     if (is.null(text.label)) {
       if (cell == "n") {
@@ -192,13 +201,13 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
     } else if (text.label == "none") {
       text.label <- NULL
     }
-    
+
     # Add variable name and levels of Y to first row
     tbl[, 1] <- c(yname, paste("  ", ylevels, sep = ""))
-    
+
     # Add N column
     tbl[1, 2] <- sprintf("%.0f", sum(counts))
-    
+
     # Cell values and parentheses for each cell
     if (cell == "n") {
       cells <- sprintf("%.0f", counts[, 1])
@@ -213,55 +222,68 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
       tbl[2:nrow(tbl), 3] <- cells
     } else if (parenth == "se") {
       if (cell %in% c("tot.percent", "col.percent")) {
-        parentheses <- sqrt(counts[, 1] / sum(counts) * (1 - counts[, 1] / sum(counts)) / sum(counts)) * 100
+        parentheses <-
+          sqrt(counts[, 1] / sum(counts) *
+                 (1 - counts[, 1] / sum(counts)) / sum(counts)) * 100
       } else if (cell %in% c("tot.prop", "col.prop")) {
-        parentheses <- sqrt(counts[, 1] / sum(counts) * (1 - counts[, 1] / sum(counts)) / sum(counts))
+        parentheses <- sqrt(counts[, 1] / sum(counts) *
+                              (1 - counts[, 1] / sum(counts)) / sum(counts))
       }
-      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, parentheses), ")",
+                                   sep = "")
     } else if (parenth == "ci") {
       if (cell %in% c("tot.percent", "col.percent")) {
         conf95 <- matrix(NA, ncol = 2, nrow = nrow(counts))
         for (jj in 1:nrow(counts)) {
-          conf95[jj, ] <- binom.test(x = counts[jj, 1], n = sum(counts))$conf.int*100
+          conf95[jj, ] <- binom.test(x = counts[jj, 1],
+                                     n = sum(counts))$conf.int*100
         }
       } else if (cell %in% c("tot.prop", "col.prop")) {
         conf95 <- matrix(NA, ncol = 2, nrow = nrow(counts))
         for (jj in 1:nrow(counts)) {
-          conf95[jj, ] <- binom.test(x = counts[jj, 1], n = sum(counts))$conf.int
+          conf95[jj, ] <- binom.test(x = counts[jj, 1],
+                                     n = sum(counts))$conf.int
         }
       }
-      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, conf95[, 1]), parenth.sep, sprintf(spf, conf95[, 2]), ")", sep = "")
+      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, conf95[, 1]),
+                                   parenth.sep, sprintf(spf, conf95[, 2]), ")",
+                                   sep = "")
     } else if (parenth %in% c("tot.percent", "col.percent")) {
       parentheses <- counts[, 1] / sum(counts) * 100
-      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, parentheses), ")",
+                                   sep = "")
     } else if (parenth %in% c("tot.prop", "col.prop")) {
       parentheses <- counts[, 1] / sum(counts)
-      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, parentheses), ")",
+                                   sep = "")
     }
-    
+
     # If y binary and compress is TRUE, compress table to a single row
     if (nrow(counts) <= 2 & compress == TRUE) {
       if (is.null(compress.val)) {
         tbl <- matrix(c(ylevels[2], tbl[1, 2], tbl[3, 3]), nrow = 1)
       } else {
         whichrow <- which(rownames(counts) == as.character(compress.val)) + 1
-        tbl <- matrix(c(ylevels[whichrow - 1], tbl[1, 2], tbl[whichrow, 3]), nrow = 1)
+        tbl <- matrix(c(ylevels[whichrow - 1], tbl[1, 2], tbl[whichrow, 3]),
+                      nrow = 1)
       }
     }
-    
+
     # Add column names
     colnames(tbl) <- c(variable.colname, "N", text.label)
-    
+
     # Drop N column if requested
     if (n.column == FALSE) {
       tbl <- tbl[, -2, drop = FALSE]
     }
-    
+
     # If latex is TRUE, do some re-formatting
     if (latex == TRUE) {
       spacelocs <- which(substr(tbl[, variable.colname], 1, 2) == "  ")
       if (length(spacelocs) > 0) {
-        tbl[spacelocs, variable.colname] <- paste("$\\hskip .4cm$", substring(tbl[spacelocs, variable.colname], 3), sep = "")
+        tbl[spacelocs, variable.colname] <-
+          paste("$\\hskip .4cm$",
+                substring(tbl[spacelocs, variable.colname], 3), sep = "")
       }
       chars <- strsplit(colnames(tbl), "")
       for (ii in 1:length(chars)) {
@@ -270,7 +292,8 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
           chars[[ii]][percentlocs] <- "\\%"
         }
       }
-      colnames(tbl) <- sapply(chars, function(x) paste(x, sep = "", collapse = ""))
+      colnames(tbl) <- sapply(chars, function(x)
+        paste(x, sep = "", collapse = ""))
       if (bold.colnames == TRUE) {
         colnames(tbl) <- paste("$\\textbf{", colnames(tbl), "}$", sep = "")
       }
@@ -278,16 +301,17 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
         tbl[1, 1] <- paste("$\\textbf{", tbl[1, 1], "}$")
       }
       if (bold.varlevels == TRUE) {
-        tbl[2:nrow(tbl), 1] <- paste("$\\textbf{", tbl[2:nrow(tbl), 1], "}$", sep = "")
+        tbl[2:nrow(tbl), 1] <- paste("$\\textbf{", tbl[2:nrow(tbl), 1], "}$",
+                                     sep = "")
       }
     }
-    
+
     # Create table for multivariate case
   } else {
-    
+
     # Initialize table
-    tbl <- matrix("", nrow = nrow(counts) + 1, ncol = ncol(counts) + 4) 
-    
+    tbl <- matrix("", nrow = nrow(counts) + 1, ncol = ncol(counts) + 4)
+
     # Figure out text.label
     if (is.null(text.label)) {
       if (cell == "n") {
@@ -317,13 +341,14 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
     } else if (text.label == "none") {
       text.label <- NULL
     }
-    
+
     # Add variable name and levels of Y to first row
-    tbl[, 1] <- c(paste(yname, text.label, sep = ""), paste("  ", ylevels, sep = ""))
-    
+    tbl[, 1] <- c(paste(yname, text.label, sep = ""), paste("  ", ylevels,
+                                                            sep = ""))
+
     # Add N column
     tbl[1, 2] <- sprintf("%.0f", sum(counts))
-    
+
     # Cell values and parentheses for overall y column
     if (cell == "n") {
       cells <- sprintf("%.0f", rowSums(counts))
@@ -337,35 +362,48 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
     if (parenth == "none") {
       tbl[2:nrow(tbl), 3] <- cells
     } else if (parenth == "se") {
-      if (cell %in% c("tot.percent", "col.percent", "row.percent", "n/totn", "n/coln", "n/rown")) {
-        parentheses <- sqrt(rowSums(props) / 100 * (1 - rowSums(props) / 100) / sum(counts)) * 100
+      if (cell %in% c("tot.percent", "col.percent", "row.percent", "n/totn",
+                      "n/coln", "n/rown")) {
+        parentheses <- sqrt(rowSums(props) / 100 * (1 - rowSums(props) / 100) /
+                              sum(counts)) * 100
       } else if (cell %in% c("tot.prop", "col.prop", "row.prop")) {
-        parentheses <- sqrt(rowSums(props) / 100 * (1 - rowSums(props) / 100) / sum(counts))
+        parentheses <- sqrt(rowSums(props) / 100 * (1 - rowSums(props) / 100) /
+                              sum(counts))
       }
-      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, parentheses), ")",
+                                   sep = "")
     } else if (parenth == "ci") {
       if (cell %in% c("tot.percent", "col.percent", "row.percent")) {
         conf95 <- matrix(NA, nrow = nrow(counts), ncol = 2)
         for (ii in 1:nrow(counts)) {
-          conf95[ii, 1:2] <- binom.test(x = sum(counts[ii, ]), n = sum(counts))$conf.int*100
+          conf95[ii, 1:2] <- binom.test(x = sum(counts[ii, ]),
+                                        n = sum(counts))$conf.int*100
         }
-        tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, conf95[, 1]), parenth.sep, sprintf(spf, conf95[, 2]), ")", sep = "")
+        tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, conf95[, 1]),
+                                     parenth.sep,
+                                     sprintf(spf, conf95[, 2]), ")", sep = "")
       } else if (cell %in% c("tot.prop", "col.prop", "row.prop")) {
         conf95 <- matrix(NA, nrow = nrow(counts), ncol = 2)
         for (ii in 1:nrow(counts)) {
-          conf95[ii, 1:2] <- binom.test(x = sum(counts[ii, ]), n = sum(counts))$conf.int
+          conf95[ii, 1:2] <- binom.test(x = sum(counts[ii, ]),
+                                        n = sum(counts))$conf.int
         }
-        tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, conf95[, 1]), parenth.sep, sprintf(spf, conf95[, 2]), ")", sep = "")
+        tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, conf95[, 1]),
+                                     parenth.sep,
+                                     sprintf(spf, conf95[, 2]), ")", sep = "")
       }
     } else if (parenth %in% c("tot.percent", "col.percent", "row.percent")) {
-      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, rowSums(props)), ")", sep = "")
+      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, rowSums(props)),
+                                   ")", sep = "")
     } else if (parenth %in% c("tot.prop", "col.prop", "row.prop")) {
-      tbl[2:nrow(tbl), 3] <- paste(cells, " (", sprintf(spf, rowSums(props)/100), ")", sep = "")
+      tbl[2:nrow(tbl), 3] <- paste(cells, " (",
+                                   sprintf(spf, rowSums(props)/100), ")",
+                                   sep = "")
     }
-    
+
     # Cell values and parentheses for each cell
     for (ii in 1: ncol(counts)) {
-      
+
       if (cell == "n") {
         cells <- sprintf("%.0f", counts[, ii])
       } else if (cell == "tot.percent") {
@@ -387,73 +425,100 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
       } else if (cell == "n/rown") {
         cells <- paste(counts[, ii], "/", rowSums(counts), sep = "")
       }
-      
+
       if (parenth == "none") {
         tbl[2:nrow(tbl), (3 + ii)] <- cells
       } else if (parenth == "se") {
         if (cell == "tot.percent") {
-          parentheses <- sqrt(counts[, ii] / sum(counts) * (1 - counts[, ii] / sum(counts)) / sum(counts)) * 100
+          parentheses <- sqrt(counts[, ii] / sum(counts) *
+                                (1 - counts[, ii] / sum(counts)) /
+                                sum(counts)) * 100
         } else if (cell == "col.percent") {
-          parentheses <- sqrt(counts[, ii] / sum(counts[, ii]) * (1 - counts[, ii] / sum(counts[, ii])) / sum(counts[, ii])) * 100
+          parentheses <- sqrt(counts[, ii] / sum(counts[, ii]) *
+                                (1 - counts[, ii] / sum(counts[, ii])) /
+                                sum(counts[, ii])) * 100
         } else if (cell == "row.percent") {
-          parentheses <- sqrt(counts[, ii] / rowSums(counts) * (1 - counts[, ii] / rowSums(counts)) / rowSums(counts)) * 100
+          parentheses <- sqrt(counts[, ii] / rowSums(counts) *
+                                (1 - counts[, ii] / rowSums(counts)) /
+                                rowSums(counts)) * 100
         } else if (cell == "tot.prop") {
-          parentheses <- sqrt(counts[, ii] / sum(counts) * (1 - counts[, ii] / sum(counts)) / sum(counts))
+          parentheses <- sqrt(counts[, ii] / sum(counts) *
+                                (1 - counts[, ii] / sum(counts)) / sum(counts))
         } else if (cell == "col.prop") {
-          parentheses <- sqrt(counts[, ii] / sum(counts[, ii]) * (1 - counts[, ii] / sum(counts[, ii])) / sum(counts[, ii]))
+          parentheses <- sqrt(counts[, ii] / sum(counts[, ii]) *
+                                (1 - counts[, ii] / sum(counts[, ii])) /
+                                sum(counts[, ii]))
         } else if (cell == "row.prop") {
-          parentheses <- sqrt(counts[, ii] / rowSums(counts) * (1 - counts[, ii] / rowSums(counts)) / rowSums(counts))
+          parentheses <- sqrt(counts[, ii] / rowSums(counts) *
+                                (1 - counts[, ii] / rowSums(counts)) /
+                                rowSums(counts))
         }
-        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (",
+                                            sprintf(spf, parentheses), ")",
+                                            sep = "")
       } else if (parenth == "ci") {
         conf95 <- matrix(NA, nrow = nrow(counts), ncol = 2)
         if (cell == "tot.percent") {
           for (jj in 1:nrow(counts)) {
-            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii], n = sum(counts))$conf.int*100
+            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii],
+                                          n = sum(counts))$conf.int*100
           }
         } else if (cell == "col.percent") {
           for (jj in 1:nrow(counts)) {
-            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii], n = sum(counts[, ii]))$conf.int*100
+            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii],
+                                          n = sum(counts[, ii]))$conf.int*100
           }
         } else if (cell == "row.percent") {
           for (jj in 1:nrow(counts)) {
-            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii], n = sum(counts[ii, ]))$conf.int*100
+            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii],
+                                          n = sum(counts[ii, ]))$conf.int*100
           }
         } else if (cell == "tot.prop") {
           for (jj in 1:nrow(counts)) {
-            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii], n = sum(counts))$conf.int
+            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii],
+                                          n = sum(counts))$conf.int
           }
         } else if (cell == "col.prop") {
           for (jj in 1:nrow(counts)) {
-            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii], n = sum(counts[, ii]))$conf.int
+            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii],
+                                          n = sum(counts[, ii]))$conf.int
           }
         } else if (cell == "row.prop") {
           for (jj in 1:nrow(counts)) {
-            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii], n = sum(counts[ii, ]))$conf.int
+            conf95[jj, 1:2] <- binom.test(x = counts[jj, ii],
+                                          n = sum(counts[ii, ]))$conf.int
           }
         }
-        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (", sprintf(spf, conf95[, 1]), parenth.sep, sprintf(spf, conf95[, 2]), ")", sep = "")
+        tbl[2:nrow(tbl), (3 + ii)] <-
+          paste(cells, " (", sprintf(spf, conf95[, 1]), parenth.sep,
+                sprintf(spf, conf95[, 2]), ")", sep = "")
       } else if (parenth == "tot.percent") {
         parentheses <- counts[, ii] / sum(counts) * 100
-        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+        tbl[2:nrow(tbl), (3 + ii)] <-
+          paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
       } else if (parenth == "col.percent") {
         parentheses <- counts[, ii] / sum(counts[, ii]) * 100
-        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+        tbl[2:nrow(tbl), (3 + ii)] <-
+          paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
       } else if (parenth == "row.percent") {
         parentheses <- counts[, ii] / rowSums(counts) * 100
-        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+        tbl[2:nrow(tbl), (3 + ii)] <-
+          paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
       } else if (parenth == "tot.prop") {
         parentheses <- counts[, ii] / sum(counts)
-        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+        tbl[2:nrow(tbl), (3 + ii)] <-
+          paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
       } else if (parenth == "col.prop") {
         parentheses <- counts[, ii] / sum(counts[, ii])
-        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+        tbl[2:nrow(tbl), (3 + ii)] <-
+          paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
       } else if (parenth == "row.prop") {
         parentheses <- counts[, ii] / rowSums(counts)
-        tbl[2:nrow(tbl), (3 + ii)] <- paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
+        tbl[2:nrow(tbl), (3 + ii)] <-
+          paste(cells, " (", sprintf(spf, parentheses), ")", sep = "")
       }
     }
-    
+
     # Statistical test
     if (p.include == FALSE | nrow(counts) == 1) {
       pval = "-"
@@ -471,15 +536,19 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
         pval <- prop.test(x = counts)$p.value
         message(paste("A z-test (with continuity correction) was used to test whether proportions of ", yname, " differed in the two groups.", sep = ""))
       }
-      tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
+      tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts,
+                                   decimals = p.decimals,
+                                   lowerbound = p.lowerbound,
+                                   leading0 = p.leading0, avoid1 = p.avoid1)
     }
-    
+
     # If xlevels unspecified, set to actual values
     xvals <- colnames(counts)
     if (is.null(xlevels)) {
       if (!is.null(quantiles)) {
         if (quantile.vals == TRUE) {
-          xlevels <- paste("Q", 1:length(xvals), " ", as.character(xvals), sep = "")
+          xlevels <- paste("Q", 1:length(xvals), " ", as.character(xvals),
+                           sep = "")
         } else {
           xlevels <- paste("Q", 1:length(xvals), sep = "")
         }
@@ -487,52 +556,61 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
         xlevels <- as.character(xvals)
       }
     }
-    
+
     # If y binary and compress is TRUE, compress table to a single row
     if (nrow(counts) <= 2 & compress == TRUE) {
       if (is.null(compress.val)) {
-        tbl <- matrix(c(paste(yname, text.label, sep = ""), tbl[3, 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+        tbl <- matrix(c(paste(yname, text.label, sep = ""),
+                        tbl[3, 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
         #tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
       } else {
         whichrow <- which(rownames(counts) == as.character(compress.val)) + 1
-        tbl <- matrix(c(paste(yname, text.label, sep = ""), tbl[whichrow, 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+        tbl <- matrix(c(paste(yname, text.label, sep = ""),
+                        tbl[whichrow, 2:(ncol(tbl)-1)], tbl[1, ncol(tbl)]),
+                      nrow = 1)
         #tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
       }
     }
-    
+
     # Add column names, with sample sizes for each group if requested
     if (n.headings == FALSE) {
       colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
     } else {
-      colnames(tbl) <- c(variable.colname, "N", paste(c("Overall", xlevels), " (n = ", c(sum(counts), apply(counts, 2, sum)), ")", sep = ""), "P")
+      colnames(tbl) <- c(variable.colname, "N",
+                         paste(c("Overall", xlevels), " (n = ",
+                               c(sum(counts), apply(counts, 2, sum)), ")",
+                               sep = ""), "P")
     }
-    
+
     # Drop N column if requested
     if (n.column == FALSE) {
       tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
     }
-    
+
     # Drop overall column if requested
     if (overall.column == FALSE) {
       tbl <- tbl[, -grep("^Overall", colnames(tbl)), drop = FALSE]
     }
-    
+
     # Drop p column if requested
     if (p.include == FALSE) {
       tbl <- tbl[, -which(colnames(tbl) == "P"), drop = FALSE]
     }
-    
+
     # If latex is TRUE, do some re-formatting
     if (latex == TRUE) {
       if (p.include == TRUE) {
         plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
         if (length(plocs) > 0) {
-          tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2), sep = "")
+          tbl[plocs, "P"] <- paste("$<$", substring(tbl[plocs, "P"], 2),
+                                   sep = "")
         }
       }
       spacelocs <- which(substr(tbl[, variable.colname], 1, 2) == "  ")
       if (length(spacelocs) > 0) {
-        tbl[spacelocs, variable.colname] <- paste("$\\hskip .4cm$", substring(tbl[spacelocs, variable.colname], 3), sep = "")
+        tbl[spacelocs, variable.colname] <-
+          paste("$\\hskip .4cm$",
+                substring(tbl[spacelocs, variable.colname], 3), sep = "")
       }
       chars <- strsplit(tbl[, variable.colname], "")
       for (ii in 1:length(chars)) {
@@ -541,7 +619,8 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
           chars[[ii]][percentlocs] <- "\\%"
         }
       }
-      tbl[, variable.colname] <- sapply(chars, function(x) paste(x, sep = "", collapse = ""))
+      tbl[, variable.colname] <- sapply(chars, function(x)
+        paste(x, sep = "", collapse = ""))
       if (bold.colnames == TRUE) {
         colnames(tbl) <- paste("$\\textbf{", colnames(tbl), "}$", sep = "")
       }
@@ -549,22 +628,29 @@ tabfreq <- function(x = NULL, y, latex = FALSE, xlevels = NULL, yname = NULL, yl
         tbl[1, 1] <- paste("$\\textbf{", tbl[1, 1], "}$")
       }
       if (bold.varlevels == TRUE) {
-        tbl[2:nrow(tbl), 1] <- paste("$\\textbf{", tbl[2:nrow(tbl), 1], "}$", sep = "")
+        tbl[2:nrow(tbl), 1] <- paste("$\\textbf{", tbl[2:nrow(tbl), 1], "}$",
+                                     sep = "")
       }
     }
-    
+
   }
-  
+
   # Print html version of table if requested
   if (print.html) {
-    
-    tbl.xtable <- xtable(tbl, align = paste("ll", paste(rep("r", ncol(tbl) - 1), collapse = ""), sep = "", collapse = ""))
-    print(tbl.xtable, include.rownames = FALSE, type = "html", file = html.filename,
-          sanitize.text.function = function(x) {ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)})
-    
+
+    tbl.xtable <-
+      xtable(tbl, align = paste("ll",
+                                paste(rep("r", ncol(tbl) - 1), collapse = ""),
+                                sep = "", collapse = ""))
+    print(tbl.xtable, include.rownames = FALSE, type = "html",
+          file = html.filename,
+          sanitize.text.function = function(x) {
+            ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)
+          })
+
   }
-  
+
   # Return table
   return(tbl)
-  
+
 }

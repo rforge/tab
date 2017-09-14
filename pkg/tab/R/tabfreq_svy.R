@@ -1,11 +1,13 @@
-tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y variable",
-                        ylevels = NULL, test = "F", decimals = 1, p.decimals = c(2,3), p.cuts = 0.01,
-                        p.lowerbound = 0.001, p.leading0 = TRUE, p.avoid1 = FALSE, n.column = FALSE,
-                        n.headings = TRUE, compress = FALSE, compress.val = NULL, 
-                        bold.colnames = TRUE, bold.varnames = FALSE, bold.varlevels = FALSE, 
-                        variable.colname = "Variable", print.html = FALSE, 
-                        html.filename = "table1.html") {
-  
+tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL,
+                        yname = "Y variable", ylevels = NULL, test = "F",
+                        decimals = 1, p.decimals = c(2,3), p.cuts = 0.01,
+                        p.lowerbound = 0.001, p.leading0 = TRUE,
+                        p.avoid1 = FALSE, n.column = FALSE, n.headings = TRUE,
+                        compress = FALSE, compress.val = NULL,
+                        bold.colnames = TRUE, bold.varnames = FALSE,
+                        bold.varlevels = FALSE, variable.colname = "Variable",
+                        print.html = FALSE, html.filename = "table1.html") {
+
   # If any inputs are not correct class, return error
   if (!is.logical(latex)) {
     stop("For latex input, please enter TRUE or FALSE")
@@ -20,9 +22,7 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
     stop("For ylevels input, please enter vector of character strings")
   }
   if (! test %in% c("F", "Chisq", "Wald", "adjWald", "lincom", "saddlepoint")) {
-    stop("For test input, please enter a possible value for the 'statistic' input of the 
-         svychisq function in the survey package: 'F', 'Chisq', 'Wald', 'adjWald', 'lincom', 
-         or 'saddlepoint'. See svychisq documentation for details.")
+    stop("For test input, please enter a possible value for the 'statistic' input of the svychisq function in the survey package: 'F', 'Chisq', 'Wald', 'adjWald', 'lincom', or 'saddlepoint'. See svychisq documentation for details.")
   }
   if (!is.numeric(decimals)) {
     stop("For decimals input, please enter numeric value")
@@ -30,7 +30,7 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
   if (!is.numeric(p.decimals)) {
     stop("For p.decimals input, please enter numeric value or vector")
   }
-  if (!is.numeric(p.cuts)) {  
+  if (!is.numeric(p.cuts)) {
     stop("For p.cuts input, please enter numeric value or vector")
   }
   if (!is.numeric(p.lowerbound)) {
@@ -63,21 +63,21 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
   if (!is.character(variable.colname)) {
     stop("For variable.colname input, please enter a character string")
   }
-  
+
   # Convert decimals to variable for sprintf
   spf <- paste("%0.", decimals, "f", sep = "")
-  
+
   # Save x and y as character strings
   xstring <- x
   ystring <- y
-  
+
   # Extract vectors x and y
   x <- svy$variables[, xstring]
   y <- svy$variables[, ystring]
-  
+
   # Update survey object to include y and x explicitly
   svy2 <- update(svy, y = y, x = x)
-  
+
   # Drop missing values if present
   locs <- which(!is.na(x) & !is.na(y))
   if (length(locs) < nrow(svy2)) {
@@ -85,74 +85,85 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
     x <- svy2$variables[, xstring]
     y <- svy2$variables[, ystring]
   }
-  
+
   # Basic table to get levels of x and y
   counts <- table(y, x)
-  
+
   # If ylevels unspecified, set to actual values
   if (is.null(ylevels)) {
     ylevels <- rownames(counts)
   }
-  
+
   # Initialize table
-  tbl <- matrix("", nrow = nrow(counts)+1, ncol = ncol(counts) + 4) 
-  
+  tbl <- matrix("", nrow = nrow(counts)+1, ncol = ncol(counts) + 4)
+
   # Add variable name and levels of Y to first row
-  tbl[, 1] <- c(paste(yname, ", n (%)", sep = ""), paste("  ", ylevels, sep = ""))
-  
+  tbl[, 1] <- c(paste(yname, ", n (%)", sep = ""), paste("  ", ylevels,
+                                                         sep = ""))
+
   # Add N column
   tbl[1, 2] = sprintf("%.0f", sum(counts))
-  
+
   # n (%) for each cell
   for (ii in 1:nrow(counts)) {
     yval <- rownames(counts)[ii]
     totmean <- svymean(y == yval, design = svy2)
-    tbl[ii+1, 3] <- paste(sprintf("%.0f", rowSums(counts)[ii]), " (", sprintf(spf, totmean*100), ")", sep = "")
+    tbl[ii+1, 3] <- paste(sprintf("%.0f", rowSums(counts)[ii]), " (",
+                          sprintf(spf, totmean*100), ")", sep = "")
     yval <- rownames(counts)[ii]
     levmeans <- svyby(~y == yval, by = ~x, FUN = svymean, design = svy2)
-    tbl[ii+1, 4:(ncol(tbl)-1)] <- paste(sprintf("%.0f", counts[ii, ]), " (", sprintf(spf, levmeans$"y == yvalTRUE"*100), ")", sep = "")
+    tbl[ii+1, 4:(ncol(tbl)-1)] <-
+      paste(sprintf("%.0f", counts[ii, ]), " (",
+            sprintf(spf, levmeans$"y == yvalTRUE"*100), ")", sep = "")
   }
-  
+
   # Statistical test
   if (nrow(counts) == 1) {
     pval <- "-"
   } else {
     pval <- svychisq(~y + x, design = svy2, statistic = test)$p.value
   }
-  tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals, lowerbound = p.lowerbound, leading0 = p.leading0, avoid1 = p.avoid1)
-  
+  tbl[1, ncol(tbl)] <- formatp(p = pval, cuts = p.cuts, decimals = p.decimals,
+                               lowerbound = p.lowerbound, leading0 = p.leading0,
+                               avoid1 = p.avoid1)
+
   #   # If y binary and compress is TRUE, compress table to a single row
   #   if (nrow(counts) <= 2 & compress == TRUE) {
   #     tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
   #   }
-  
+
   # If xlevels unspecified, set to actual values
   if (is.null(xlevels)) {
     xlevels <- colnames(counts)
   }
-  
+
   # If y binary and compress is TRUE, compress table to a single row
   if (nrow(counts) <= 2 & compress == TRUE) {
     if (is.null(compress.val)) {
-      tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+      tbl <- matrix(c(tbl[1, 1:2], tbl[nrow(tbl), 3:(ncol(tbl)-1)],
+                      tbl[1, ncol(tbl)]), nrow = 1)
     } else {
       whichrow <- which(rownames(counts) == as.character(compress.val)) + 1
-      tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)], tbl[1, ncol(tbl)]), nrow = 1)
+      tbl <- matrix(c(tbl[1, 1:2], tbl[whichrow, 3:(ncol(tbl)-1)],
+                      tbl[1, ncol(tbl)]), nrow = 1)
     }
   }
-  
+
   # Add column names, with sample sizes for each group if requested
   if (n.headings == FALSE) {
     colnames(tbl) <- c(variable.colname, "N", "Overall", xlevels, "P")
   } else {
-    colnames(tbl) <- c(variable.colname, "N", paste(c("Overall", xlevels), " (n = ", c(sum(counts), apply(counts, 2, sum)), ")", sep = ""), "P")
+    colnames(tbl) <-
+      c(variable.colname, "N",
+        paste(c("Overall", xlevels), " (n = ",
+              c(sum(counts), apply(counts, 2, sum)), ")", sep = ""), "P")
   }
-  
+
   # Drop N column if requested
   if (n.column == FALSE) {
     tbl <- tbl[, -which(colnames(tbl) == "N"), drop = FALSE]
   }
-  
+
   # If latex is TRUE, do some re-formatting
   if (latex == TRUE) {
     plocs <- which(substr(tbl[, "P"], 1, 1) == "<")
@@ -161,7 +172,9 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
     }
     spacelocs <- which(substr(tbl[, variable.colname], 1, 2) == "  ")
     if (length(spacelocs) > 0) {
-      tbl[spacelocs, variable.colname] <- paste("$\\hskip .4cm$", substring(tbl[spacelocs, variable.colname], 3), sep = "")
+      tbl[spacelocs, variable.colname] <-
+        paste("$\\hskip .4cm$", substring(tbl[spacelocs, variable.colname], 3),
+              sep = "")
     }
     chars <- strsplit(tbl[, variable.colname], "")
     for (ii in 1:length(chars)) {
@@ -170,7 +183,8 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
         chars[[ii]][percentlocs] <- "\\%"
       }
     }
-    tbl[, variable.colname] <- sapply(chars, function(x) paste(x, sep = "", collapse = ""))
+    tbl[, variable.colname] <- sapply(chars, function(x)
+      paste(x, sep = "", collapse = ""))
     if (bold.colnames == TRUE) {
       colnames(tbl) <- paste("$\\textbf{", colnames(tbl), "}$", sep = "")
     }
@@ -178,20 +192,26 @@ tabfreq.svy <- function(x, y, svy, latex = FALSE, xlevels = NULL, yname = "Y var
       tbl[1, 1] <- paste("$\\textbf{", tbl[1, 1], "}$")
     }
     if (bold.varlevels == TRUE) {
-      tbl[2:nrow(tbl), 1] <- paste("$\\textbf{", tbl[2:nrow(tbl), 1], "}$", sep = "")
+      tbl[2:nrow(tbl), 1] <- paste("$\\textbf{", tbl[2:nrow(tbl), 1], "}$",
+                                   sep = "")
     }
   }
-  
+
   # Print html version of table if requested
   if (print.html) {
-    
-    tbl.xtable <- xtable(tbl, align = paste("ll", paste(rep("r", ncol(tbl) - 1), collapse = ""), sep = "", collapse = ""))
-    print(tbl.xtable, include.rownames = FALSE, type = "html", file = html.filename,
-          sanitize.text.function = function(x) {ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)})
-    
+
+    tbl.xtable <-
+      xtable(tbl, align = paste("ll",
+                                paste(rep("r", ncol(tbl) - 1), collapse = ""),
+                                sep = "", collapse = ""))
+    print(tbl.xtable, include.rownames = FALSE, type = "html",
+          file = html.filename, sanitize.text.function = function(x) {
+            ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)
+          })
+
   }
-  
+
   # Return table
   return(tbl)
-  
+
 }

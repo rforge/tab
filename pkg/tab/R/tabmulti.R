@@ -39,10 +39,14 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL,
   if (!all(is.character(ynames))) {
     stop("For ynames input, please enter character string or vector of character strings of same length as yvarnames")
   }
-  if (!is.null(ylevels) && !all(unlist(lapply(X = ylevels, FUN = function(x) all(is.character(x)))))) {
+  if (!is.null(ylevels) &&
+      !all(unlist(lapply(X = ylevels,
+                         FUN = function(x) all(is.character(x)))))) {
     stop("For ylevels input, please enter vector or list of vectors of character strings")
   }
-  if (!is.null(quantiles) && ! (is.numeric(quantiles) & length(quantiles) == 1 && quantiles > 1 & quantiles == round(quantiles))) {
+  if (!is.null(quantiles) &&
+      ! (is.numeric(quantiles) & length(quantiles) == 1 && quantiles > 1 &
+         quantiles == round(quantiles))) {
     stop("For quantiles input, please enter a whole number greater than 1")
   }
   if (!is.logical(quantile.vals)) {
@@ -51,22 +55,22 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL,
   if (!is.character(parenth.sep)) {
     stop("For parenth.sep input, please enter a character string")
   }
-  if (! cell %in% c("n", "percent", "tot.percent", "col.percent", "row.percent", "tot.prop",
-                    "col.prop", "row.prop", "n/totn", "n/coln", "n/rown")) {
-    stop("For cell input, please enter 'n', 'tot.percent', 'col.percent', 'row.percent',
-         'tot.prop', 'col.prop', 'row.prop', 'n/totn', 'n/coln', or 'n/rown'")
+  if (! cell %in% c("n", "percent", "tot.percent", "col.percent", "row.percent",
+                    "tot.prop", "col.prop", "row.prop", "n/totn", "n/coln",
+                    "n/rown")) {
+    stop("For cell input, please enter 'n', 'tot.percent', 'col.percent', 'row.percent', 'tot.prop', 'col.prop', 'row.prop', 'n/totn', 'n/coln', or 'n/rown'")
   }
-  if (!is.null(freq.parenth) && ! freq.parenth %in% c("none", "se", "ci", "tot.percent", "col.percent", "row.percent",
-                                                      "tot.prop", "col.prop", "row.prop")) {
-    stop("For freq.parenth input, please enter 'none', 'se', 'ci', 'tot.percent', 'col.percent', 'row.percent',
-         'tot.prop', 'col.prop', or 'row.prop'")
+  if (!is.null(freq.parenth) &&
+      ! freq.parenth %in% c("none", "se", "ci", "tot.percent", "col.percent",
+                            "row.percent", "tot.prop", "col.prop",
+                            "row.prop")) {
+    stop("For freq.parenth input, please enter 'none', 'se', 'ci', 'tot.percent', 'col.percent', 'row.percent', 'tot.prop', 'col.prop', or 'row.prop'")
   }
   if (!is.null(freq.text.label) && !is.character(freq.text.label)) {
     stop("For freq.text.label input, please enter a character string or just leave it unspecified. Use 'none' to request no label")
   }
   if (!all(freq.tests %in% c("chi", "fisher", "z", "z.continuity"))) {
-    stop("For freq.tests input, please enter character string or vector of character strings indicating what statistical test
-         should be performed for each categorical row variable. Each element should be 'chi', 'fisher', 'z', or 'z.continuity'")
+    stop("For freq.tests input, please enter character string or vector of character strings indicating what statistical test should be performed for each categorical row variable. Each element should be 'chi', 'fisher', 'z', or 'z.continuity'")
   }
   if (! means.parenth %in% c("none", "sd", "se", "t.ci", "z.ci", "none")) {
     stop("For means.parenth input, please enter 'none', 'sd', 'se', 't.ci', or 'z.ci'")
@@ -84,8 +88,7 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL,
     stop("For medians.text.label input, please enter a character string or just leave it unspecified. Use 'none' to request no label")
   }
   if (!is.null(decimals) && !all(is.numeric(decimals))) {
-    stop("For decimals input, please enter numeric value or vector of numeric values indicating how many decimal places should
-         be used in reporting statistics for each row variable")
+    stop("For decimals input, please enter numeric value or vector of numeric values indicating how many decimal places should be used in reporting statistics for each row variable")
   }
   if (!is.logical(p.include)) {
     stop("For p.include input, please enter TRUE or FALSE")
@@ -130,7 +133,8 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL,
     stop("For variable.colname input, please enter a character string")
   }
 
-  # If listwise.deletion is TRUE, drop observations with missing values for column variable or any row variables
+  # If listwise.deletion is TRUE, drop observations with missing values for
+  # column variable or any row variables
   if (listwise.deletion == TRUE){
 
     dataset <- dataset[which(!is.na(dataset[, xvarname])), ]
@@ -140,11 +144,15 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL,
 
   }
 
-  # If ymeasures is NULL, guess what measures are appropriate based on each variable
+  # If ymeasures is NULL, guess what measures are appropriate based on each
+  # variable
   if (is.null(ymeasures)) {
     ymeasures <- c()
     for (ii in 1:length(yvarnames)) {
-      if (is.factor(dataset[, yvarnames[ii]]) | is.character(dataset[, yvarnames[ii]]) | length(unique(dataset[!is.na(dataset[, yvarnames[ii]]), yvarnames[ii]])) <= 5) {
+      if (is.factor(dataset[, yvarnames[ii]]) |
+          is.character(dataset[, yvarnames[ii]]) |
+          length(unique(dataset[!is.na(dataset[, yvarnames[ii]]),
+                                yvarnames[ii]])) <= 5) {
         ymeasures <- c(ymeasures, "freq")
       } else {
         ymeasures <- c(ymeasures, "mean")
@@ -179,32 +187,55 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL,
   for (ii in 1:length(yvarnames)) {
     if (ymeasures[ii] == "mean") {
       meansindex <- meansindex + 1
-      current <- tabmeans(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, variance = variance,
-                          xlevels = xlevels, yname = ynames[ii], quantiles = quantiles, quantile.vals = quantile.vals,
-                          parenth = means.parenth, text.label = means.text.label, parenth.sep = parenth.sep,
-                          decimals = decimals[ii], p.include = p.include, p.decimals = p.decimals, p.cuts = p.cuts,
-                          p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
-                          overall.column = overall.column, n.column = n.column, n.headings = n.headings,
-                          bold.colnames = bold.colnames, bold.varnames = bold.varnames, variable.colname = variable.colname)
+      current <- tabmeans(x = dataset[, xvarname], y = dataset[, yvarnames[ii]],
+                          latex = latex, variance = variance, xlevels = xlevels,
+                          yname = ynames[ii], quantiles = quantiles,
+                          quantile.vals = quantile.vals,
+                          parenth = means.parenth,
+                          text.label = means.text.label, parenth.sep = parenth.sep,
+                          decimals = decimals[ii], p.include = p.include,
+                          p.decimals = p.decimals, p.cuts = p.cuts,
+                          p.lowerbound = p.lowerbound, p.leading0 = p.leading0,
+                          p.avoid1 = p.avoid1, overall.column = overall.column,
+                          n.column = n.column, n.headings = n.headings,
+                          bold.colnames = bold.colnames,
+                          bold.varnames = bold.varnames,
+                          variable.colname = variable.colname)
     } else if (ymeasures[ii] == "median") {
       mediansindex <- mediansindex + 1
-      current <- tabmedians(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
-                            yname = ynames[ii], quantiles = quantiles, quantile.vals = quantile.vals,
-                            parenth = medians.parenth, text.label = medians.text.label, parenth.sep = parenth.sep,
-                            decimals = decimals[ii], p.include = p.include, p.decimals = p.decimals, p.cuts = p.cuts,
-                            p.lowerbound = p.lowerbound, p.leading0 = p.leading0, p.avoid1 = p.avoid1,
-                            overall.column = overall.column, n.column = n.column, n.headings = n.headings,
-                            bold.colnames = bold.colnames, bold.varnames = bold.varnames, variable.colname = variable.colname)
+      current <- tabmedians(x = dataset[, xvarname],
+                            y = dataset[, yvarnames[ii]], latex = latex,
+                            xlevels = xlevels, yname = ynames[ii],
+                            quantiles = quantiles, quantile.vals = quantile.vals,
+                            parenth = medians.parenth,
+                            text.label = medians.text.label,
+                            parenth.sep = parenth.sep, decimals = decimals[ii],
+                            p.include = p.include, p.decimals = p.decimals,
+                            p.cuts = p.cuts, p.lowerbound = p.lowerbound,
+                            p.leading0 = p.leading0, p.avoid1 = p.avoid1,
+                            overall.column = overall.column, n.column = n.column,
+                            n.headings = n.headings,
+                            bold.colnames = bold.colnames,
+                            bold.varnames = bold.varnames,
+                            variable.colname = variable.colname)
     } else if (ymeasures[ii] == "freq") {
       freqindex <- freqindex + 1
-      current <- tabfreq(x = dataset[, xvarname], y = dataset[, yvarnames[ii]], latex = latex, xlevels = xlevels,
-                         yname = ynames[ii], ylevels = ylevels[[freqindex]], quantiles = quantiles,
-                         quantile.vals = quantile.vals, cell = cell, parenth = freq.parenth, text.label = freq.text.label,
-                         parenth.sep = parenth.sep, test = freq.tests[freqindex], decimals = decimals[ii], p.include = p.include,
-                         p.decimals = p.decimals, p.cuts = p.cuts, p.lowerbound = p.lowerbound, p.leading0 = p.leading0,
-                         p.avoid1 = p.avoid1, overall.column = overall.column, n.column = n.column, n.headings = n.headings,
-                         compress = compress, bold.colnames = bold.colnames, bold.varnames = bold.varnames,
-                         bold.varlevels = bold.varlevels, variable.colname = variable.colname)
+      current <- tabfreq(x = dataset[, xvarname], y = dataset[, yvarnames[ii]],
+                         latex = latex, xlevels = xlevels, yname = ynames[ii],
+                         ylevels = ylevels[[freqindex]], quantiles = quantiles,
+                         quantile.vals = quantile.vals, cell = cell,
+                         parenth = freq.parenth, text.label = freq.text.label,
+                         parenth.sep = parenth.sep,
+                         test = freq.tests[freqindex], decimals = decimals[ii],
+                         p.include = p.include, p.decimals = p.decimals,
+                         p.cuts = p.cuts, p.lowerbound = p.lowerbound,
+                         p.leading0 = p.leading0, p.avoid1 = p.avoid1,
+                         overall.column = overall.column, n.column = n.column,
+                         n.headings = n.headings, compress = compress,
+                         bold.colnames = bold.colnames,
+                         bold.varnames = bold.varnames,
+                         bold.varlevels = bold.varlevels,
+                         variable.colname = variable.colname)
     }
     if (ii == 1) {
       results <- current
@@ -217,9 +248,15 @@ tabmulti <- function(dataset, xvarname, yvarnames, ymeasures = NULL,
   # Print html version of table if requested
   if (print.html) {
 
-    results.xtable <- xtable(results, align = paste("ll", paste(rep("r", ncol(results) - 1), collapse = ""), sep = "", collapse = ""))
-    print(results.xtable, include.rownames = FALSE, type = "html", file = html.filename,
-          sanitize.text.function = function(x) {ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)})
+    results.xtable <-
+      xtable(results,
+             align = paste("ll",
+                           paste(rep("r", ncol(results) - 1), collapse = ""),
+                           sep = "", collapse = ""))
+    print(results.xtable, include.rownames = FALSE, type = "html",
+          file = html.filename, sanitize.text.function = function(x) {
+            ifelse(substr(x, 1, 1) == " ", paste("&nbsp &nbsp", x), x)
+          })
 
   }
 

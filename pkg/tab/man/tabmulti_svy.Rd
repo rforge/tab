@@ -6,7 +6,7 @@ Variables Across Levels of One Categorical Variable (Survey Data)
 }
 \description{
 This function basically provides an alternative to making multiple calls to
-\code{\link{tabmeans.svy}, \code{\link{tabmedians.svy}}, and
+\code{\link{tabmeans.svy}}, \code{\link{tabmedians.svy}}, and
 \code{\link{tabfreq.svy}}, then using \code{\link{rbind}} to combine the results
 into a single table. Similar to \code{\link{tabmulti}}, but for survey data.
 Relies heavily on the \bold{survey} package [1, 2].

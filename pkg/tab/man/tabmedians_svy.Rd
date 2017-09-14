@@ -81,6 +81,9 @@ Number of decimal places for p-values. If a vector is provided rather than a
 single value, number of decimal places will depend on what range the p-value
 lies in. See \code{p.cuts}.
 }
+  \item{p.include}{
+If \code{FALSE}, statistical test is not performed and p-value is not returned.
+}
   \item{p.cuts}{
 Cut-point(s) to control number of decimal places used for p-values. For example,
 by default \code{p.cuts = 0.1} and \code{p.decimals = c(2, 3)}. This means that
