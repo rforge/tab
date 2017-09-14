@@ -107,7 +107,7 @@ tabmeans <- function(x, y, latex = FALSE, variance = "unequal", xname = NULL,
 
   # Create quantiles if necessary
   if (!is.null(quantiles)) {
-    x <- cut(x = x, breaks = quantile(x, probs = seq(0, 1, 1/quantiles)),
+    x <- cut(x = x, breaks = quantile(x, probs = seq(0, 1, 1 / quantiles)),
              include.lowest = TRUE, right = TRUE, dig.lab = 3)
   }
 
