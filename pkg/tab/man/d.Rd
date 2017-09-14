@@ -2,10 +2,11 @@
 \alias{d}
 \docType{data}
 \title{
-Example Dataset for tab Package
+Example Dataset for \bold{tab} Package
 }
 \description{
-This dataset is used to illustrate the various functions in the R package tab.
+This dataset is used to illustrate the various functions in the R package
+\bold{tab}.
 }
 \usage{data(d)}
 \format{
@@ -35,7 +36,8 @@ NA
 This dataset was generated in R.
 }
 \references{
-Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
+Acknowledgment: This material is based upon work supported by the National
+Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
 \examples{
 NA
